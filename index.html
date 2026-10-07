@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>比例ラボ 第1週</title>
+<meta name="description" content="中1数学 比例の式(y = ax)を、式の形→代入→かっこ→符号→計算→たしかめ算の順で練習するゲーム">
+<meta name="theme-color" content="#63B7F2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="比例ラボ">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 10'%3E%3Crect x='4' width='1' height='1' fill='%23FFC928'/%3E%3Crect x='4' y='1' width='1' height='1' fill='%231E1B3A'/%3E%3Crect x='1' y='2' width='7' height='6' fill='%231E1B3A'/%3E%3Crect x='2' y='3' width='5' height='4' fill='%234FA3F7'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='5' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='3' y='6' width='3' height='1' fill='%231E1B3A'/%3E%3Crect x='2' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3Crect x='5' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#63B7F2; --panel:#FFF6DC; --text:#1E1B3A; --line:#1E1B3A; --sub:#4B4668;
+  --coin:#FFC928; --onCoin:#1E1B3A; --blue:#2F6FD6; --onBlue:#FFFFFF;
+  --chip:#FFFFFF; --goodbg:#D9F3E0; --badbg:#FFE0DA; --fbtext:#1E1B3A;
+  --grass:#4FBF45; --ground:#9A5B2A; --grid:#D9CFAE; --axis:#1E1B3A; --lineplot:#2F6FD6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky:#18234A; --panel:#262B45; --text:#F3EEDB; --line:#05070F; --sub:#C2BCDD;
+    --coin:#FFC928; --onCoin:#1E1B3A; --blue:#7FA9FF; --onBlue:#0E1430;
+    --chip:#353B5E; --goodbg:#1F4A31; --badbg:#5A2525; --fbtext:#F3EEDB;
+    --grass:#2F7F3A; --ground:#5E3818; --grid:#3E4468; --axis:#F3EEDB; --lineplot:#7FA9FF;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --sky:#18234A; --panel:#262B45; --text:#F3EEDB; --line:#05070F; --sub:#C2BCDD;
+  --coin:#FFC928; --onCoin:#1E1B3A; --blue:#7FA9FF; --onBlue:#0E1430;
+  --chip:#353B5E; --goodbg:#1F4A31; --badbg:#5A2525; --fbtext:#F3EEDB;
+  --grass:#2F7F3A; --ground:#5E3818; --grid:#3E4468; --axis:#F3EEDB; --lineplot:#7FA9FF;
+  color-scheme: dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--sky);}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--sky);color:var(--text);font-family:'DotGothic16','Zen Kaku Gothic New',system-ui,sans-serif;font-size:18px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:480px;margin:0 auto;padding:16px 16px 0}
+.panel{background:var(--panel);border:3px solid var(--line);box-shadow:5px 5px 0 var(--line);padding:16px;margin-bottom:18px}
+button{font-family:inherit;color:inherit}
+.btn{font-size:20px;background:var(--coin);color:var(--onCoin);border:3px solid var(--line);box-shadow:4px 4px 0 var(--line);padding:10px 16px;min-height:52px;cursor:pointer;touch-action:manipulation}
+.btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.plain{background:var(--chip);color:var(--text)}
+.btn.blue{background:var(--blue);color:var(--onBlue)}
+.btn.wide{width:100%}
+:focus-visible{outline:3px dashed var(--blue);outline-offset:3px}
+.hint{font-family:'Zen Kaku Gothic New',system-ui,sans-serif}
+.snd{display:inline-flex;align-items:center;gap:6px;font-size:16px;min-height:44px;padding:6px 10px}
+.titlebar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+
+/* title */
+.hero{display:flex;align-items:center;gap:14px}
+.hero h1{margin:0;font-size:40px;line-height:1.1;font-weight:400}
+.hero p{margin:4px 0 0;color:var(--sub);font-size:16px}
+.bob{animation:bob 1.6s steps(2) infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.coins{display:inline-flex;align-items:center;gap:6px;font-size:20px}
+.stagebtn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;margin-bottom:12px;background:var(--chip);color:var(--text)}
+.stagebtn .nm{font-size:22px;display:block}
+.stagebtn .ds{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:14px;color:var(--sub);display:block}
+.stars{font-size:20px;color:var(--coin);white-space:nowrap;-webkit-text-stroke:1px var(--line)}
+.stars .off{color:transparent}
+.record{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.record div{border:2px solid var(--line);padding:6px 4px;background:var(--chip)}
+.record b{display:block;font-size:24px;font-weight:400}
+.record span{font-size:13px;font-family:'Zen Kaku Gothic New',system-ui,sans-serif;color:var(--sub)}
+h2{font-size:20px;font-weight:400;margin:0 0 10px}
+
+/* play */
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.top .btn{min-height:44px;min-width:44px;font-size:16px;padding:6px 10px;white-space:nowrap}
+.top .prog{flex:1;text-align:center}
+.prog{font-size:18px}
+.hearts{display:inline-flex;gap:3px}
+.eq{text-align:center;font-size:34px;margin:4px 0 8px}
+.ask{text-align:center;font-size:20px;margin:6px 0 12px}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.62em;line-height:1.1;margin:0 .1em}
+.fr span:first-child{border-bottom:2px solid currentColor;padding:0 .15em}
+.tblbox{overflow-x:auto}
+table.tbl{border-collapse:collapse;margin:0 auto;font-size:18px}
+.tbl th,.tbl td{border:2px solid var(--line);min-width:38px;padding:6px 2px;text-align:center}
+.tbl th{background:var(--grid)}
+.tbl td.q{background:var(--coin);color:var(--onCoin)}
+.tpl{display:flex;align-items:center;justify-content:center;gap:10px;font-size:24px;margin:6px 0}
+.box{width:84px;height:60px;border:3px dashed var(--line);background:var(--chip);font-size:24px;cursor:pointer}
+.box.fill{border-style:solid}
+.line2{text-align:center;font-size:22px;margin:6px 0}
+.ans{display:inline-block;min-width:60px;border-bottom:3px solid var(--line);padding:0 6px}
+.chips{display:flex;justify-content:center;gap:16px;margin-top:6px}
+.chips .btn{background:var(--chip);color:var(--text);font-size:28px;min-width:100px;min-height:60px}
+.signs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.signs .btn{font-size:21px;min-height:64px}
+.keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.keypad .btn{background:var(--chip);color:var(--text);font-size:26px;min-height:56px;padding:4px}
+.keypad .btn.on{background:var(--blue);color:var(--onBlue)}
+.keypad .ok{grid-column:1 / -1;background:var(--coin);color:var(--onCoin)}
+.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:0 0 10px}
+.steps span{font-size:13px;padding:2px 5px;border:2px solid var(--line);background:var(--chip);color:var(--sub)}
+.steps .cur{background:var(--coin);color:var(--onCoin)}
+.steps .okd{background:var(--goodbg);color:var(--fbtext)}
+.note{background:var(--chip);border:2px solid var(--line);padding:4px 14px}
+.nl{font-size:22px;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.nl+.nl{border-top:2px dashed var(--grid)}
+.nl.muted{color:var(--sub);font-size:16px}
+.nl.fin{font-size:30px;color:var(--blue)}
+.nl .tag{font-size:14px;border:2px solid var(--line);padding:0 6px;background:var(--goodbg);color:var(--fbtext)}
+mark{background:var(--coin);color:var(--onCoin);padding:0 4px}
+.forms{display:grid;gap:10px}
+.forms .btn{font-size:24px;background:var(--chip);color:var(--text)}
+.rules{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.rules li{display:flex;gap:10px;align-items:center;font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:16px}
+.rules b{font-family:'DotGothic16',sans-serif;font-weight:400;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex-shrink:0;background:var(--coin);color:var(--onCoin);border:2px solid var(--line)}
+.fb{border:3px solid var(--line);padding:10px 12px;font-size:16px;line-height:1.65;margin-bottom:14px;color:var(--fbtext)}
+.fb.good{background:var(--goodbg)}
+.fb.bad{background:var(--badbg)}
+.fb b{font-weight:700}
+.graph{display:block;width:100%;max-width:300px;margin:0 auto}
+.graph .gl{stroke:var(--grid);stroke-width:1}
+.graph .ax{stroke:var(--axis);stroke-width:2}
+.graph .pl{stroke:var(--lineplot);stroke-width:3}
+.graph text{fill:var(--text);font-family:'DotGothic16',sans-serif;font-size:14px}
+.cap{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:13px;color:var(--sub);text-align:center;margin:6px 0 0}
+.done{font-size:30px;text-align:center;margin:4px 0}
+.result{text-align:center}
+.result .big{font-size:44px;margin:4px 0}
+.row{display:flex;gap:12px}
+.row .btn{flex:1}
+.ground{height:44px;margin-top:10px;border-top:3px solid var(--line);background:linear-gradient(var(--grass) 0 12px,var(--ground) 12px)}
+@media (prefers-reduced-motion: reduce){.bob{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap"><main id="app" aria-live="polite"></main></div>
+<div class="ground" aria-hidden="true"></div>
+<script>
+(function(){
+/* ====== 進捗記録の設定(GitHub Pages で使うとき) ======
+   Google Apps Script の「ウェブアプリURL」と、合言葉を入れてください。
+   空のままなら記録は送られません。 */
+var LOG_URL = '';
+var LOG_KEY = '';
+/* ================================================ */
+var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var KEY='hireiLabW1';
+function load(){try{var v=localStorage.getItem(KEY);if(v)return JSON.parse(v);}catch(e){}return null;}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){}}
+var save=load()||{};
+save.stars=save.stars||{}; save.coins=save.coins||0; save.miss=save.miss||{swap:0,sign:0,calc:0};
+if(save.sound===undefined)save.sound=true;
+save.queue=save.queue||[];
+save.device=save.device||Math.random().toString(36).slice(2,8);
+
+/* ---------- progress log ---------- */
+function calcStars(){var n=G.st.n,f=G.firstOK;return G.over?0:(f===n?3:(f>=n-2?2:1));}
+function logResult(result){
+  if(!LOG_URL||!G)return;
+  var answered=Math.min(G.st.n,G.i+(G.done?1:0)+(result==='ゲームオーバー'?1:0));
+  save.queue.push({
+    key:LOG_KEY, app:'比例ラボ 第1週', stage:G.st.name, result:result,
+    answered:answered, total:G.st.n, firstOK:G.firstOK, stars:result==='途中でやめた'?0:calcStars(),
+    swap:G.ms.swap, sign:G.ms.sign, calc:G.ms.calc,
+    seconds:Math.round((Date.now()-G.t0)/1000), device:save.device,
+    clientTime:new Date().toLocaleString('ja-JP')
+  });
+  if(save.queue.length>100)save.queue=save.queue.slice(-100);
+  persist(); flush();
+}
+var flushing=false;
+function flush(){
+  if(!LOG_URL||flushing||!save.queue.length||!window.fetch)return;
+  flushing=true;
+  fetch(LOG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(save.queue[0])})
+    .then(function(){save.queue.shift();persist();flushing=false;flush();})
+    .catch(function(){flushing=false;});
+}
+window.addEventListener('online',flush);
+
+/* ---------- sound (8bit, Web Audio) ---------- */
+var actx=null;
+function ac(){
+  if(!actx){var C=window.AudioContext||window.webkitAudioContext;if(!C)return null;try{actx=new C();}catch(e){return null;}}
+  if(actx.state==='suspended')actx.resume();
+  return actx;
+}
+function tone(f,st,dur,type,vol,to){
+  if(!save.sound)return;var c=ac();if(!c)return;
+  var t=c.currentTime+st,o=c.createOscillator(),g=c.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);
+  if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);
+  g.gain.setValueAtTime(vol||0.07,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+0.03);
+}
+var SFX={
+  tap:function(){tone(660,0,0.05,'square',0.035);},
+  place:function(){tone(523,0,0.07,'square',0.06);tone(784,0.06,0.07,'square',0.05);},
+  step:function(){tone(784,0,0.08);tone(1175,0.08,0.14);},
+  coin:function(){tone(988,0,0.07,'square',0.07);tone(1319,0.07,0.3,'square',0.07);},
+  wrong:function(){tone(196,0,0.12,'square',0.07);tone(147,0.12,0.25,'square',0.07);},
+  heart:function(){tone(440,0.05,0.35,'sawtooth',0.05,110);},
+  jumps:function(n,gap){for(var i=0;i<n;i++)tone(320,i*gap,0.12,'square',0.04,760);},
+  start:function(){[523,659,784].forEach(function(f,i){tone(f,i*0.07,0.09,'square',0.06);});},
+  clear:function(){[523,659,784,1047,0,784,1047].forEach(function(f,i){if(f)tone(f,i*0.11,0.15,'square',0.07);});tone(1568,0.8,0.5,'square',0.06);},
+  over:function(){[392,330,262,196].forEach(function(f,i){tone(f,i*0.2,0.24,'triangle',0.1);});}
+};
+function soundBtn(compact){
+  var on=save.sound;
+  return '<button class="btn plain snd" data-act="sound" aria-pressed="'+on+'" aria-label="効果音 '+(on?'オン':'オフ')+'">'
+   +'<svg width="22" height="20" viewBox="0 0 11 10" aria-hidden="true"><path d="M0 3h2l3-3h1v10H5L2 7H0z" fill="currentColor"/>'
+   +(on?'<path d="M7 3v1h1v2H7v1h1V6h1V4H8V3zM9 1v1h1v6H9v1h1V8h1V2h-1V1z" fill="currentColor"/>':'<path d="M7 3l4 4M11 3l-4 4" stroke="currentColor" stroke-width="1.2"/>')
+   +'</svg>'+(compact?'':'<span>'+(on?'音 ON':'音 OFF')+'</span>')+'</button>';
+}
+
+var STAGES=[
+  {id:'table',name:'表をうめろ',desc:'y = ax の表の「?」を計算。マイナスに注意',n:6},
+  {id:'place',name:'代入パズル',desc:'式の形を書いて、y と x を正しい□へ',n:8},
+  {id:'find',name:'a をさがせ',desc:'形→代入→符号→計算→たしかめ',n:8},
+  {id:'boss',name:'ボス戦',desc:'全部まぜて10問。ハートは3つ',n:10}
+];
+
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function sgn(){return Math.random()<.5?-1:1;}
+function M(n){return n<0?'−'+Math.abs(n):String(n);}
+function P(n){return n<0?'('+M(n)+')':M(n);}
+function frac(n,d){if(d===1)return M(n);return (n<0?'−':'')+'<span class="fr"><span>'+Math.abs(n)+'</span><span>'+d+'</span></span>';}
+function eqn(n,d){if(d===1&&n===1)return 'y = x';if(d===1&&n===-1)return 'y = −x';return 'y = '+frac(n,d)+'x';}
+
+function genPair(fp){
+  if(Math.random()<fp){var q=[2,3,4][rnd(0,2)],p;do{p=rnd(1,3);}while(gcd(p,q)!==1);p*=sgn();var k=rnd(1,3)*sgn();return {x:q*k,y:p*k,an:p,ad:q};}
+  var a=rnd(2,6)*sgn(),x=rnd(1,6)*sgn();return {x:x,y:a*x,an:a,ad:1};
+}
+function genQ(type){
+  if(type==='table'){
+    var a=rnd(1,5)*sgn(),xs=[-3,-2,-1,0,1,2,3],ask;
+    do{ask=xs[rnd(0,6)];}while(ask===0);
+    var others=xs.filter(function(v){return v!==ask&&v!==0;}),hidden=[];
+    while(hidden.length<2){var h=others[rnd(0,others.length-1)];if(hidden.indexOf(h)<0)hidden.push(h);}
+    return {type:type,a:a,xs:xs,ask:ask,hidden:hidden,an:a,ad:1,x:ask,y:a*ask};
+  }
+  var p=genPair(type==='place'?0.35:0.3);
+  p.type=type; p.flip=Math.random()<.5; return p;
+}
+
+var screen='title', G=null;
+var PRAISE=['ナイス！','クリア！','いいね！','その調子！','完ぺき！'];
+
+function startStage(id){
+  var st=STAGES.filter(function(s){return s.id===id;})[0],qs=[];
+  for(var i=0;i<st.n;i++){var t=id;if(id==='boss')t=['table','place','find','find'][rnd(0,3)];qs.push(genQ(t));}
+  G={st:st,qs:qs,i:0,firstOK:0,hearts:id==='boss'?3:null,over:false,ms:{swap:0,sign:0,calc:0},t0:Date.now()};
+  resetQ(); screen='play'; render(); SFX.start();
+}
+function resetQ(){
+  var q=G.qs[G.i];
+  G.phase=q.type==='table'?'num':'form'; G.boxes=[null,null]; G.sign=null; G.input=''; G.neg=false;
+  G.parenDone=false; G.missed=false; G.done=false; G.fb=null;
+  var f=['ax','adx','ay'];for(var i=f.length-1;i>0;i--){var j=rnd(0,i),t=f[i];f[i]=f[j];f[j]=t;}G.forms=f;
+}
+function miss(kind,msg){
+  save.miss[kind]=(save.miss[kind]||0)+1; G.ms[kind]++; G.missed=true; G.fb={ok:false,msg:msg};
+  if(G.hearts!==null){G.hearts--; if(G.hearts<=0){G.over=true; persist(); logResult('ゲームオーバー'); screen='result'; render(); SFX.over(); return true;} SFX.wrong(); SFX.heart();}
+  else SFX.wrong();
+  persist(); return false;
+}
+function finish(){
+  G.done=true; G.phase='done';
+  if(!G.missed){G.firstOK++;save.coins+=2;}else{save.coins+=1;}
+  persist();
+  var q=G.qs[G.i];
+  var msg=PRAISE[rnd(0,PRAISE.length-1)];
+  if(q.type!=='table')msg+=' ロボが '+eqn(q.an,q.ad)+' の上を走るよ。';
+  G.fb={ok:true,msg:msg};
+  render(); SFX.coin(); runRobot();
+}
+
+/* ---------- pixel art ---------- */
+var ROBO=["....Y....","....K....",".KKKKKKK.",".KBBBBBK.",".KBWBWBK.",".KBBBBBK.",".KBKKKBK.",".KKKKKKK.","..KB.BK..","..KK.KK.."];
+var COL={Y:'#FFC928',K:'#1E1B3A',B:'#4FA3F7',W:'#FFFFFF'};
+function robo(px,ox,oy){
+  var s='';for(var r=0;r<ROBO.length;r++)for(var c=0;c<ROBO[r].length;c++){var ch=ROBO[r][c];if(ch!=='.')s+='<rect x="'+(ox+c*px)+'" y="'+(oy+r*px)+'" width="'+px+'" height="'+px+'" fill="'+COL[ch]+'"/>';}
+  return s;
+}
+function coinSVG(){return '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="6" y="2" width="10" height="18" fill="#1E1B3A"/><rect x="2" y="6" width="18" height="10" fill="#1E1B3A"/><rect x="4" y="4" width="14" height="14" fill="#1E1B3A"/><rect x="7" y="4" width="8" height="14" fill="#FFC928"/><rect x="4" y="7" width="14" height="8" fill="#FFC928"/><rect x="10" y="7" width="2" height="8" fill="#E39A00"/></svg>';}
+function heartSVG(on){var f=on?'#E5484D':'none';return '<svg width="24" height="22" viewBox="0 0 12 11" aria-hidden="true"><path d="M1 1h4v1h2V1h4v1h1v4h-1v1h-1v1H9v1H8v1H7v1H5V10H4V9H3V8H2V7H1V6H0V2h1z" fill="'+f+'" stroke="currentColor" stroke-width="1"/></svg>';}
+
+/* ---------- graph ---------- */
+function graph(q){
+  var X=q.x,Y=q.y,a=q.an/q.ad;
+  var m=Math.max(Math.abs(X),Math.abs(Y),4)+1;
+  var Rs=[6,8,10,12,15,20,25,30,40],R=40;for(var i=0;i<Rs.length;i++){if(Rs[i]>=m){R=Rs[i];break;}}
+  var g=R<=8?1:R<=12?2:R===15?3:R<=30?5:10;
+  var C=150,S=135/R,s='';
+  for(var v=-R;v<=R;v+=g){if(v===0)continue;var p=C+v*S;s+='<line class="gl" x1="'+p+'" y1="15" x2="'+p+'" y2="285"/><line class="gl" x1="15" y1="'+p+'" x2="285" y2="'+p+'"/>';}
+  s+='<line class="ax" x1="10" y1="'+C+'" x2="290" y2="'+C+'"/><line class="ax" x1="'+C+'" y1="290" x2="'+C+'" y2="10"/>';
+  s+='<polygon points="290,'+C+' 282,'+(C-5)+' 282,'+(C+5)+'" fill="var(--axis)"/><polygon points="'+C+',10 '+(C-5)+',18 '+(C+5)+',18" fill="var(--axis)"/>';
+  s+='<text x="280" y="'+(C+20)+'">x</text><text x="'+(C+8)+'" y="22">y</text><text x="'+(C-16)+'" y="'+(C+18)+'">O</text>';
+  s+='<text x="'+(C+R*S-14)+'" y="'+(C+20)+'">'+R+'</text><text x="'+(C+6)+'" y="'+(C-R*S+12)+'">'+R+'</text>';
+  var x1=-R*1.5,x2=R*1.5;
+  s+='<g clip-path="url(#clip)"><line class="pl" x1="'+(C+x1*S)+'" y1="'+(C-a*x1*S)+'" x2="'+(C+x2*S)+'" y2="'+(C-a*x2*S)+'"/></g>';
+  var px=C+X*S,py=C-Y*S;
+  s+='<rect x="'+(px-6)+'" y="'+(py-6)+'" width="12" height="12" fill="#FFC928" stroke="#1E1B3A" stroke-width="2"/>';
+  var lx=px>200?px-10:px+10,anc=px>200?'end':'start',ly=py<40?py+26:py-12;
+  s+='<text x="'+lx+'" y="'+ly+'" text-anchor="'+anc+'">('+M(X)+', '+M(Y)+')</text>';
+  s+='<g id="robo" transform="translate('+C+','+C+')">'+robo(2.6,-11.7,-26)+'</g>';
+  return '<svg class="graph" viewBox="0 0 300 300" role="img" aria-label="'+eqn(q.an,q.ad).replace(/<[^>]+>/g,'')+' のグラフ。点('+M(X)+', '+M(Y)+')を通る"><defs><clipPath id="clip"><rect x="10" y="10" width="280" height="280"/></clipPath></defs>'+s+'</svg>'
+    +'<p class="cap">比例のグラフは原点Oを通る直線。数学では y が上向き(ゲーム画面とは逆!)</p>'
+    +'<span id="gdata" hidden data-c="'+C+'" data-px="'+px+'" data-py="'+py+'"></span>';
+}
+function runRobot(){
+  var r=document.getElementById('robo'),d=document.getElementById('gdata');if(!r||!d)return;
+  var C=+d.dataset.c,px=+d.dataset.px,py=+d.dataset.py;
+  if(RM){r.setAttribute('transform','translate('+px+','+py+')');SFX.jumps(1,0);return;}
+  var t0=null,dur=1100;
+  SFX.jumps(4,dur/4000);
+  function step(ts){if(!t0)t0=ts;var t=Math.min(1,(ts-t0)/dur);var hop=Math.abs(Math.sin(t*Math.PI*4))*7;
+    r.setAttribute('transform','translate('+(C+(px-C)*t)+','+(C+(py-C)*t-hop)+')');if(t<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+
+/* ---------- views ---------- */
+function starStr(n){var s='';for(var i=0;i<3;i++)s+=i<n?'★':'<span class="off">★</span>';return s;}
+function viewTitle(){
+  var h='<section class="panel"><div class="hero"><svg class="bob" width="70" height="78" viewBox="0 0 70 78" aria-hidden="true">'+robo(7.5,1.25,2)+'</svg><div><h1>比例ラボ</h1><p>第1週 比例の式をつくろう</p></div></div>'+(LOG_URL?'<p class="cap" style="text-align:left">クリアの記録は お父さんにも届くよ</p>':'')
+   +'<div class="titlebar"><p class="coins" style="margin:0">'+coinSVG()+'<span>コイン '+save.coins+'</span></p>'+soundBtn()+'</div></section>';
+  h+='<section class="panel"><h2>ステージをえらぶ</h2>';
+  STAGES.forEach(function(s){
+    h+='<button class="btn stagebtn" data-act="start" data-id="'+s.id+'"><span><span class="nm">'+s.name+'</span><span class="ds">'+s.desc+'</span></span><span class="stars" aria-label="星'+(save.stars[s.id]||0)+'つ">'+starStr(save.stars[s.id]||0)+'</span></button>';
+  });
+  h+='</section>';
+  h+='<section class="panel"><h2>書き方の3つのルール</h2><ol class="rules">'
+    +'<li><b>1</b><span>まず「y = ax」を書く</span></li>'
+    +'<li><b>2</b><span>マイナスの数は ( ) に入れる</span></li>'
+    +'<li><b>3</b><span>最後に たしかめ算</span></li></ol>'
+    +'<p class="cap" style="margin-top:10px">ワークに書くときも、アプリと同じ順番で</p></section>';
+  h+='<section class="panel"><h2>ミスのきろく</h2><div class="record">'
+    +'<div><b>'+save.miss.swap+'</b><span>式の形・<br>入れかわり</span></div>'
+    +'<div><b>'+save.miss.sign+'</b><span>符号<br>(+と−)</span></div>'
+    +'<div><b>'+save.miss.calc+'</b><span>計算</span></div></div>'
+    +'<p class="cap" style="margin-top:10px">ミスは数えるだけ。へらすのが目標!</p></section>';
+  return h;
+}
+function topBar(){
+  var h='<div class="top"><button class="btn plain" data-act="back">もどる</button><span class="prog">'+G.st.name+' '+(G.i+1)+'/'+G.st.n+'</span>';
+  if(G.hearts!==null){h+='<span class="hearts" aria-label="ハート'+G.hearts+'つ">';for(var i=0;i<3;i++)h+=heartSVG(i<G.hearts);h+='</span>';}
+  else h+='<span class="coins">'+coinSVG()+save.coins+'</span>';
+  return h+soundBtn(true)+'</div>';
+}
+function viewTable(q){
+  var h='<div class="eq">'+eqn(q.a,1)+'</div><p class="ask">x = '+M(q.ask)+' のとき y は?</p><div class="line2" style="font-size:20px">y = '+P(q.a)+' × '+P(q.ask)+'</div><div class="tblbox"><table class="tbl"><tr><th>x</th>';
+  q.xs.forEach(function(x){h+='<td>'+M(x)+'</td>';});
+  h+='</tr><tr><th>y</th>';
+  q.xs.forEach(function(x){
+    if(x===q.ask){var c=G.done?M(q.y):(G.input?(G.neg?'−':'')+G.input:(G.neg?'−':'')+'?');h+='<td class="q">'+c+'</td>';}
+    else if(q.hidden.indexOf(x)>=0)h+='<td></td>';
+    else h+='<td>'+M(q.a*x)+'</td>';
+  });
+  return h+'</tr></table></div>';
+}
+var ORDER=['form','place','paren','sign','num','check','done'];
+var STEPNAME={form:'形',place:'代入',paren:'かっこ',sign:'符号',num:'計算',check:'たしかめ'};
+function stepsBar(q){
+  var list=q.type==='place'?['form','place','paren']:['form','place','paren','sign','num','check'];
+  if(q.x>0)list=list.filter(function(v){return v!=='paren';});
+  var at=ORDER.indexOf(G.phase),h='<div class="steps" aria-label="手順">';
+  list.forEach(function(k){var i=ORDER.indexOf(k);var c=i<at?'okd':(i===at?'cur':'');h+='<span class="'+c+'">'+STEPNAME[k]+'</span>';});
+  return h+'</div>';
+}
+function aP(q){var f=frac(q.an,q.ad);return (q.ad!==1||q.an<0)?'('+f+')':f;}
+function boxVal(k,q){if(!k)return '';return M(k==='x'?q.x:q.y);}
+function viewPlace(q){
+  var at=ORDER.indexOf(G.phase),find=q.type==='find';
+  var h=stepsBar(q)+'<p class="ask">x = '+M(q.x)+' のとき y = '+M(q.y)+'</p><div class="note">';
+  h+=at===0?'<div class="nl muted">まず 式の形 を書こう</div>':'<div class="nl">y = ax</div>';
+  if(at===1){
+    h+='<div class="nl"><div class="tpl"><button class="box'+(G.boxes[0]?' fill':'')+'" data-act="box" data-i="0" aria-label="左の□">'+boxVal(G.boxes[0],q)+'</button><span>= a ×</span>'
+      +'<button class="box'+(G.boxes[1]?' fill':'')+'" data-act="box" data-i="1" aria-label="右の□">'+boxVal(G.boxes[1],q)+'</button></div></div>';
+  }else if(at>=2){
+    var xs=G.phase==='paren'?'<mark>'+M(q.x)+'</mark>':P(q.x);
+    h+='<div class="nl">'+M(q.y)+' = a × '+xs+'</div>';
+  }
+  if(find&&at>=3)h+='<div class="nl">a = '+M(q.y)+' ÷ '+P(q.x)+'</div>';
+  if(find&&at===4)h+='<div class="nl">a = <span class="ans">'+(G.sign<0?'−':'')+(G.input||'&nbsp;')+'</span></div>';
+  if(find&&at>=5){
+    h+='<div class="nl">a = '+frac(q.an,q.ad)+'</div>';
+    var rhs=G.phase==='check'?'<span class="ans">'+(G.neg?'−':'')+(G.input||'&nbsp;')+'</span>':M(q.y)+' <span class="tag">OK</span>';
+    h+='<div class="nl"><span style="font-size:15px">たしかめ</span> '+aP(q)+' × '+P(q.x)+' = '+rhs+'</div>';
+  }
+  if(G.done)h+='<div class="nl fin">'+eqn(q.an,q.ad)+'</div>';
+  return h+'</div>';
+}
+function keypad(q){
+  var neg=q.type==='table'||G.phase==='check';
+  var keys=['7','8','9','4','5','6','1','2','3',neg?'−':'/','0','⌫'],h='<div class="keypad">';
+  keys.forEach(function(k){var on=(k==='−'&&G.neg)?' on':'';var lab=k==='⌫'?' aria-label="1文字けす"':(k==='−'?' aria-label="マイナス切りかえ" aria-pressed="'+G.neg+'"':'');h+='<button class="btn'+on+'" data-act="key" data-v="'+k+'"'+lab+'>'+k+'</button>';});
+  return h+'<button class="btn ok" data-act="ok">OK</button></div>';
+}
+function controls(q){
+  if(G.done)return '<button class="btn blue wide" data-act="next">'+(G.i+1>=G.st.n?'結果を見る':'次へ')+'</button>';
+  if(G.phase==='form'){
+    var lab={ax:'y = ax',adx:'y = '+'<span class="fr"><span>a</span><span>x</span></span>',ay:'x = ay'},h='<p class="ask" style="font-size:18px">比例の式の形はどれ?</p><div class="forms">';
+    G.forms.forEach(function(f){h+='<button class="btn" data-act="form" data-v="'+f+'">'+lab[f]+'</button>';});
+    return h+'</div>';
+  }
+  if(G.phase==='place'){
+    var ks=q.flip?['x','y']:['y','x'],h2='<div class="chips">';
+    ks.forEach(function(k){var used=G.boxes.indexOf(k)>=0;h2+='<button class="btn" data-act="chip" data-k="'+k+'"'+(used?' disabled':'')+'>'+M(k==='x'?q.x:q.y)+'</button>';});
+    return h2+'</div><p class="cap">数字をタップすると□に入るよ。□をタップすると取り消し</p>';
+  }
+  if(G.phase==='paren')return '<p class="ask" style="font-size:18px">マイナスの数が入ったね。どう書く?</p><div class="signs"><button class="btn" data-act="paren" data-v="wrap">( ) をつける</button><button class="btn plain" data-act="paren" data-v="skip">このままでOK</button></div>';
+  if(G.phase==='sign')return '<p class="ask" style="font-size:18px">a はプラス? マイナス?</p><div class="signs"><button class="btn" data-act="sign" data-v="1">+ プラス</button><button class="btn" data-act="sign" data-v="-1">− マイナス</button></div>';
+  if(G.phase==='check')return '<p class="ask" style="font-size:18px">たしかめ算: 計算して y になるかな?</p>'+keypad(q);
+  return keypad(q);
+}
+function viewPlay(){
+  var q=G.qs[G.i],h=topBar();
+  h+='<section class="panel">'+(q.type==='table'?viewTable(q):viewPlace(q))+'</section>';
+  if(G.fb)h+='<div class="fb hint '+(G.fb.ok?'good':'bad')+'" role="status">'+G.fb.msg+'</div>';
+  if(G.done)h+='<section class="panel">'+graph(q)+'</section>';
+  h+='<section class="panel">'+controls(q)+'</section>';
+  return h;
+}
+function viewResult(){
+  var n=G.st.n,f=G.firstOK,st=calcStars();
+  if(st>(save.stars[G.st.id]||0)){save.stars[G.st.id]=st;persist();}
+  var title=G.over?'ハートがなくなった…':'ステージクリア!';
+  var sub=G.over?'あと一歩。ミスした問題のヒントを思い出してもう一回!':'1回でせいかい '+f+' / '+n+' 問';
+  return '<section class="panel result"><svg class="bob" width="70" height="78" viewBox="0 0 70 78" aria-hidden="true">'+robo(7.5,1.25,2)+'</svg>'
+    +'<p class="big">'+title+'</p><p class="stars" style="font-size:34px;margin:0">'+starStr(st)+'</p><p>'+sub+'</p>'
+    +'<p class="coins" style="justify-content:center;display:flex">'+coinSVG()+'コイン '+save.coins+'</p>'
+    +'<div class="row"><button class="btn" data-act="start" data-id="'+G.st.id+'">もう一回</button><button class="btn plain" data-act="back">ステージへ</button></div></section>';
+}
+function render(){
+  var app=document.getElementById('app');
+  app.innerHTML=screen==='title'?viewTitle():screen==='play'?viewPlay():viewResult();
+}
+
+/* ---------- logic ---------- */
+function onForm(v){
+  if(G.phase!=='form')return;
+  if(v==='ax'){G.phase='place';G.fb={ok:true,msg:'まず <b>y = ax</b>。これを書いてから代入すると、入れかわりが起きにくいよ。'};SFX.step();render();return;}
+  var msg=v==='ay'?'<b>xとyが逆!</b> 比例は y = ax。左に来るのは y だよ。':'それは<b>反比例</b>の式(3週目に出てくるよ)。比例は y = ax。';
+  if(miss('swap',msg))return;render();
+}
+function afterPlace(){
+  var q=G.qs[G.i];
+  if(q.type==='place'){finish();return;}
+  G.phase='sign';G.fb={ok:true,msg:'代入OK! 次は a の<b>符号</b>を決めよう。'};SFX.step();render();
+}
+function onChip(k){
+  var q=G.qs[G.i];if(G.phase!=='place')return;
+  var idx=G.boxes[0]===null?0:1;G.boxes[idx]=k;G.fb=null;SFX.place();
+  if(G.boxes[0]&&G.boxes[1]){
+    if(G.boxes[0]==='y'&&G.boxes[1]==='x'){
+      if(q.x<0){G.phase='paren';G.fb=null;render();return;}
+      afterPlace();return;
+    }else{
+      G.boxes=[null,null];
+      if(miss('swap','<b>xとyが入れかわってるよ!</b> y = a × x だから、左の□には <b>y の値('+M(q.y)+')</b>、右の□には x の値が入るよ。'))return;
+    }
+  }
+  render();
+}
+function onParen(v){
+  if(G.phase!=='paren')return;
+  if(v==='wrap'){G.parenDone=true;afterPlace();if(!G.done){G.fb={ok:true,msg:'<b>( ) でガード!</b> 次は a の<b>符号</b>を決めよう。'};render();}return;}
+  G.fb={ok:false,msg:'このままだと「× −」が並んで、符号を見落としやすい。<b>マイナスの数は ( ) に入れよう。</b>'};SFX.tap();render();
+}
+function onBox(i){if(G.phase!=='place')return;G.boxes[i]=null;if(i===0&&G.boxes[1]){G.boxes[0]=G.boxes[1];G.boxes[1]=null;}render();}
+function onSign(v){
+  var q=G.qs[G.i];if(G.phase!=='sign')return;
+  var right=q.an<0?-1:1;
+  if(v===right){G.sign=v;G.phase='num';G.fb={ok:true,msg:'符号OK! あとは数を入れよう。'};SFX.step();}
+  else{
+    var ys=q.y<0?'−':'+',xs=q.x<0?'−':'+',rs=right<0?'−':'+';
+    if(miss('sign','<b>符号チェック!</b> ('+ys+') ÷ ('+xs+') = ('+rs+')。わり算は <b>同じ符号なら+、ちがう符号なら−</b>。'))return;
+  }
+  render();
+}
+function onKey(k){
+  if(G.done||(G.phase!=='num'&&G.phase!=='check'))return;
+  var q=G.qs[G.i];
+  SFX.tap();
+  if(k==='⌫')G.input=G.input.slice(0,-1);
+  else if(k==='−'){if(q.type==='table'||G.phase==='check')G.neg=!G.neg;}
+  else if(k==='/'){if(G.phase==='num'&&q.type!=='table'&&G.input&&G.input.indexOf('/')<0)G.input+='/';}
+  else if(/^\d$/.test(k)&&G.input.length<6)G.input+=k;
+  render();
+}
+function onOK(){
+  var q=G.qs[G.i];if(G.done||(G.phase!=='num'&&G.phase!=='check'))return;
+  if(G.phase==='check'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてからOKを押そう。'};render();return;}
+    var cv=(G.neg?-1:1)*parseInt(G.input,10);
+    if(cv===q.y){finish();return;}
+    var st2;
+    if(Math.abs(cv)===Math.abs(q.y))st2=miss('sign','<b>数は合ってる! 符号をチェック。</b> かけ算は 同じ符号なら+、ちがう符号なら−。');
+    else st2=miss('calc',q.ad!==1?'分数のかけ算は、<b>x ÷ 分母 × 分子</b> の順でやると楽だよ。':'かけ算しなおしてみよう。');
+    if(st2)return;G.input='';G.neg=false;render();return;
+  }
+  if(q.type==='table'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてからOKを押そう。'};render();return;}
+    var val=(G.neg?-1:1)*parseInt(G.input,10);
+    if(val===q.y){finish();return;}
+    var stop;
+    if(Math.abs(val)===Math.abs(q.y))stop=miss('sign','<b>数は合ってる! 符号をチェック。</b> かけ算は 同じ符号なら+、ちがう符号なら−。');
+    else stop=miss('calc','y = '+M(q.a)+' × '+P(q.ask)+' を計算しよう。表のとなりの数もヒントになるよ。');
+    if(stop)return;
+    G.input='';G.neg=false;render();return;
+  }
+  var mt=G.input.match(/^(\d+)(?:\/(\d+))?$/);
+  if(!mt){G.fb={ok:false,msg:'数を入れてね。分数は 1/3 のように / を使うよ。'};render();return;}
+  var n=+mt[1],d=mt[2]?+mt[2]:1;
+  if(d===0){G.fb={ok:false,msg:'分母に0は使えないよ。'};G.input='';render();return;}
+  var tn=Math.abs(q.an),td=q.ad;
+  if(n*td===tn*d){
+    if(gcd(n,d)!==1){G.fb={ok:false,msg:'<b>おしい!</b> 値は合ってる。<b>約分</b>してみよう。'};G.input='';render();return;}
+    G.phase='check';G.input='';G.neg=false;G.fb={ok:true,msg:'a が出た! 最後に<b>たしかめ算</b>。a × x が y になるかな?'};SFX.step();render();return;
+  }
+  if(miss('calc',Math.abs(q.y)+' ÷ '+Math.abs(q.x)+' を計算しよう。わり切れないときは <b>分数(○/○)</b> で書くよ。'))return;
+  G.input='';render();
+}
+function onNext(){var fin=G.i+1>=G.st.n;if(fin)logResult('クリア');G.i++;if(fin){screen='result';}else resetQ();render();window.scrollTo(0,0);if(fin)SFX.clear();else SFX.tap();}
+
+document.getElementById('app').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b||b.disabled)return;
+  var a=b.dataset.act;
+  if(a==='start')startStage(b.dataset.id);
+  else if(a==='back'){if(screen==='play'&&G&&(G.i>0||G.done))logResult('途中でやめた');screen='title';G=null;render();window.scrollTo(0,0);}
+  else if(a==='chip')onChip(b.dataset.k);
+  else if(a==='form')onForm(b.dataset.v);
+  else if(a==='paren')onParen(b.dataset.v);
+  else if(a==='box')onBox(+b.dataset.i);
+  else if(a==='sign')onSign(+b.dataset.v);
+  else if(a==='key')onKey(b.dataset.v);
+  else if(a==='ok')onOK();
+  else if(a==='next')onNext();
+  else if(a==='sound'){save.sound=!save.sound;persist();render();if(save.sound)SFX.coin();}
+});
+document.addEventListener('keydown',function(e){
+  if(screen!=='play'||!G)return;
+  if(G.done&&e.key==='Enter'){onNext();return;}
+  if(G.phase!=='num'&&G.phase!=='check')return;
+  if(/^\d$/.test(e.key))onKey(e.key);
+  else if(e.key==='Backspace')onKey('⌫');
+  else if(e.key==='-')onKey('−');
+  else if(e.key==='/')onKey('/');
+  else if(e.key==='Enter')onOK();
+});
+render();
+flush();
+})();
+</script>
+</body>
+</html>
