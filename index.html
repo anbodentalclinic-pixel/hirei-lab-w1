@@ -187,6 +187,19 @@ pre.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-h
 @keyframes buildin{0%{opacity:0;transform:translateY(-8px) scale(.4)}70%{opacity:1;transform:translateY(1px) scale(1.08)}100%{opacity:1;transform:none}}
 svg.build > *{animation:buildin .3s steps(5) both;transform-box:fill-box;transform-origin:center}
 .tvplay{width:100%;margin-top:8px;min-height:44px;font-size:16px}
+.vgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.vgrid .btn{background:var(--chip);color:var(--text);font-size:20px;min-height:46px;padding:4px}
+.vgrid .btn.on{background:var(--coin);color:var(--onCoin)}
+.remind{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:15px;text-align:center;border:2px dashed var(--line);padding:6px 8px;margin:0 0 10px;background:var(--goodbg);color:var(--fbtext)}
+.jline{display:block;width:100%;max-width:360px;margin:0 auto}
+.jline .jl{font-family:'DotGothic16',sans-serif;font-size:10px;fill:var(--sub)}
+.jline .jl.on{fill:var(--text);font-size:13px;font-weight:700}
+.jline .jk{font-family:'Zen Kaku Gothic New',sans-serif;font-size:9px;font-weight:700;fill:#E9822E}
+.arcnew{stroke-dasharray:80;stroke-dashoffset:80;animation:drawarc .35s ease-out forwards}
+@keyframes drawarc{to{stroke-dashoffset:0}}
+.hopnew{animation:hop .35s ease-out}
+@keyframes hop{40%{transform:translateY(-14px)}}
+@media (prefers-reduced-motion: reduce){.arcnew{animation:none;stroke-dashoffset:0}.hopnew{animation:none}}
 </style>
 </head>
 <body>
@@ -277,7 +290,7 @@ var STAGES=[
   {id:'table',name:'表をうめろ',desc:'y = ax の表の「?」を計算。マイナスに注意',n:6},
   {id:'place',name:'代入パズル',desc:'式の形を書いて、y と x を正しい□へ',n:8},
   {id:'find',name:'a をさがせ',desc:'形→代入→符号→計算→たしかめ',n:8},
-  {id:'words',name:'関係ラボ',desc:'関数マシン・表から比例/反比例を見ぬく・変域',n:7},
+  {id:'words',name:'関係ラボ',desc:'関数マシン・表から比例/反比例を見ぬく・変域',n:8},
   {id:'boss',name:'ボス戦',desc:'全部まぜて10問。ハートは3つ',n:10}
 ];
 
@@ -334,6 +347,7 @@ function numberLine(d){
 }
 /* ---------- 関係ラボ:関数マシン ---------- */
 var MACH=[
+ {t:'自然数 x → x の2倍 y',ex:'たとえば 3 の2倍は 6',pair:true,fn:true,xs:[2,3,5],v:'double',f:function(x){return 2*x;},code:'int y(int x) {\n  return 2 * x;\n}'},
  {t:'1辺が x cm の正方形 → 面積 y cm²',fn:true,xs:[2,3,4],v:'square',f:function(x){return x*x;},code:'int y(int x) {\n  return x * x;\n}'},
  {t:'1000円出して x 円の買い物 → おつり y 円',fn:true,xs:[100,300,500],v:'change',f:function(x){return 1000-x;},code:'int y(int x) {\n  return 1000 - x;\n}'},
  {t:'20km を時速 x km で進む → かかる時間 y 時間',fn:true,xs:[2,4,5],v:'road',f:function(x){return 20/x;},code:'int y(int x) {\n  return 20 / x;\n}'},
@@ -356,7 +370,8 @@ var TAB=[
  {v:'rect30',t:'周の長さが 30cm の長方形の縦 x cm と横 y cm',k:'none',op:'sub',c:15,xs:[1,2,3,4,5],w:'横 = 15(周の半分) − 縦',e:'y = 15 − x'},
  {v:'bro',t:'弟が x 歳のとき、3歳上の兄は y 歳',k:'none',op:'add',c:3,xs:[1,2,3,4,5],w:'兄の年 = 弟の年 + 3',e:'y = x + 3'}];
 function tabY(r,x){return r.k==='prop'?r.c*x:r.k==='inv'?r.c/x:(r.op==='sub'?r.c-x:x+r.c);}
-function genMach(fn){var pool=MACH.filter(function(m){return m.fn===fn;});return {type:'words',sub:'mach',m:pool[rnd(0,pool.length-1)]};}
+function machBy(v){return {type:'words',sub:'mach',m:MACH.filter(function(m){return m.v===v;})[0]};}
+function genMach(fn){var pool=MACH.filter(function(m){return m.fn===fn&&!m.pair&&m.v!=='mult';});return {type:'words',sub:'mach',m:pool[rnd(0,pool.length-1)]};}
 function genTab(k){var pool=TAB.filter(function(r){return r.k===k;});var r=pool[rnd(0,pool.length-1)];return {type:'words',sub:'tab',r:r,mo:r.mo?shuffle(r.mo):null};}
 function rfrac(n,d){var g=gcd(n,d);n/=g;d/=g;return frac(n,d);}
 
@@ -385,6 +400,11 @@ var VIZ={
   age:function(x,y){var hgt=30+(y-115)*1.1;return '<line x1="20" y1="86" x2="120" y2="86" stroke="var(--grid)" stroke-width="2"/>'+person(70,86,hgt,22,'#E9822E')+vt(70,102,x+'歳 → '+y+'cm');},
   rect:function(x,y){var h=x/2,a=Math.round((h-Math.sqrt(h*h-4*y))/2),b=h-a,u=Math.min(11,120/b,64/a);var w=b*u,hh=a*u,ox=70-w/2,oy=12+(64-hh)/2;
     return tiles(ox,oy,b,a,u)+vt(70,94,b+'×'+a+' → '+y+'マス');},
+  double:function(x,y){var s=vt(70,14,x+' の2倍'),w=20,gap=2,ox=70-(6*w+5*gap)/2;
+    for(var k=1;k<=6;k++){var v=x*k,on=k===2,bx0=ox+(k-1)*(w+gap);
+      s+='<rect x="'+bx0+'" y="26" width="'+w+'" height="22" fill="'+(on?'#FFC928':'var(--panel)')+'" stroke="#1E1B3A" stroke-width="'+(on?2.5:1)+'" opacity="'+(on?1:0.25)+'"/>'+(on?vt(bx0+w/2,41,String(v)):'');}
+    s+='<polygon points="'+(ox+(w+gap)+w/2-5)+',56 '+(ox+(w+gap)+w/2+5)+',56 '+(ox+(w+gap)+w/2)+',50" fill="#E5484D"/>';
+    return s+vt(70,72,'2倍は これ1つだけ → '+y)+vt(70,90,'('+x+' × 2)');},
   mult:function(x,y){var s=vt(70,14,x+' の倍数'),w=20,gap=2,ox=70-(6*w+5*gap)/2;
     for(var k=1;k<=6;k++){var v=x*k,on=v===y,bx0=ox+(k-1)*(w+gap);
       s+='<rect x="'+bx0+'" y="26" width="'+w+'" height="22" fill="'+(on?'#FFC928':'var(--panel)')+'" stroke="#1E1B3A" stroke-width="'+(on?2.5:1)+'"/>'+vt(bx0+w/2,41,String(v));}
@@ -395,7 +415,9 @@ function vizCard(m,e,clash,anim){
   return '<div class="mcard'+(clash?' clash':'')+'"><svg viewBox="0 0 140 108" aria-hidden="true"'+(anim?' data-anim="0"':'')+'>'+VIZ[m.v](e.x,e.y)+'</svg><div class="mcap">x = '+M(e.x)+' → y = '+M(e.y)+'</div></div>';
 }
 function viewMach(q){
-  var m=q.m,h='<p class="ask">関数マシンを調べよう</p><p class="wtext">'+m.t+'</p>'+(m.ex?'<p class="cap" style="margin-top:-6px">'+m.ex+'</p>':'');
+  var m=q.m,h='<p class="ask">関数マシンを調べよう</p><p class="wtext">'+m.t+'</p>'+(m.ex&&G.phase!=='vocab'&&G.phase!=='intro'?'<p class="cap" style="margin-top:-6px">'+m.ex+'</p>':'')+(m.v==='mult'&&G.dbl&&G.phase!=='vocab'&&G.phase!=='intro'?'<p class="remind">さっきの「2倍マシン」は、3 を何回入れても <b>6</b> だった。こんどは?</p>':'');
+  if(G.phase==='intro')return h+introView();
+  if(G.phase==='vocab')return h+'<p class="ask" style="font-size:18px">じゃあ、<b>4 の倍数</b>は?<br>ぜんぶタップしよう</p>';
   var last=G.hist.length?G.hist[G.hist.length-1]:null;
   h+='<div class="mach" aria-hidden="true"><div class="mslot"><span>x</span><b>'+(last?M(last.x):'?')+'</b></div>'
     +'<svg class="mbox'+(G.pop?' pop':'')+'" viewBox="0 0 84 70"><rect x="2" y="8" width="80" height="58" fill="var(--blue)" stroke="var(--line)" stroke-width="3"/><rect x="12" y="18" width="60" height="22" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/><text x="42" y="34" text-anchor="middle" style="font-size:12px;fill:var(--text)">関数?</text><rect x="16" y="48" width="10" height="10" fill="#FFC928"/><rect x="32" y="48" width="10" height="10" fill="#E5484D"/><rect x="58" y="0" width="8" height="10" fill="var(--line)"/></svg>'
@@ -408,13 +430,18 @@ function viewMach(q){
   if(G.done){
     h+='<div class="note">';
     if(m.fn)h+='<div class="nl">同じ x からは、いつも同じ y</div><div class="nl fin" style="font-size:24px">関数である</div><div class="nl muted">Javaで書くと、こんなメソッドになる</div><pre class="code">'+m.code+'</pre>';
-    else h+='<div class="nl">同じ x なのに、y がちがう!</div><div class="nl fin" style="font-size:24px">関数ではない</div><div class="nl muted">'+m.why+'。y を1つ返すメソッドは書けない</div>';
+    else h+=(m.v==='mult'?'<div class="nl" style="font-size:17px">x の2倍 → 1つ(関数)/x の倍数 → たくさん</div>':'')+'<div class="nl">同じ x なのに、y がちがう!</div><div class="nl fin" style="font-size:24px">関数ではない</div><div class="nl muted">'+m.why+'。y を1つ返すメソッドは書けない</div>';
     h+='</div>';
   }
   return h;
 }
 function machState(){var xs={},rep=false;G.hist.forEach(function(e){if(xs[e.x])rep=true;xs[e.x]=1;});return {n:G.hist.length,rep:rep};}
 function machControls(q){
+  if(G.phase==='intro'){
+    if(G.jumps<6)return '<button class="btn wide" data-act="jump" style="font-size:24px;min-height:64px">ジャンプ! (+3)</button><p class="cap">ロボは 1回で 3 ずつ進むよ</p>';
+    return '<button class="btn blue wide" data-act="introok">わかった! 次へ</button>';}
+  if(G.phase==='vocab'){var g='<div class="vgrid">';for(var n=1;n<=20;n++)g+='<button class="btn'+(G.vsel[n]?' on':'')+'" data-act="vsel" data-v="'+n+'" aria-pressed="'+(!!G.vsel[n])+'">'+n+'</button>';
+    return g+'</div><button class="btn wide" data-act="vok" style="margin-top:10px">できた</button><p class="cap">1〜20 の中で、4 の倍数はどれ? (ロボが 4 ずつジャンプしたら?)</p>';}
   var st=machState(),h='<div class="choices three">';
   q.m.xs.forEach(function(x){h+='<button class="btn" data-act="mx" data-v="'+x+'">x = '+M(x)+'</button>';});
   h+='</div><div class="mstat"><span class="'+(st.n>=3?'okd':'')+'">入れた回数 '+Math.min(st.n,3)+'/3</span><span class="'+(st.rep?'okd':'')+'">同じ x をもう一度 '+(st.rep?'OK':'まだ')+'</span></div>';
@@ -430,9 +457,37 @@ function onMachX(x){
   G.hist.push({x:x,y:y});G.pop=true;G.animNew=true;G.fb=null;SFX.place();setTimeout(function(){SFX.step();},120);render();
   setTimeout(function(){G&&(G.pop=false);},400);
 }
+function introView(){
+  var n=G.jumps,L=12,U=(300-2*L)/21,y=66,h='<p class="ask" style="font-size:18px;margin-bottom:4px"><b>倍数</b>ってなに?</p>';
+  var sv='<svg class="jline" viewBox="0 0 300 120" aria-label="3ずつ進む数直線">';
+  sv+='<line x1="'+L+'" y1="'+y+'" x2="'+(300-L)+'" y2="'+y+'" stroke="var(--axis)" stroke-width="2"/>';
+  for(var v=0;v<=21;v++){var px=L+v*U,land=v>0&&v%3===0&&v/3<=n;
+    sv+='<line x1="'+px+'" y1="'+(y-4)+'" x2="'+px+'" y2="'+(y+4)+'" stroke="var(--axis)" stroke-width="1"/>';
+    sv+='<text x="'+px+'" y="'+(y+18)+'" text-anchor="middle" class="'+(land?'jl on':'jl')+'">'+v+'</text>';
+    if(land)sv+='<text x="'+px+'" y="'+(y+34)+'" text-anchor="middle" class="jk">3×'+(v/3)+'</text>';}
+  for(var k=1;k<=n;k++){var x1=L+(k-1)*3*U,x2=L+k*3*U;sv+='<path d="M'+x1+' '+y+' Q'+((x1+x2)/2)+' '+(y-34)+' '+x2+' '+y+'" fill="none" stroke="#E9822E" stroke-width="2.5"'+(k===n?' class="arcnew"':'')+'/>';
+    sv+='<rect x="'+(x2-5)+'" y="'+(y-5)+'" width="10" height="10" fill="#FFC928" stroke="#1E1B3A" stroke-width="1.5"/>';}
+  var rx=L+n*3*U;sv+='<g class="'+(n?'hopnew':'')+'" style="transform-box:fill-box">'+robo(1.8,rx-8.1,y-24)+'</g>';
+  if(n>=6)sv+='<text x="292" y="'+(y-8)+'" text-anchor="end" class="jl on">…</text>';
+  h+=sv+'</svg>';
+  if(n===0)h+='<p class="wtext" style="font-size:16px">ロボが 0 から <b>3 ずつ</b>ジャンプするよ。<br>着地したところを見てみよう。</p>';
+  else if(n<6)h+='<p class="wtext" style="font-size:16px">着地:'+[3,6,9,12,15,18].slice(0,n).join(', ')+'</p>';
+  else h+='<div class="note"><div class="nl">3, 6, 9, 12, 15, 18 … まだまだ続く!</div><div class="nl">3 ずつ進んで着地する数が<b style="all:unset;font-weight:700">&nbsp;3 の倍数</b></div><div class="nl muted">3×1, 3×2, 3×3 … のように、3 に整数をかけた数ぜんぶ</div><div class="nl" style="font-size:17px">3 の<b style="all:unset;font-weight:700">2倍</b>は、2回目に着地した 6 の<b style="all:unset;font-weight:700">1つだけ</b></div><div class="nl muted">プログラムなら x % 3 == 0 の数</div></div>';
+  return h;
+}
+function onVocabOK(){
+  var sel=Object.keys(G.vsel).filter(function(k){return G.vsel[k];}).map(Number).sort(function(a,b){return a-b;});
+  var right=[4,8,12,16,20];
+  if(sel.join(',')===right.join(',')){G.phase='try';G.fb={ok:true,msg:'正解! 4 の倍数は 4, 8, 12, 16, 20, … とまだまだ続く。<b>倍数は1つじゃない</b>。では、倍数マシンを調べよう。'};SFX.step();render();return;}
+  var msg;
+  if(sel.length===1&&sel[0]===8)msg='8 は <b>4 の2倍</b>だね。<b>倍数</b>は 4×1, 4×2, 4×3 … と、4 ずつジャンプして着地する数<b>ぜんぶ</b>だよ。';
+  else if(sel.length<right.length&&sel.every(function(n){return n%4===0;}))msg='合ってる数もあるけど、<b>まだある</b>よ。4 ずつジャンプして、20 までに着地する数をぜんぶ。';
+  else msg='4 ずつジャンプして着地する数(4×1, 4×2, 4×3 …)だけが 4 の倍数だよ。';
+  if(miss('word',msg))return;render();
+}
 function onMachJudge(v){
   var q=G.qs[G.i];
-  if((v==='1')===q.m.fn){finish();return;}
+  if((v==='1')===q.m.fn){if(q.m.v==='double')G.dbl=true;finish();return;}
   if(miss('word','<b>同じ x を入れたときの y</b>を見比べよう。いつも同じなら関数、ちがう y が出たら関数ではない。'))return;render();
 }
 
@@ -599,7 +654,7 @@ var PRAISE=['ナイス！','クリア！','いいね！','その調子！','完�
 
 function startStage(id){
   var st=STAGES.filter(function(s){return s.id===id;})[0],qs=[];
-  if(id==='words'){qs=shuffle([genMach(true),genMach(false)]).concat(shuffle([genTab('prop'),genTab('inv'),genTab('none')]));qs.push(genWords('dom'));var qz=genWords('rel');qz.quiz=true;qs.push(qz);}
+  if(id==='words'){qs=[machBy('double'),machBy('mult'),genMach(Math.random()<0.5)].concat(shuffle([genTab('prop'),genTab('inv'),genTab('none')]));qs.push(genWords('dom'));var qz=genWords('rel');qz.quiz=true;qs.push(qz);}
   else for(var i=0;i<st.n;i++){var t=id;if(id==='boss')t=['table','place','find','find'][rnd(0,3)];qs.push(genQ(t));}
   G={st:st,qs:qs,i:0,firstOK:0,hearts:id==='boss'?3:null,over:false,ms:{swap:0,sign:0,calc:0,word:0},t0:Date.now()};
   resetQ(); screen='play'; render(); SFX.start();
@@ -607,7 +662,8 @@ function startStage(id){
 function resetQ(){
   var q=G.qs[G.i];
   G.phase=q.type==='table'?'num':(q.type==='words'?({mach:'try',tab:'fill',rel:'kind'}[q.sub]||'choice'):'form');
-  G.hist=[];G.pop=false;G.ty=[];G.fillAt=1;G.rows={div:false,mul:false};
+  G.hist=[];G.pop=false;G.vsel={};
+  if(q.type==='words'&&q.sub==='mach'&&q.m.v==='mult'){G.phase='intro';G.jumps=0;}G.ty=[];G.fillAt=1;G.rows={div:false,mul:false};
   if(q.type==='words'&&q.sub==='tab'){var rr=q.r;G.ty=rr.xs.map(function(x,i){return i===0?tabY(rr,x):null;});G.animCols=[0,1];} G.boxes=[null,null]; G.sign=null; G.input=''; G.neg=false;
   G.parenDone=false; G.missed=false; G.done=false; G.fb=null;
   var f=['ax','adx','ay'];for(var i=f.length-1;i>0;i--){var j=rnd(0,i),t=f[i];f[i]=f[j];f[j]=t;}G.forms=f;
@@ -1114,6 +1170,10 @@ document.getElementById('app').addEventListener('click',function(e){
   else if(a==='form')onForm(b.dataset.v);
   else if(a==='wc')onWord(b.dataset.v);
   else if(a==='mx')onMachX(+b.dataset.v);
+  else if(a==='vsel'){G.vsel[b.dataset.v]=!G.vsel[b.dataset.v];SFX.tap();render();}
+  else if(a==='vok')onVocabOK();
+  else if(a==='jump'){if(G.phase==='intro'&&G.jumps<6){G.jumps++;SFX.jumps(1,0);render();}}
+  else if(a==='introok'){G.phase='vocab';G.fb=null;SFX.step();render();}
   else if(a==='tvplay'){G.animCols=[0,1,2,3,4];render();}
   else if(a==='trow'){G.rows[b.dataset.v]=!G.rows[b.dataset.v];SFX.tap();render();}
   else if(a==='wkey')onTabKey(b.dataset.v);
