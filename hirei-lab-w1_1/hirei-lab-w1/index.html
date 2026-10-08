@@ -1,0 +1,1149 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>比例ラボ 第1週</title>
+<meta name="description" content="中1数学 比例の式(y = ax)を、式の形→代入→かっこ→符号→計算→たしかめ算の順で練習するゲーム">
+<meta name="theme-color" content="#63B7F2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="比例ラボ">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 10'%3E%3Crect x='4' width='1' height='1' fill='%23FFC928'/%3E%3Crect x='4' y='1' width='1' height='1' fill='%231E1B3A'/%3E%3Crect x='1' y='2' width='7' height='6' fill='%231E1B3A'/%3E%3Crect x='2' y='3' width='5' height='4' fill='%234FA3F7'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='5' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='3' y='6' width='3' height='1' fill='%231E1B3A'/%3E%3Crect x='2' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3Crect x='5' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#63B7F2; --panel:#FFF6DC; --text:#1E1B3A; --line:#1E1B3A; --sub:#4B4668;
+  --coin:#FFC928; --onCoin:#1E1B3A; --blue:#2F6FD6; --onBlue:#FFFFFF;
+  --chip:#FFFFFF; --goodbg:#D9F3E0; --badbg:#FFE0DA; --fbtext:#1E1B3A;
+  --grass:#4FBF45; --ground:#9A5B2A; --grid:#D9CFAE; --axis:#1E1B3A; --lineplot:#2F6FD6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky:#18234A; --panel:#262B45; --text:#F3EEDB; --line:#05070F; --sub:#C2BCDD;
+    --coin:#FFC928; --onCoin:#1E1B3A; --blue:#7FA9FF; --onBlue:#0E1430;
+    --chip:#353B5E; --goodbg:#1F4A31; --badbg:#5A2525; --fbtext:#F3EEDB;
+    --grass:#2F7F3A; --ground:#5E3818; --grid:#3E4468; --axis:#F3EEDB; --lineplot:#7FA9FF;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --sky:#18234A; --panel:#262B45; --text:#F3EEDB; --line:#05070F; --sub:#C2BCDD;
+  --coin:#FFC928; --onCoin:#1E1B3A; --blue:#7FA9FF; --onBlue:#0E1430;
+  --chip:#353B5E; --goodbg:#1F4A31; --badbg:#5A2525; --fbtext:#F3EEDB;
+  --grass:#2F7F3A; --ground:#5E3818; --grid:#3E4468; --axis:#F3EEDB; --lineplot:#7FA9FF;
+  color-scheme: dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--sky);}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--sky);color:var(--text);font-family:'DotGothic16','Zen Kaku Gothic New',system-ui,sans-serif;font-size:18px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:480px;margin:0 auto;padding:16px 16px 0}
+.panel{background:var(--panel);border:3px solid var(--line);box-shadow:5px 5px 0 var(--line);padding:16px;margin-bottom:18px}
+button{font-family:inherit;color:inherit}
+.btn{font-size:20px;background:var(--coin);color:var(--onCoin);border:3px solid var(--line);box-shadow:4px 4px 0 var(--line);padding:10px 16px;min-height:52px;cursor:pointer;touch-action:manipulation}
+.btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.plain{background:var(--chip);color:var(--text)}
+.btn.blue{background:var(--blue);color:var(--onBlue)}
+.btn.wide{width:100%}
+:focus-visible{outline:3px dashed var(--blue);outline-offset:3px}
+.hint{font-family:'Zen Kaku Gothic New',system-ui,sans-serif}
+.snd{display:inline-flex;align-items:center;gap:6px;font-size:16px;min-height:44px;padding:6px 10px}
+.titlebar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+
+/* title */
+.hero{display:flex;align-items:center;gap:14px}
+.hero h1{margin:0;font-size:40px;line-height:1.1;font-weight:400}
+.hero p{margin:4px 0 0;color:var(--sub);font-size:16px}
+.bob{animation:bob 1.6s steps(2) infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.coins{display:inline-flex;align-items:center;gap:6px;font-size:20px}
+.stagebtn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;margin-bottom:12px;background:var(--chip);color:var(--text)}
+.stagebtn .nm{font-size:22px;display:block}
+.stagebtn .ds{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:14px;color:var(--sub);display:block}
+.stars{font-size:20px;color:var(--coin);white-space:nowrap;-webkit-text-stroke:1px var(--line)}
+.stars .off{color:transparent}
+.record{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;text-align:center}
+.record div{border:2px solid var(--line);padding:6px 4px;background:var(--chip)}
+.record b{display:block;font-size:24px;font-weight:400}
+.record span{font-size:13px;font-family:'Zen Kaku Gothic New',system-ui,sans-serif;color:var(--sub)}
+h2{font-size:20px;font-weight:400;margin:0 0 10px}
+
+/* play */
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.top .btn{min-height:44px;min-width:44px;font-size:16px;padding:6px 10px;white-space:nowrap}
+.top .prog{flex:1;text-align:center}
+.prog{font-size:18px}
+.hearts{display:inline-flex;gap:3px}
+.eq{text-align:center;font-size:34px;margin:4px 0 8px}
+.ask{text-align:center;font-size:20px;margin:6px 0 12px}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.62em;line-height:1.1;margin:0 .1em}
+.fr span:first-child{border-bottom:2px solid currentColor;padding:0 .15em}
+.tblbox{overflow-x:auto}
+table.tbl{border-collapse:collapse;margin:0 auto;font-size:18px}
+.tbl th,.tbl td{border:2px solid var(--line);min-width:38px;padding:6px 2px;text-align:center}
+.tbl th{background:var(--grid)}
+.tbl td.q{background:var(--coin);color:var(--onCoin)}
+.tpl{display:flex;align-items:center;justify-content:center;gap:10px;font-size:24px;margin:6px 0}
+.box{width:84px;height:60px;border:3px dashed var(--line);background:var(--chip);font-size:24px;cursor:pointer}
+.box.fill{border-style:solid}
+.line2{text-align:center;font-size:22px;margin:6px 0}
+.ans{display:inline-block;min-width:60px;border-bottom:3px solid var(--line);padding:0 6px}
+.chips{display:flex;justify-content:center;gap:16px;margin-top:6px}
+.chips .btn{background:var(--chip);color:var(--text);font-size:28px;min-width:100px;min-height:60px}
+.signs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.signs .btn{font-size:21px;min-height:64px}
+.keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.keypad .btn{background:var(--chip);color:var(--text);font-size:26px;min-height:56px;padding:4px}
+.keypad .btn.on{background:var(--blue);color:var(--onBlue)}
+.keypad .ok{grid-column:1 / -1;background:var(--coin);color:var(--onCoin)}
+.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:0 0 10px}
+.steps span{font-size:13px;padding:2px 5px;border:2px solid var(--line);background:var(--chip);color:var(--sub)}
+.steps .cur{background:var(--coin);color:var(--onCoin)}
+.steps .okd{background:var(--goodbg);color:var(--fbtext)}
+.note{background:var(--chip);border:2px solid var(--line);padding:4px 14px}
+.nl{font-size:22px;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.nl+.nl{border-top:2px dashed var(--grid)}
+.nl.muted{color:var(--sub);font-size:16px}
+.nl.fin{font-size:30px;color:var(--blue)}
+.nl .tag{font-size:14px;border:2px solid var(--line);padding:0 6px;background:var(--goodbg);color:var(--fbtext)}
+mark{background:var(--coin);color:var(--onCoin);padding:0 4px}
+.forms{display:grid;gap:10px}
+.forms .btn{font-size:24px;background:var(--chip);color:var(--text)}
+.rules{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.rules li{display:flex;gap:10px;align-items:center;font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:16px}
+.rules b{font-family:'DotGothic16',sans-serif;font-weight:400;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex-shrink:0;background:var(--coin);color:var(--onCoin);border:2px solid var(--line)}
+.fb{border:3px solid var(--line);padding:10px 12px;font-size:16px;line-height:1.65;margin-bottom:14px;color:var(--fbtext)}
+.fb.good{background:var(--goodbg)}
+.fb.bad{background:var(--badbg)}
+.fb b{font-weight:700}
+.graph{display:block;width:100%;max-width:300px;margin:0 auto}
+.graph .gl{stroke:var(--grid);stroke-width:1}
+.graph .ax{stroke:var(--axis);stroke-width:2}
+.graph .pl{stroke:var(--lineplot);stroke-width:3}
+.graph text{fill:var(--text);font-family:'DotGothic16',sans-serif;font-size:14px}
+.cap{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:13px;color:var(--sub);text-align:center;margin:6px 0 0}
+.done{font-size:30px;text-align:center;margin:4px 0}
+.result{text-align:center}
+.result .big{font-size:44px;margin:4px 0}
+.row{display:flex;gap:12px}
+.row .btn{flex:1}
+.ground{height:44px;margin-top:10px;border-top:3px solid var(--line);background:linear-gradient(var(--grass) 0 12px,var(--ground) 12px)}
+.stage3d{position:relative;width:100%;max-width:420px;aspect-ratio:1/1;margin:0 auto;border:3px solid var(--line);background:var(--sky);touch-action:pan-y;cursor:grab;overflow:hidden}
+.stage3d canvas{display:block;width:100%;height:100%}
+.stage3d.res{max-width:340px;aspect-ratio:16/10;border:0;background:transparent}
+.hero3d{width:96px;height:110px;flex-shrink:0;touch-action:pan-y;cursor:pointer}
+.hero3d canvas{display:block;width:100%;height:100%}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{0%{transform:scale(.85);opacity:.3}60%{transform:scale(1.06)}100%{transform:none;opacity:1}}
+.plus{position:fixed;z-index:20;transform:translate(-50%,0);font-size:28px;color:#FFC928;-webkit-text-stroke:1.5px #1E1B3A;pointer-events:none;animation:plus .9s ease-out forwards}
+@keyframes plus{to{transform:translate(-50%,-50px);opacity:0}}
+.fxc{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
+@media (prefers-reduced-motion: reduce){.bob,.shake,.pop,.plus{animation:none}}
+.wtext{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:19px;line-height:1.7;font-weight:700;text-align:center;margin:6px 0 12px}
+.wtext .hl{background:var(--coin);color:var(--onCoin);padding:0 4px}
+.nline{display:block;width:100%;max-width:320px;margin:6px auto}
+.nline text{fill:var(--text);font-family:'DotGothic16',sans-serif;font-size:15px}
+.choices{display:grid;gap:10px}
+.choices .btn{background:var(--chip);color:var(--text);font-size:21px;text-align:center}
+.choices .btn.small{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:17px;font-weight:700}
+.choices.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mach{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 12px}
+.mslot{width:78px;height:64px;border:3px solid var(--line);background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.mslot span{font-size:13px;color:var(--sub)}.mslot b{font-weight:400;font-size:24px}
+.mslot.out{background:var(--coin);color:var(--onCoin)}.mslot.out span{color:var(--onCoin)}
+.mbox{width:84px;height:70px}.mbox.pop{animation:pop .35s steps(3)}
+@keyframes pop{30%{transform:translateY(-5px) scale(1.06)}60%{transform:translateY(2px)}}
+.tbl td.clash{background:var(--badbg);color:var(--fbtext)}
+.tbl td.calc{background:var(--goodbg);color:var(--fbtext);font-size:15px}
+.tbl th.sm{font-size:13px}
+.tblbox{padding-bottom:4px}
+.tblbox + .note{margin-top:12px}
+.choices.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.choices.three .btn{font-size:17px;padding:8px 4px}
+.choices .btn.on{background:var(--blue);color:var(--onBlue)}
+.mstat{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.mstat span{font-size:13px;padding:2px 8px;border:2px solid var(--line);background:var(--chip);color:var(--sub)}
+.mstat span.okd{background:var(--goodbg);color:var(--fbtext)}
+pre.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.5;background:#1E1B3A;color:#FFF6DC;border:3px solid var(--line);padding:10px 12px;margin:8px 0;text-align:left;overflow-x:auto;white-space:pre}
+.mcards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px}
+.mcard{border:2px solid var(--line);background:var(--chip);padding:4px}
+.mcard svg{display:block;width:100%;height:auto}
+.mcard.clash{background:var(--badbg);border-color:#E5484D;border-width:3px}
+.mcap{text-align:center;font-size:14px;color:var(--text)}
+.vt{font-family:'Zen Kaku Gothic New',sans-serif;font-size:11px;font-weight:700;fill:var(--text)}
+.mcard svg{aspect-ratio:140/108}
+.tvstrip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin-top:8px}
+.tv{border:2px solid var(--line);background:var(--chip);text-align:center;padding:2px}
+.tv svg{display:block;width:100%;height:auto;aspect-ratio:80/68}
+.tv span{font-size:12px;color:var(--sub)}
+.tv.act{background:var(--coin);border-width:3px}.tv.act span{color:var(--onCoin)}
+.tv .vt{font-size:9px}
+@keyframes buildin{0%{opacity:0;transform:translateY(-8px) scale(.4)}70%{opacity:1;transform:translateY(1px) scale(1.08)}100%{opacity:1;transform:none}}
+svg.build > *{animation:buildin .3s steps(5) both;transform-box:fill-box;transform-origin:center}
+.tvplay{width:100%;margin-top:8px;min-height:44px;font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap"><main id="app" aria-live="polite"></main></div>
+<div class="ground" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+/* ====== 進捗記録の設定(GitHub Pages で使うとき) ======
+   Google Apps Script の「ウェブアプリURL」と、合言葉を入れてください。
+   空のままなら記録は送られません。 */
+var LOG_URL = '';
+var LOG_KEY = '';
+/* ================================================ */
+var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var KEY='hireiLabW1';
+function load(){try{var v=localStorage.getItem(KEY);if(v)return JSON.parse(v);}catch(e){}return null;}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){}}
+var save=load()||{};
+save.stars=save.stars||{}; save.coins=save.coins||0; save.miss=save.miss||{swap:0,sign:0,calc:0};
+if(save.miss.word===undefined)save.miss.word=0;
+if(save.sound===undefined)save.sound=true;
+save.queue=save.queue||[];
+save.device=save.device||Math.random().toString(36).slice(2,8);
+
+/* ---------- progress log ---------- */
+function calcStars(){var n=G.st.n,f=G.firstOK;return G.over?0:(f===n?3:(f>=n-2?2:1));}
+function logResult(result){
+  if(!LOG_URL||!G)return;
+  var answered=Math.min(G.st.n,G.i+(G.done?1:0)+(result==='ゲームオーバー'?1:0));
+  save.queue.push({
+    key:LOG_KEY, app:'比例ラボ 第1週', stage:G.st.name, result:result,
+    answered:answered, total:G.st.n, firstOK:G.firstOK, stars:result==='途中でやめた'?0:calcStars(),
+    swap:G.ms.swap, sign:G.ms.sign, calc:G.ms.calc, word:G.ms.word||0,
+    seconds:Math.round((Date.now()-G.t0)/1000), device:save.device,
+    clientTime:new Date().toLocaleString('ja-JP')
+  });
+  if(save.queue.length>100)save.queue=save.queue.slice(-100);
+  persist(); flush();
+}
+var flushing=false;
+function flush(){
+  if(!LOG_URL||flushing||!save.queue.length||!window.fetch)return;
+  flushing=true;
+  fetch(LOG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(save.queue[0])})
+    .then(function(){save.queue.shift();persist();flushing=false;flush();})
+    .catch(function(){flushing=false;});
+}
+window.addEventListener('online',flush);
+
+/* ---------- sound (8bit, Web Audio) ---------- */
+var actx=null;
+function ac(){
+  if(!actx){var C=window.AudioContext||window.webkitAudioContext;if(!C)return null;try{actx=new C();}catch(e){return null;}}
+  if(actx.state==='suspended')actx.resume();
+  return actx;
+}
+function tone(f,st,dur,type,vol,to){
+  if(!save.sound)return;var c=ac();if(!c)return;
+  var t=c.currentTime+st,o=c.createOscillator(),g=c.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);
+  if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);
+  g.gain.setValueAtTime(vol||0.07,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+0.03);
+}
+var SFX={
+  tap:function(){tone(660,0,0.05,'square',0.035);},
+  place:function(){tone(523,0,0.07,'square',0.06);tone(784,0.06,0.07,'square',0.05);},
+  step:function(){tone(784,0,0.08);tone(1175,0.08,0.14);},
+  coin:function(){tone(988,0,0.07,'square',0.07);tone(1319,0.07,0.3,'square',0.07);},
+  wrong:function(){tone(196,0,0.12,'square',0.07);tone(147,0.12,0.25,'square',0.07);},
+  heart:function(){tone(440,0.05,0.35,'sawtooth',0.05,110);},
+  jumps:function(n,gap){for(var i=0;i<n;i++)tone(320,i*gap,0.12,'square',0.04,760);},
+  start:function(){[523,659,784].forEach(function(f,i){tone(f,i*0.07,0.09,'square',0.06);});},
+  clear:function(){[523,659,784,1047,0,784,1047].forEach(function(f,i){if(f)tone(f,i*0.11,0.15,'square',0.07);});tone(1568,0.8,0.5,'square',0.06);},
+  over:function(){[392,330,262,196].forEach(function(f,i){tone(f,i*0.2,0.24,'triangle',0.1);});}
+};
+var _step=SFX.step;SFX.step=function(){_step();fxNext={t:'pop'};};
+function soundBtn(compact){
+  var on=save.sound;
+  return '<button class="btn plain snd" data-act="sound" aria-pressed="'+on+'" aria-label="効果音 '+(on?'オン':'オフ')+'">'
+   +'<svg width="22" height="20" viewBox="0 0 11 10" aria-hidden="true"><path d="M0 3h2l3-3h1v10H5L2 7H0z" fill="currentColor"/>'
+   +(on?'<path d="M7 3v1h1v2H7v1h1V6h1V4H8V3zM9 1v1h1v6H9v1h1V8h1V2h-1V1z" fill="currentColor"/>':'<path d="M7 3l4 4M11 3l-4 4" stroke="currentColor" stroke-width="1.2"/>')
+   +'</svg>'+(compact?'':'<span>'+(on?'音 ON':'音 OFF')+'</span>')+'</button>';
+}
+
+var STAGES=[
+  {id:'table',name:'表をうめろ',desc:'y = ax の表の「?」を計算。マイナスに注意',n:6},
+  {id:'place',name:'代入パズル',desc:'式の形を書いて、y と x を正しい□へ',n:8},
+  {id:'find',name:'a をさがせ',desc:'形→代入→符号→計算→たしかめ',n:8},
+  {id:'words',name:'関係ラボ',desc:'関数マシン・表から比例/反比例を見ぬく・変域',n:7},
+  {id:'boss',name:'ボス戦',desc:'全部まぜて10問。ハートは3つ',n:10}
+];
+
+/* ---------- ことばの問題 データ ---------- */
+var DOM=[[0,true,6,true,'0以上6以下'],[3,true,18,false,'3以上18未満'],[3,false,null,null,'3より大きい'],[null,null,-1,false,'−1未満'],
+ [-5,false,0,false,'−5より大きく0より小さい'],[0,true,100,true,'0以上100以下'],[-2,true,4,false,'−2以上4未満'],[null,null,5,true,'5以下'],
+ [1,false,7,true,'1より大きく7以下'],[-3,true,null,null,'−3以上']];
+var FUNC=[['1辺が x cm の正方形の面積は y cm²',true,'1辺を決めると、面積はただ1つに決まる'],
+ ['身長 x cm の人の体重は y kg',false,'同じ身長でも、体重は人によってちがう'],
+ ['x 歳の人の身長は y cm',false,'同じ年でも、身長は人によってちがう'],
+ ['半径 x cm の円の面積は y cm²',true,'半径を決めると、面積はただ1つに決まる'],
+ ['整数 x の絶対値は y',true,'x を決めると、絶対値はただ1つに決まる'],
+ ['20km はなれた所へ時速 x km で行くと y 時間かかる',true,'速さを決めると、時間はただ1つに決まる'],
+ ['周の長さが x cm の長方形の面積は y cm²',false,'周の長さが同じでも、形によって面積がちがう'],
+ ['自然数 x の倍数は y',false,'3 の倍数は 3, 6, 9…と たくさんあって1つに決まらない'],
+ ['1000円出して x 円の買い物をしたときのおつりは y 円',true,'代金を決めると、おつりはただ1つに決まる']];
+var REL=[
+ {t:'1本 50円のえんぴつを x 本買ったときの代金 y 円',k:'prop',c:'50',m:'えんぴつ1本の値段',mo:['えんぴつ1本の値段','えんぴつの本数','代金'],w:'代金 = 1本の値段 × 本数'},
+ {t:'時速 4km で x 時間歩いたときの道のり y km',k:'prop',c:'4',m:'歩く速さ(時速)',mo:['歩く速さ(時速)','歩いた時間','道のり'],w:'道のり = 速さ × 時間'},
+ {t:'縦 4cm、横 x cm の長方形の面積 y cm²',k:'prop',c:'4',m:'長方形の縦の長さ',mo:['長方形の縦の長さ','長方形の横の長さ','長方形の面積'],w:'面積 = 縦 × 横'},
+ {t:'底辺 12cm、高さ x cm の平行四辺形の面積 y cm²',k:'prop',c:'12',m:'平行四辺形の底辺',mo:['平行四辺形の底辺','平行四辺形の高さ','平行四辺形の面積'],w:'面積 = 底辺 × 高さ'},
+ {t:'1人に x 本ずつ、5人にえんぴつを配るときの本数の合計 y 本',k:'prop',c:'5',m:'配る人数',mo:['配る人数','1人に配る本数','配る本数の合計'],w:'合計 = 1人分 × 人数'},
+ {t:'毎分 3L ずつ水そうに水を入れるとき、x 分後の水の量 y L',k:'prop',c:'3',m:'1分間に入れる水の量',mo:['1分間に入れる水の量','水を入れる時間','水そうの大きさ'],w:'水の量 = 1分間の量 × 時間'},
+ {t:'面積が 18cm² の長方形の横 x cm と縦 y cm',k:'inv',c:'18',m:'長方形の面積',mo:['長方形の面積','長方形の縦の長さ','長方形の周の長さ'],w:'縦 = 面積 ÷ 横'},
+ {t:'1200m の道のりを分速 x m で歩くときにかかる時間 y 分',k:'inv',c:'1200',m:'道のりの長さ',mo:['道のりの長さ','歩く速さ','かかる時間'],w:'時間 = 道のり ÷ 速さ'},
+ {t:'120cm のひもを x 等分したときの1本の長さ y cm',k:'inv',c:'120',m:'ひも全体の長さ',mo:['ひも全体の長さ','分ける数','1本の長さ'],w:'1本の長さ = 全体の長さ ÷ 分ける数'},
+ {t:'24個のあめを x 人で同じ数ずつ分けるときの1人分 y 個',k:'inv',c:'24',m:'あめ全体の個数',mo:['あめ全体の個数','分ける人数','1人分の個数'],w:'1人分 = 全体 ÷ 人数'},
+ {t:'1000円出して x 円の買い物をしたときのおつり y 円',k:'none',e:'y = 1000 − x',w:'おつり = 出したお金 − 代金'},
+ {t:'周の長さが 30cm の長方形の縦 x cm と横 y cm',k:'none',e:'y = 15 − x',w:'横 = 15 − 縦'}];
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=rnd(0,i),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function ineq(d,lo,li,hi,hiI){
+  if(lo!==null&&hi!==null)return M(lo)+' '+(li?'≦':'<')+' x '+(hiI?'≦':'<')+' '+M(hi);
+  if(lo!==null)return 'x '+(li?'≧':'>')+' '+M(lo);
+  return 'x '+(hiI?'≦':'<')+' '+M(hi);
+}
+function domOptions(d){
+  var lo=d[0],li=d[1],hi=d[2],hiI=d[3],o=[];
+  if(lo!==null&&hi!==null){[[true,true],[true,false],[false,true],[false,false]].forEach(function(c){o.push({s:ineq(d,lo,c[0],hi,c[1]),ok:c[0]===li&&c[1]===hiI,dir:false});});}
+  else if(lo!==null){[[lo,true],[lo,false]].forEach(function(c){o.push({s:ineq(d,lo,c[1],null,null),ok:c[1]===li,dir:false});});[true,false].forEach(function(c){o.push({s:ineq(d,null,null,lo,c),ok:false,dir:true});});}
+  else{[true,false].forEach(function(c){o.push({s:ineq(d,null,null,hi,c),ok:c===hiI,dir:false});});[true,false].forEach(function(c){o.push({s:ineq(d,hi,c,null,null),ok:false,dir:true});});}
+  return shuffle(o);
+}
+function numberLine(d){
+  var lo=d[0],li=d[1],hi=d[2],hiI=d[3];
+  var a=lo!==null?lo:hi-6,b=hi!==null?hi:lo+6;var span=Math.max(b-a,1);
+  var L=40,Rr=260;function X(v){return L+(v-a)*(Rr-L)/span;}
+  var s='<line x1="10" y1="40" x2="290" y2="40" stroke="var(--axis)" stroke-width="2"/>';
+  var sx=lo!==null?X(lo):12,ex=hi!==null?X(hi):288;
+  s+='<line x1="'+sx+'" y1="40" x2="'+ex+'" y2="40" stroke="var(--blue)" stroke-width="7"/>';
+  if(lo===null)s+='<polygon points="8,40 18,33 18,47" fill="var(--blue)"/>';
+  if(hi===null)s+='<polygon points="292,40 282,33 282,47" fill="var(--blue)"/>';
+  [[lo,li],[hi,hiI]].forEach(function(e){if(e[0]===null)return;var x=X(e[0]);s+='<circle cx="'+x+'" cy="40" r="7" fill="'+(e[1]?'var(--text)':'var(--panel)')+'" stroke="var(--text)" stroke-width="2.5"/><text x="'+x+'" y="70" text-anchor="middle">'+M(e[0])+'</text>';});
+  return '<svg class="nline" viewBox="0 0 300 80" role="img" aria-label="数直線">'+s+'</svg>';
+}
+/* ---------- 関係ラボ:関数マシン ---------- */
+var MACH=[
+ {t:'1辺が x cm の正方形 → 面積 y cm²',fn:true,xs:[2,3,4],v:'square',f:function(x){return x*x;},code:'int y(int x) {\n  return x * x;\n}'},
+ {t:'1000円出して x 円の買い物 → おつり y 円',fn:true,xs:[100,300,500],v:'change',f:function(x){return 1000-x;},code:'int y(int x) {\n  return 1000 - x;\n}'},
+ {t:'20km を時速 x km で進む → かかる時間 y 時間',fn:true,xs:[2,4,5],v:'road',f:function(x){return 20/x;},code:'int y(int x) {\n  return 20 / x;\n}'},
+ {t:'整数 x → x の絶対値 y',fn:true,xs:[-3,2,-5],v:'abs',f:function(x){return Math.abs(x);},code:'int y(int x) {\n  return Math.abs(x);\n}'},
+ {t:'身長 x cm の人 → 体重 y kg',fn:false,xs:[150,160,170],v:'weight',g:function(x){return x-110+rnd(-8,8);},why:'同じ身長でも、体重は人によってちがう'},
+ {t:'x 歳の人 → 身長 y cm',fn:false,xs:[10,12,14],v:'age',g:function(x){return 130+(x-10)*6+rnd(-8,8);},why:'同じ年でも、身長は人によってちがう'},
+ {t:'周の長さ x cm の長方形 → 面積 y cm²',fn:false,xs:[12,16,20],v:'rect',g:function(x){var h=x/2,a=rnd(1,h-1);return a*(h-a);},why:'周の長さが同じでも、細長い形と正方形に近い形で面積がちがう'},
+ {t:'自然数 x → x の倍数 y',ex:'たとえば 3 の倍数は 3, 6, 9, 12 … とたくさんある。マシンはその中の1つを出す',fn:false,xs:[2,3,5],v:'mult',g:function(x){return x*rnd(1,6);},why:'倍数はたくさんあって、1つに決まらない'}];
+/* ---------- 関係ラボ:表から見ぬく ---------- */
+var TAB=[
+ {v:'pencil',t:'1本 50円のえんぴつを x 本買ったときの代金 y 円',k:'prop',c:50,xs:[1,2,3,4,5],w:'代金 = 1本の値段 × 本数',m:'えんぴつ1本の値段',mo:['えんぴつ1本の値段','えんぴつの本数','代金']},
+ {v:'walk',t:'時速 4km で x 時間歩いたときの道のり y km',k:'prop',c:4,xs:[1,2,3,4,5],w:'道のり = 速さ × 時間',m:'歩く速さ(時速)',mo:['歩く速さ(時速)','歩いた時間','道のり']},
+ {v:'rect6',t:'縦 6cm、横 x cm の長方形の面積 y cm²',k:'prop',c:6,xs:[1,2,3,4,5],w:'面積 = 縦 × 横',m:'長方形の縦の長さ',mo:['長方形の縦の長さ','長方形の横の長さ','長方形の面積']},
+ {v:'water',t:'毎分 3L ずつ水そうに水を入れるとき、x 分後の水の量 y L',k:'prop',c:3,xs:[1,2,3,4,5],w:'水の量 = 1分間の量 × 時間',m:'1分間に入れる水の量',mo:['1分間に入れる水の量','水を入れる時間','水そうの大きさ']},
+ {v:'candy',t:'24個のあめを x 人で同じ数ずつ分けるときの1人分 y 個',k:'inv',c:24,xs:[1,2,3,4,6],w:'1人分 = 全体の個数 ÷ 人数',m:'あめ全体の個数',mo:['あめ全体の個数','分ける人数','1人分の個数']},
+ {v:'rect18',t:'面積が 18cm² の長方形の横 x cm と縦 y cm',k:'inv',c:18,xs:[1,2,3,6,9],w:'縦 = 面積 ÷ 横',m:'長方形の面積',mo:['長方形の面積','長方形の縦の長さ','長方形の周の長さ']},
+ {v:'string',t:'120cm のひもを x 等分したときの1本の長さ y cm',k:'inv',c:120,xs:[2,3,4,5,6],w:'1本の長さ = 全体の長さ ÷ 分ける数',m:'ひも全体の長さ',mo:['ひも全体の長さ','分ける数','1本の長さ']},
+ {v:'walk1200',t:'1200m の道のりを分速 x m で歩くときにかかる時間 y 分',k:'inv',c:1200,xs:[100,200,300,400,600],w:'時間 = 道のり ÷ 速さ',m:'道のりの長さ',mo:['道のりの長さ','歩く速さ','かかる時間']},
+ {v:'change',t:'1000円出して x 円の買い物をしたときのおつり y 円',k:'none',op:'sub',c:1000,xs:[100,200,300,400,500],w:'おつり = 出したお金 − 代金',e:'y = 1000 − x'},
+ {v:'rect30',t:'周の長さが 30cm の長方形の縦 x cm と横 y cm',k:'none',op:'sub',c:15,xs:[1,2,3,4,5],w:'横 = 15(周の半分) − 縦',e:'y = 15 − x'},
+ {v:'bro',t:'弟が x 歳のとき、3歳上の兄は y 歳',k:'none',op:'add',c:3,xs:[1,2,3,4,5],w:'兄の年 = 弟の年 + 3',e:'y = x + 3'}];
+function tabY(r,x){return r.k==='prop'?r.c*x:r.k==='inv'?r.c/x:(r.op==='sub'?r.c-x:x+r.c);}
+function genMach(fn){var pool=MACH.filter(function(m){return m.fn===fn;});return {type:'words',sub:'mach',m:pool[rnd(0,pool.length-1)]};}
+function genTab(k){var pool=TAB.filter(function(r){return r.k===k;});var r=pool[rnd(0,pool.length-1)];return {type:'words',sub:'tab',r:r,mo:r.mo?shuffle(r.mo):null};}
+function rfrac(n,d){var g=gcd(n,d);n/=g;d/=g;return frac(n,d);}
+
+/* ---------- 関数マシンの絵 ---------- */
+function vt(x,y,t,anc,cls){return '<text x="'+x+'" y="'+y+'" text-anchor="'+(anc||'middle')+'" class="'+(cls||'vt')+'">'+t+'</text>';}
+function tiles(ox,oy,w,h,u){var s='';for(var r=0;r<h;r++)for(var c=0;c<w;c++)s+='<rect x="'+(ox+c*u)+'" y="'+(oy+r*u)+'" width="'+u+'" height="'+u+'" fill="#FFC928" stroke="#1E1B3A" stroke-width="1"/>';return s;}
+function person(cx,base,hgt,wid,col){
+  var head=Math.max(7,hgt*0.13),bodyH=hgt*0.45,legH=hgt-head*2-bodyH,top=base-hgt,s='';
+  s+='<circle cx="'+cx+'" cy="'+(top+head)+'" r="'+head+'" fill="#FFDDBD" stroke="#1E1B3A" stroke-width="1.5"/>';
+  s+='<rect x="'+(cx-wid/2)+'" y="'+(top+head*2)+'" width="'+wid+'" height="'+bodyH+'" rx="'+Math.min(8,wid/3)+'" fill="'+col+'" stroke="#1E1B3A" stroke-width="1.5"/>';
+  s+='<rect x="'+(cx-wid/2+2)+'" y="'+(top+head*2+bodyH)+'" width="'+(wid/2-3)+'" height="'+legH+'" fill="#3B302A"/><rect x="'+(cx+1)+'" y="'+(top+head*2+bodyH)+'" width="'+(wid/2-3)+'" height="'+legH+'" fill="#3B302A"/>';
+  return s;
+}
+var VIZ={
+  square:function(x,y){var u=Math.min(18,72/x),w=x*u,ox=70-w/2,oy=12;return tiles(ox,oy,x,x,u)+vt(70,oy+w+16,'1辺 '+x+'cm → '+y+'マス');},
+  change:function(x,y){var W=120,px=W*x/1000,s='<rect x="10" y="22" width="'+px+'" height="26" fill="#E5484D" stroke="#1E1B3A" stroke-width="1.5"/><rect x="'+(10+px)+'" y="22" width="'+(W-px)+'" height="26" fill="#4FBF45" stroke="#1E1B3A" stroke-width="1.5"/>';
+    return vt(70,14,'1000円')+s+vt(10,66,'代金 '+x,'start')+vt(130,84,'おつり '+y,'end');},
+  road:function(x,y){var W=124,seg=W/y,s='';for(var i=0;i<y;i++)s+='<rect x="'+(8+i*seg)+'" y="30" width="'+seg+'" height="18" fill="'+(i%2?'#9FC3EE':'#2F6FD6')+'" stroke="#1E1B3A" stroke-width="1"/>';
+    return vt(70,20,'20km の道')+s+vt(70,68,'1時間に '+x+'km → '+y+'時間');},
+  abs:function(x,y){var u=12,c=70,s='<line x1="6" y1="40" x2="134" y2="40" stroke="var(--axis)" stroke-width="2"/>';
+    for(var v=-5;v<=5;v++)s+='<line x1="'+(c+v*u)+'" y1="36" x2="'+(c+v*u)+'" y2="44" stroke="var(--axis)" stroke-width="1.5"/>';
+    s+='<rect x="'+Math.min(c,c+x*u)+'" y="30" width="'+Math.abs(x*u)+'" height="7" fill="#4FBF45"/>';
+    s+='<circle cx="'+(c+x*u)+'" cy="40" r="5" fill="#FFC928" stroke="#1E1B3A" stroke-width="1.5"/>'+vt(c,60,'0')+vt(c+x*u,60,M(x));
+    return s+vt(70,84,'0からの距離 '+y);},
+  weight:function(x,y){var hgt=50+(x-150)*1.5,wid=8+(y-30)*1.3;return person(70,86,hgt,wid,'#4FA3F7')+vt(70,102,x+'cm → '+y+'kg');},
+  age:function(x,y){var hgt=30+(y-115)*1.1;return '<line x1="20" y1="86" x2="120" y2="86" stroke="var(--grid)" stroke-width="2"/>'+person(70,86,hgt,22,'#E9822E')+vt(70,102,x+'歳 → '+y+'cm');},
+  rect:function(x,y){var h=x/2,a=Math.round((h-Math.sqrt(h*h-4*y))/2),b=h-a,u=Math.min(11,120/b,64/a);var w=b*u,hh=a*u,ox=70-w/2,oy=12+(64-hh)/2;
+    return tiles(ox,oy,b,a,u)+vt(70,94,b+'×'+a+' → '+y+'マス');},
+  mult:function(x,y){var s=vt(70,14,x+' の倍数'),w=20,gap=2,ox=70-(6*w+5*gap)/2;
+    for(var k=1;k<=6;k++){var v=x*k,on=v===y,bx0=ox+(k-1)*(w+gap);
+      s+='<rect x="'+bx0+'" y="26" width="'+w+'" height="22" fill="'+(on?'#FFC928':'var(--panel)')+'" stroke="#1E1B3A" stroke-width="'+(on?2.5:1)+'"/>'+vt(bx0+w/2,41,String(v));}
+    s+='<polygon points="'+(ox+(y/x-1)*(w+gap)+w/2-5)+',56 '+(ox+(y/x-1)*(w+gap)+w/2+5)+',56 '+(ox+(y/x-1)*(w+gap)+w/2)+',50" fill="#E5484D"/>';
+    return s+vt(70,72,'この中から1つ → '+y)+vt(70,90,'('+x+' × '+(y/x)+')');}
+};
+function vizCard(m,e,clash,anim){
+  return '<div class="mcard'+(clash?' clash':'')+'"><svg viewBox="0 0 140 108" aria-hidden="true"'+(anim?' data-anim="0"':'')+'>'+VIZ[m.v](e.x,e.y)+'</svg><div class="mcap">x = '+M(e.x)+' → y = '+M(e.y)+'</div></div>';
+}
+function viewMach(q){
+  var m=q.m,h='<p class="ask">関数マシンを調べよう</p><p class="wtext">'+m.t+'</p>'+(m.ex?'<p class="cap" style="margin-top:-6px">'+m.ex+'</p>':'');
+  var last=G.hist.length?G.hist[G.hist.length-1]:null;
+  h+='<div class="mach" aria-hidden="true"><div class="mslot"><span>x</span><b>'+(last?M(last.x):'?')+'</b></div>'
+    +'<svg class="mbox'+(G.pop?' pop':'')+'" viewBox="0 0 84 70"><rect x="2" y="8" width="80" height="58" fill="var(--blue)" stroke="var(--line)" stroke-width="3"/><rect x="12" y="18" width="60" height="22" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/><text x="42" y="34" text-anchor="middle" style="font-size:12px;fill:var(--text)">関数?</text><rect x="16" y="48" width="10" height="10" fill="#FFC928"/><rect x="32" y="48" width="10" height="10" fill="#E5484D"/><rect x="58" y="0" width="8" height="10" fill="var(--line)"/></svg>'
+    +'<div class="mslot out"><span>y</span><b>'+(last?M(last.y):'?')+'</b></div></div>';
+  if(G.hist.length){
+    var seen={},cl={};G.hist.forEach(function(e){if(seen[e.x]!==undefined&&seen[e.x]!==e.y)cl[e.x]=1;seen[e.x]=e.y;});
+    var shown=G.hist.slice(-4);cl={};var sv={};shown.forEach(function(e){if(sv[e.x]!==undefined&&sv[e.x]!==e.y)cl[e.x]=1;sv[e.x]=e.y;});h+='<div class="mcards">';shown.forEach(function(e,k){h+=vizCard(m,e,cl[e.x],G.animNew&&k===shown.length-1);});h+='</div>';
+    if(Object.keys(cl).length)h+='<p class="cap" style="color:var(--text)">赤いカードは、<b>同じ x なのに y がちがう</b>ところ</p>';
+  }
+  if(G.done){
+    h+='<div class="note">';
+    if(m.fn)h+='<div class="nl">同じ x からは、いつも同じ y</div><div class="nl fin" style="font-size:24px">関数である</div><div class="nl muted">Javaで書くと、こんなメソッドになる</div><pre class="code">'+m.code+'</pre>';
+    else h+='<div class="nl">同じ x なのに、y がちがう!</div><div class="nl fin" style="font-size:24px">関数ではない</div><div class="nl muted">'+m.why+'。y を1つ返すメソッドは書けない</div>';
+    h+='</div>';
+  }
+  return h;
+}
+function machState(){var xs={},rep=false;G.hist.forEach(function(e){if(xs[e.x])rep=true;xs[e.x]=1;});return {n:G.hist.length,rep:rep};}
+function machControls(q){
+  var st=machState(),h='<div class="choices three">';
+  q.m.xs.forEach(function(x){h+='<button class="btn" data-act="mx" data-v="'+x+'">x = '+M(x)+'</button>';});
+  h+='</div><div class="mstat"><span class="'+(st.n>=3?'okd':'')+'">入れた回数 '+Math.min(st.n,3)+'/3</span><span class="'+(st.rep?'okd':'')+'">同じ x をもう一度 '+(st.rep?'OK':'まだ')+'</span></div>';
+  if(st.n>=3&&st.rep)h+='<p class="ask" style="font-size:18px">y は x の関数といえる?</p><div class="choices two"><button class="btn small" data-act="wc" data-v="1">関数である<br><span style="font-weight:500;font-size:14px">いつも同じ y</span></button><button class="btn small" data-act="wc" data-v="0">関数ではない<br><span style="font-weight:500;font-size:14px">y が1つに決まらない</span></button></div>';
+  else h+='<p class="cap">x を入れて y を見よう。<b>同じ x を2回</b>入れると、何かわかるかも?</p>';
+  return h;
+}
+function onMachX(x){
+  var q=G.qs[G.i],m=q.m;if(G.done||G.phase!=='try')return;
+  var y;
+  if(m.fn)y=m.f(x);
+  else{var prev=G.hist.filter(function(e){return e.x===x;}).map(function(e){return e.y;}),t=0;var gap=(m.v==='weight'||m.v==='age')?5:1;do{y=m.g(x);t++;}while(prev.some(function(p){return Math.abs(p-y)<gap;})&&t<40);}
+  G.hist.push({x:x,y:y});G.pop=true;G.animNew=true;G.fb=null;SFX.place();setTimeout(function(){SFX.step();},120);render();
+  setTimeout(function(){G&&(G.pop=false);},400);
+}
+function onMachJudge(v){
+  var q=G.qs[G.i];
+  if((v==='1')===q.m.fn){finish();return;}
+  if(miss('word','<b>同じ x を入れたときの y</b>を見比べよう。いつも同じなら関数、ちがう y が出たら関数ではない。'))return;render();
+}
+
+/* ---------- 表の問題の絵 ---------- */
+function tvTiles(cols,rows,maxW,maxH,oy){var u=Math.min(maxW/cols,maxH/rows,9),w=cols*u,ox=40-w/2;return tiles(ox,(oy||4)+(maxH-rows*u)/2,cols,rows,u);}
+function tvBar(parts,cols){var W=72,tot=parts.reduce(function(a,b){return a+b;},0),x=4,s='';parts.forEach(function(p,i){var w=W*p/tot;s+='<rect x="'+x+'" y="22" width="'+w+'" height="16" fill="'+cols[i%cols.length]+'" stroke="#1E1B3A" stroke-width="1"/>';x+=w;});return s;}
+var TV={
+  pencil:function(x){var s='',gap=72/5;for(var i=0;i<x;i++){var cx=4+gap*i+gap/2;s+='<rect x="'+(cx-3)+'" y="12" width="6" height="28" fill="#FFC928" stroke="#1E1B3A" stroke-width="1"/><polygon points="'+(cx-3)+',40 '+(cx+3)+',40 '+cx+',47" fill="#FFDDBD" stroke="#1E1B3A" stroke-width="1"/>';}return s+vt(40,60,'50円が'+x+'本');},
+  walk:function(x){var p=[];for(var i=0;i<x;i++)p.push(1);return tvBar(p,['#2F6FD6','#9FC3EE'])+vt(40,14,'4km × '+x)+vt(40,56,x+'時間');},
+  rect6:function(x){return tvTiles(x,6,64,46)+vt(40,62,'縦6 × 横'+x);},
+  water:function(x){var s='<rect x="24" y="4" width="32" height="46" fill="none" stroke="#1E1B3A" stroke-width="2"/>',h=46/6;for(var i=0;i<x;i++)s+='<rect x="25" y="'+(50-(i+1)*h)+'" width="30" height="'+h+'" fill="'+(i%2?'#9FC3EE':'#4FA3F7')+'" stroke="#1E1B3A" stroke-width="0.5"/>';return s+vt(40,62,'3L × '+x+'分');},
+  candy:function(x){var y=24/x,s='',gw=72/x;for(var g=0;g<x;g++){var cols=y>6?2:1,rows=Math.ceil(y/cols),u=Math.min(6,44/rows);for(var k=0;k<y;k++){var c=k%cols,r=Math.floor(k/cols);s+='<circle cx="'+(4+gw*g+gw/2+(c-(cols-1)/2)*u)+'" cy="'+(6+r*u+u/2)+'" r="'+(u*0.38)+'" fill="#E5484D"/>';}if(g>0)s+='<line x1="'+(4+gw*g)+'" y1="4" x2="'+(4+gw*g)+'" y2="52" stroke="var(--grid)" stroke-width="1.5"/>';}return s+vt(40,64,'24個を'+x+'人で');},
+  rect18:function(x){return tvTiles(x,18/x,64,46)+vt(40,62,'横'+x+'の長方形');},
+  string:function(x){var p=[];for(var i=0;i<x;i++)p.push(1);return tvBar(p,['#E9822E','#FFD9A8'])+vt(40,14,'120cm')+vt(40,56,x+'等分');},
+  walk1200:function(x){var n=1200/x,p=[];for(var i=0;i<n;i++)p.push(1);return tvBar(p,['#2F6FD6','#9FC3EE'])+vt(40,14,'1200m')+vt(40,56,'1分に'+x+'m');},
+  change:function(x){return tvBar([x,1000-x],['#E5484D','#4FBF45'])+vt(40,14,'1000円')+vt(40,56,'代金 '+x);},
+  rect30:function(x){return tvTiles(15-x,x,64,46)+vt(40,62,'縦'+x+'の長方形');},
+  bro:function(x){var u=4,s='<line x1="10" y1="50" x2="70" y2="50" stroke="var(--grid)" stroke-width="1.5"/>';s+='<rect x="18" y="'+(50-x*u)+'" width="16" height="'+(x*u)+'" fill="#4FA3F7" stroke="#1E1B3A" stroke-width="1"/><rect x="46" y="'+(50-(x+3)*u)+'" width="16" height="'+((x+3)*u)+'" fill="#E9822E" stroke="#1E1B3A" stroke-width="1"/>';return s+vt(26,62,'弟')+vt(54,62,'兄');}
+};
+function tvStrip(r){
+  var h='<div class="tvstrip">',ac=G.animCols||[];
+  r.xs.forEach(function(x,i){
+    var act=G.phase==='fill'&&i===G.fillAt,vis=G.phase!=='fill'||G.ty[i]!==null||act,ord=ac.indexOf(i);
+    var inner=vis?TV[r.v](x):'<text x="40" y="40" text-anchor="middle" style="font-size:22px;fill:var(--grid)">?</text>';
+    h+='<div class="tv'+(act?' act':'')+'"><svg viewBox="0 0 80 68" aria-hidden="true"'+(vis&&ord>=0?' data-anim="'+ord+'"':'')+'>'+inner+'</svg><span>x='+x+'</span></div>';
+  });
+  h+='</div>';
+  if(G.phase!=='fill')h+='<button class="btn plain tvplay" data-act="tvplay">▶ x を1つずつ増やして見る</button>';
+  return h;
+}
+function runBuild(){
+  if(G){G.animCols=null;G.animNew=false;}
+  if(RM)return;
+  var list=document.querySelectorAll('svg[data-anim]');
+  list.forEach(function(svg){
+    var base=(+svg.getAttribute('data-anim'))*550,kids=svg.children,n=kids.length,step=Math.min(40,600/Math.max(n,1));
+    svg.classList.remove('build');void svg.getBoundingClientRect();
+    for(var i=0;i<n;i++)kids[i].style.animationDelay=(base+i*step)+'ms';
+    svg.classList.add('build');
+    if(base>0)setTimeout(function(){SFX.tap();},base);
+  });
+}
+function viewTab(q){
+  var r=q.r,list=r.k==='none'?['表','変わらない数','関係']:['表','変わらない数','関係','比例定数','意味'];
+  var cur={fill:0,find:1,kind:2,cnst:3,mean:4,done:9}[G.phase];
+  var h='<div class="steps">';list.forEach(function(n,i){h+='<span class="'+(i<cur?'okd':(i===cur?'cur':''))+'">'+n+'</span>';});h+='</div>';
+  h+='<p class="wtext">'+r.t+'</p>';
+  h+='<div class="tblbox"><table class="tbl"><tr><th>x</th>';r.xs.forEach(function(x){h+='<td>'+x+'</td>';});
+  h+='</tr><tr><th>y</th>';
+  r.xs.forEach(function(x,i){var v=G.ty[i];if(v!==null)h+='<td>'+v+'</td>';else if(G.phase==='fill'&&i===G.fillAt)h+='<td class="q">'+(G.input||'?')+'</td>';else h+='<td>…</td>';});
+  h+='</tr>';
+  if(G.rows.div){h+='<tr><th class="sm">y÷x</th>';r.xs.forEach(function(x){h+='<td class="calc">'+rfrac(tabY(r,x),x)+'</td>';});h+='</tr>';}
+  if(G.rows.mul){h+='<tr><th class="sm">x×y</th>';r.xs.forEach(function(x){h+='<td class="calc">'+(x*tabY(r,x))+'</td>';});h+='</tr>';}
+  h+='</table></div>'+tvStrip(r);
+  if(cur>=2){
+    var kn={prop:'比例',inv:'反比例',none:'どちらでもない'};
+    h+='<div class="note">';
+    h+='<div class="nl">'+(r.k==='prop'?'y ÷ x がいつも '+r.c:r.k==='inv'?'x × y がいつも '+r.c:'y ÷ x も x × y も 変わる')+'</div>';
+    if(cur>=3)h+='<div class="nl">'+kn[r.k]+(r.k==='none'?'':'')+'</div>';
+    if(r.k==='none'&&G.done)h+='<div class="nl">'+r.e+'</div>';
+    if(r.k!=='none'&&cur>=4)h+='<div class="nl">'+(r.k==='prop'?'y = '+r.c+'x':'y = <span class="fr"><span>'+r.c+'</span><span>x</span></span>')+'</div>';
+    if(r.k!=='none'&&G.done)h+='<div class="nl" style="font-size:18px">比例定数 '+r.c+' = '+r.m+'</div>';
+    if(G.done&&r.k!=='none')h+='<div class="nl muted">x が2倍、3倍…になると、y は '+(r.k==='prop'?'2倍、3倍…':'<span class="fr"><span>1</span><span>2</span></span>、<span class="fr"><span>1</span><span>3</span></span>…')+'</div>';
+    h+='</div>';
+  }
+  return h;
+}
+function wKeypad(lab){
+  var keys=['7','8','9','4','5','6','1','2','3','','0','⌫'],h='<div class="keypad">';
+  keys.forEach(function(k){if(!k){h+='<span></span>';return;}h+='<button class="btn" data-act="wkey" data-v="'+k+'"'+(k==='⌫'?' aria-label="1文字けす"':'')+'>'+k+'</button>';});
+  return h+'<button class="btn ok" data-act="wok">'+(lab||'OK')+'</button></div>';
+}
+function tabControls(q){
+  var r=q.r;
+  if(G.phase==='fill')return '<p class="ask" style="font-size:18px">x = '+r.xs[G.fillAt]+' のとき、y はいくつ?</p>'+wKeypad();
+  if(G.phase==='find'){
+    var any=G.rows.div||G.rows.mul;
+    return '<p class="ask" style="font-size:18px">表の中で、<b>いつも同じ</b>になるものは?</p><div class="choices two"><button class="btn small'+(G.rows.div?' on':'')+'" data-act="trow" data-v="div">y ÷ x を<br>計算してみる</button><button class="btn small'+(G.rows.mul?' on':'')+'" data-act="trow" data-v="mul">x × y を<br>計算してみる</button></div>'
+     +'<div class="choices" style="margin-top:12px"><button class="btn small" data-act="wc" data-v="div"'+(any?'':' disabled')+'>y ÷ x がいつも同じ</button><button class="btn small" data-act="wc" data-v="mul"'+(any?'':' disabled')+'>x × y がいつも同じ</button><button class="btn small" data-act="wc" data-v="none"'+(any?'':' disabled')+'>どちらも変わる</button></div>'
+     +(any?'':'<p class="cap">まず上のボタンで計算してみよう</p>');
+  }
+  if(G.phase==='kind')return '<p class="ask" style="font-size:18px">ということは、x と y の関係は?</p><div class="choices"><button class="btn small" data-act="wc" data-v="prop">比例</button><button class="btn small" data-act="wc" data-v="inv">反比例</button><button class="btn small" data-act="wc" data-v="none">どちらでもない</button></div>';
+  if(G.phase==='cnst')return '<p class="ask" style="font-size:18px">比例定数はいくつ?</p><p class="line2">a = <span class="ans">'+(G.input||'&nbsp;')+'</span></p>'+wKeypad();
+  var h='<p class="ask" style="font-size:18px">比例定数 '+r.c+' は、問題文の何を表している?</p><div class="choices">';q.mo.forEach(function(m,i){h+='<button class="btn small" data-act="wc" data-v="'+i+'">'+m+'</button>';});return h+'</div>';
+}
+function onTabKey(k){
+  if(G.done||(G.phase!=='fill'&&G.phase!=='cnst'))return;SFX.tap();
+  if(k==='⌫')G.input=G.input.slice(0,-1);else if(/^\d$/.test(k)&&G.input.length<6)G.input+=k;
+  render();
+}
+function onTabOK(){
+  var q=G.qs[G.i],r=q.r;
+  if(G.phase==='fill'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてね。'};render();return;}
+    var x=r.xs[G.fillAt],v=parseInt(G.input,10);
+    if(v===tabY(r,x)){
+      G.ty[G.fillAt]=v;G.input='';
+      if(G.fillAt<2){G.fillAt++;G.animCols=[G.fillAt];G.fb={ok:true,msg:'OK! 次の y も計算しよう。'};SFX.step();}
+      else{for(var i=0;i<r.xs.length;i++)G.ty[i]=tabY(r,r.xs[i]);G.phase='find';G.animCols=[3,4];G.fb={ok:true,msg:'表ができた! 次は、表の中で<b>いつも同じになるもの</b>をさがそう。'};SFX.step();}
+      render();return;
+    }
+    if(miss('calc','ことばの式は <b>'+r.w+'</b>。x = '+x+' を入れて計算しよう。'))return;G.input='';render();return;
+  }
+  if(G.phase==='cnst'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてね。'};render();return;}
+    if(parseInt(G.input,10)===r.c){G.phase='mean';G.input='';G.fb={ok:true,msg:'比例定数は、表で<b>いつも同じだった数</b>。最後に、その数の意味を考えよう。'};SFX.step();render();return;}
+    if(miss('word','比例定数は、表で <b>'+(r.k==='prop'?'y ÷ x':'x × y')+'</b> を計算したときに、いつも同じになった数だよ。'))return;G.input='';render();
+  }
+}
+function onTabChoice(v){
+  var q=G.qs[G.i],r=q.r;
+  if(G.phase==='find'){
+    var right=r.k==='prop'?'div':r.k==='inv'?'mul':'none';
+    if(v===right){G.phase='kind';G.rows.div=true;G.rows.mul=true;
+      G.fb={ok:true,msg:r.k==='prop'?'そう! <b>y ÷ x がいつも '+r.c+'</b>。x が2倍、3倍…になると y も2倍、3倍…':r.k==='inv'?'そう! <b>x × y がいつも '+r.c+'</b>。x が2倍、3倍…になると y は1/2、1/3…':'そう! どちらも<b>一定じゃない</b>。'};SFX.step();render();return;}
+    if(miss('word','計算した行を、左から右へ見比べよう。<b>全部同じ数</b>になっているのはどっち?'))return;
+    G.rows.div=true;G.rows.mul=true;render();return;
+  }
+  if(G.phase==='kind'){
+    if(v===r.k){if(r.k==='none'){finish();return;}G.phase='cnst';G.fb={ok:true,msg:'正解! '+(r.k==='prop'?'y ÷ x が一定 → 比例':'x × y が一定 → 反比例')+'。'};SFX.step();render();return;}
+    if(miss('word','<b>y ÷ x が一定なら比例</b>、<b>x × y が一定なら反比例</b>、どちらも変わるなら どちらでもない。'))return;render();return;
+  }
+  if(G.phase==='mean'){
+    if(q.mo[+v]===r.m){finish();return;}
+    if(miss('word','ことばの式 <b>'+r.w+'</b> の中で、x や y が変わっても <b>'+r.c+' のまま</b>のものは何?'))return;render();
+  }
+}
+
+function genWords(sub){
+  if(sub==='dom'){var d=DOM[rnd(0,DOM.length-1)];return {type:'words',sub:'dom',d:d,mode:Math.random()<.5?'text':'line',opts:domOptions(d)};}
+  if(sub==='func'){var f=FUNC[rnd(0,FUNC.length-1)];return {type:'words',sub:'func',f:f};}
+  var r=REL[rnd(0,REL.length-1)];
+  var eqs=r.k==='none'?null:shuffle([{s:'y = '+r.c+'x',k:'prop'},{s:'y = <span class="fr"><span>'+r.c+'</span><span>x</span></span>',k:'inv'},{s:'y = x + '+r.c,k:'none'}]);
+  return {type:'words',sub:'rel',r:r,eqs:eqs,mo:r.mo?shuffle(r.mo):null};
+}
+
+
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function sgn(){return Math.random()<.5?-1:1;}
+function M(n){return n<0?'−'+Math.abs(n):String(n);}
+function P(n){return n<0?'('+M(n)+')':M(n);}
+function frac(n,d){if(d===1)return M(n);return (n<0?'−':'')+'<span class="fr"><span>'+Math.abs(n)+'</span><span>'+d+'</span></span>';}
+function eqn(n,d){if(d===1&&n===1)return 'y = x';if(d===1&&n===-1)return 'y = −x';return 'y = '+frac(n,d)+'x';}
+
+function genPair(fp){
+  if(Math.random()<fp){var q=[2,3,4][rnd(0,2)],p;do{p=rnd(1,3);}while(gcd(p,q)!==1);p*=sgn();var k=rnd(1,3)*sgn();return {x:q*k,y:p*k,an:p,ad:q};}
+  var a=rnd(2,6)*sgn(),x=rnd(1,6)*sgn();return {x:x,y:a*x,an:a,ad:1};
+}
+function genQ(type){
+  if(type==='table'){
+    var a=rnd(1,5)*sgn(),xs=[-3,-2,-1,0,1,2,3],ask;
+    do{ask=xs[rnd(0,6)];}while(ask===0);
+    var others=xs.filter(function(v){return v!==ask&&v!==0;}),hidden=[];
+    while(hidden.length<2){var h=others[rnd(0,others.length-1)];if(hidden.indexOf(h)<0)hidden.push(h);}
+    return {type:type,a:a,xs:xs,ask:ask,hidden:hidden,an:a,ad:1,x:ask,y:a*ask};
+  }
+  var p=genPair(type==='place'?0.35:0.3);
+  p.type=type; p.flip=Math.random()<.5; return p;
+}
+
+var screen='title', G=null;
+var PRAISE=['ナイス！','クリア！','いいね！','その調子！','完ぺき！'];
+
+function startStage(id){
+  var st=STAGES.filter(function(s){return s.id===id;})[0],qs=[];
+  if(id==='words'){qs=shuffle([genMach(true),genMach(false)]).concat(shuffle([genTab('prop'),genTab('inv'),genTab('none')]));qs.push(genWords('dom'));var qz=genWords('rel');qz.quiz=true;qs.push(qz);}
+  else for(var i=0;i<st.n;i++){var t=id;if(id==='boss')t=['table','place','find','find'][rnd(0,3)];qs.push(genQ(t));}
+  G={st:st,qs:qs,i:0,firstOK:0,hearts:id==='boss'?3:null,over:false,ms:{swap:0,sign:0,calc:0,word:0},t0:Date.now()};
+  resetQ(); screen='play'; render(); SFX.start();
+}
+function resetQ(){
+  var q=G.qs[G.i];
+  G.phase=q.type==='table'?'num':(q.type==='words'?({mach:'try',tab:'fill',rel:'kind'}[q.sub]||'choice'):'form');
+  G.hist=[];G.pop=false;G.ty=[];G.fillAt=1;G.rows={div:false,mul:false};
+  if(q.type==='words'&&q.sub==='tab'){var rr=q.r;G.ty=rr.xs.map(function(x,i){return i===0?tabY(rr,x):null;});G.animCols=[0,1];} G.boxes=[null,null]; G.sign=null; G.input=''; G.neg=false;
+  G.parenDone=false; G.missed=false; G.done=false; G.fb=null;
+  var f=['ax','adx','ay'];for(var i=f.length-1;i>0;i--){var j=rnd(0,i),t=f[i];f[i]=f[j];f[j]=t;}G.forms=f;
+}
+function miss(kind,msg){
+  fxNext={t:'shake'};save.miss[kind]=(save.miss[kind]||0)+1; G.ms[kind]++; G.missed=true; G.fb={ok:false,msg:msg};
+  if(G.hearts!==null){G.hearts--; if(G.hearts<=0){G.over=true; persist(); logResult('ゲームオーバー'); screen='result'; render(); SFX.over(); return true;} SFX.wrong(); SFX.heart();}
+  else SFX.wrong();
+  persist(); return false;
+}
+function finish(){
+  G.done=true; G.phase='done'; fxNext={t:'coin',n:G.missed?1:2};
+  if(!G.missed){G.firstOK++;save.coins+=2;}else{save.coins+=1;}
+  persist();
+  var q=G.qs[G.i];
+  var msg=PRAISE[rnd(0,PRAISE.length-1)];
+  if(q.type!=='table'&&q.type!=='words')msg+=' ロボが '+eqn(q.an,q.ad)+' の上を走るよ。';
+  G.fb={ok:true,msg:msg};
+  render(); SFX.coin(); runRobot();
+}
+
+/* ---------- pixel art ---------- */
+var ROBO=["....Y....","....K....",".KKKKKKK.",".KBBBBBK.",".KBWBWBK.",".KBBBBBK.",".KBKKKBK.",".KKKKKKK.","..KB.BK..","..KK.KK.."];
+var COL={Y:'#FFC928',K:'#1E1B3A',B:'#4FA3F7',W:'#FFFFFF'};
+function robo(px,ox,oy){
+  var s='';for(var r=0;r<ROBO.length;r++)for(var c=0;c<ROBO[r].length;c++){var ch=ROBO[r][c];if(ch!=='.')s+='<rect x="'+(ox+c*px)+'" y="'+(oy+r*px)+'" width="'+px+'" height="'+px+'" fill="'+COL[ch]+'"/>';}
+  return s;
+}
+function coinSVG(){return '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="6" y="2" width="10" height="18" fill="#1E1B3A"/><rect x="2" y="6" width="18" height="10" fill="#1E1B3A"/><rect x="4" y="4" width="14" height="14" fill="#1E1B3A"/><rect x="7" y="4" width="8" height="14" fill="#FFC928"/><rect x="4" y="7" width="14" height="8" fill="#FFC928"/><rect x="10" y="7" width="2" height="8" fill="#E39A00"/></svg>';}
+function heartSVG(on){var f=on?'#E5484D':'none';return '<svg width="24" height="22" viewBox="0 0 12 11" aria-hidden="true"><path d="M1 1h4v1h2V1h4v1h1v4h-1v1h-1v1H9v1H8v1H7v1H5V10H4V9H3V8H2V7H1V6H0V2h1z" fill="'+f+'" stroke="currentColor" stroke-width="1"/></svg>';}
+
+/* ---------- graph ---------- */
+function graph(q){
+  if(HAS3D)return '<div id="stage3d" class="stage3d" data-kind="graph" role="img" aria-label="'+eqn(q.an,q.ad).replace(/<[^>]+>/g,'')+' のグラフを、ロボが坂道として走る3D画面"></div>'
+    +'<p class="cap">比例のグラフは原点Oを通る直線。a がプラスなら上り坂、マイナスなら下り坂。ドラッグで向きを変えられるよ</p>';
+  return graph2d(q);
+}
+function graph2d(q){
+  var X=q.x,Y=q.y,a=q.an/q.ad;
+  var m=Math.max(Math.abs(X),Math.abs(Y),4)+1;
+  var Rs=[6,8,10,12,15,20,25,30,40],R=40;for(var i=0;i<Rs.length;i++){if(Rs[i]>=m){R=Rs[i];break;}}
+  var g=R<=8?1:R<=12?2:R===15?3:R<=30?5:10;
+  var C=150,S=135/R,s='';
+  for(var v=-R;v<=R;v+=g){if(v===0)continue;var p=C+v*S;s+='<line class="gl" x1="'+p+'" y1="15" x2="'+p+'" y2="285"/><line class="gl" x1="15" y1="'+p+'" x2="285" y2="'+p+'"/>';}
+  s+='<line class="ax" x1="10" y1="'+C+'" x2="290" y2="'+C+'"/><line class="ax" x1="'+C+'" y1="290" x2="'+C+'" y2="10"/>';
+  s+='<polygon points="290,'+C+' 282,'+(C-5)+' 282,'+(C+5)+'" fill="var(--axis)"/><polygon points="'+C+',10 '+(C-5)+',18 '+(C+5)+',18" fill="var(--axis)"/>';
+  s+='<text x="280" y="'+(C+20)+'">x</text><text x="'+(C+8)+'" y="22">y</text><text x="'+(C-16)+'" y="'+(C+18)+'">O</text>';
+  s+='<text x="'+(C+R*S-14)+'" y="'+(C+20)+'">'+R+'</text><text x="'+(C+6)+'" y="'+(C-R*S+12)+'">'+R+'</text>';
+  var x1=-R*1.5,x2=R*1.5;
+  s+='<g clip-path="url(#clip)"><line class="pl" x1="'+(C+x1*S)+'" y1="'+(C-a*x1*S)+'" x2="'+(C+x2*S)+'" y2="'+(C-a*x2*S)+'"/></g>';
+  var px=C+X*S,py=C-Y*S;
+  s+='<rect x="'+(px-6)+'" y="'+(py-6)+'" width="12" height="12" fill="#FFC928" stroke="#1E1B3A" stroke-width="2"/>';
+  var lx=px>200?px-10:px+10,anc=px>200?'end':'start',ly=py<40?py+26:py-12;
+  s+='<text x="'+lx+'" y="'+ly+'" text-anchor="'+anc+'">('+M(X)+', '+M(Y)+')</text>';
+  s+='<g id="robo" transform="translate('+C+','+C+')">'+robo(2.6,-11.7,-26)+'</g>';
+  return '<svg class="graph" viewBox="0 0 300 300" role="img" aria-label="'+eqn(q.an,q.ad).replace(/<[^>]+>/g,'')+' のグラフ。点('+M(X)+', '+M(Y)+')を通る"><defs><clipPath id="clip"><rect x="10" y="10" width="280" height="280"/></clipPath></defs>'+s+'</svg>'
+    +'<p class="cap">比例のグラフは原点Oを通る直線。数学では y が上向き(ゲーム画面とは逆!)</p>'
+    +'<span id="gdata" hidden data-c="'+C+'" data-px="'+px+'" data-py="'+py+'"></span>';
+}
+function runRobot(){
+  if(HAS3D)return;
+  var r=document.getElementById('robo'),d=document.getElementById('gdata');if(!r||!d)return;
+  var C=+d.dataset.c,px=+d.dataset.px,py=+d.dataset.py;
+  if(RM){r.setAttribute('transform','translate('+px+','+py+')');SFX.jumps(1,0);return;}
+  var t0=null,dur=1100;
+  SFX.jumps(4,dur/4000);
+  function step(ts){if(!t0)t0=ts;var t=Math.min(1,(ts-t0)/dur);var hop=Math.abs(Math.sin(t*Math.PI*4))*7;
+    r.setAttribute('transform','translate('+(C+(px-C)*t)+','+(C+(py-C)*t-hop)+')');if(t<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+
+/* ---------- 3D (three.js) ---------- */
+var HAS3D=(function(){if(!window.THREE)return false;try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}})();
+var R3=null,cur3=null,raf3=0,last3=0,BOX=null;
+function cv(n,d){var v=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return v||d;}
+function getR3(){if(R3)return R3;try{R3=new THREE.WebGLRenderer({antialias:true,alpha:true});R3.setPixelRatio(Math.min(window.devicePixelRatio||1,2));R3.domElement.setAttribute('aria-hidden','true');}catch(e){R3=null;}return R3;}
+function boxG(){return BOX||(BOX=new THREE.BoxGeometry(1,1,1));}
+function lam(col,em){var o={color:col};if(em)o.emissive=em;return new THREE.MeshLambertMaterial(o);}
+function bx(par,w,h,d,col,x,y,z,em){var m=new THREE.Mesh(boxG(),lam(col,em));m.scale.set(w,h,d);m.position.set(x,y,z);par.add(m);return m;}
+function lights(sc){sc.add(new THREE.HemisphereLight(0xffffff,0x6b6f8a,0.85));var d=new THREE.DirectionalLight(0xffffff,0.65);d.position.set(5,9,12);sc.add(d);}
+function voxRobot(){
+  var o=new THREE.Group(),i=new THREE.Group();o.add(i);
+  var H=ROBO.length,W=ROBO[0].length,by={},m=new THREE.Matrix4();
+  for(var r=0;r<H;r++)for(var c=0;c<W;c++){var ch=ROBO[r][c];if(ch==='.')continue;
+    var d=r<=1?1:(r>=8?3:5);
+    for(var z=0;z<d;z++){var col=COL[ch];if(ch==='W'&&z<d-1)col=COL.B;(by[col]=by[col]||[]).push([c-(W-1)/2,H-1-r+0.5,z-(d-1)/2]);}}
+  Object.keys(by).forEach(function(col){var L=by[col],im=new THREE.InstancedMesh(boxG(),lam(col),L.length);L.forEach(function(p,k){m.makeTranslation(p[0],p[1],p[2]);im.setMatrixAt(k,m);});i.add(im);});
+  return {o:o,i:i};
+}
+function platform(par){bx(par,1.7,0.28,1.7,'#4FBF45',0,-0.14,0);bx(par,1.7,0.55,1.7,'#9A5B2A',0,-0.555,0);bx(par,0.42,0.1,0.42,'#3E9A36',-0.45,0.02,0.4);bx(par,0.3,0.08,0.3,'#3E9A36',0.5,0.02,-0.3);}
+function label3(text,h){
+  var c=document.createElement('canvas'),x=c.getContext('2d'),fs=64,f=fs+'px "DotGothic16","Zen Kaku Gothic New",sans-serif';
+  x.font=f;var w=Math.ceil(x.measureText(text).width)+30;c.width=w;c.height=fs+30;
+  x.font=f;x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.lineWidth=12;
+  x.strokeStyle=cv('--panel','#FFF6DC');x.strokeText(text,w/2,c.height/2);x.fillStyle=cv('--text','#1E1B3A');x.fillText(text,w/2,c.height/2);
+  var t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;
+  var s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false,transparent:true}));s.scale.set(h*w/c.height,h,1);s.renderOrder=10;return s;
+}
+function hop1(p){return p<1?Math.sin(p*Math.PI):0;}
+
+function sceneTitle(){
+  var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(34,1,0.1,50);lights(sc);
+  var g=new THREE.Group();sc.add(g);platform(g);
+  var rb=voxRobot();rb.o.scale.setScalar(0.12);g.add(rb.o);
+  cam.position.set(0,0.75,3.9);cam.lookAt(0,0.4,0);
+  var time=0,jt=9;
+  return {scene:sc,camera:cam,
+    poke:function(){if(jt>0.6){jt=0;SFX.jumps(1,0);}},
+    update:function(dt){time+=dt;jt+=dt;
+      if(!RM)g.rotation.y=Math.sin(time*0.8)*0.75;else g.rotation.y=0.4;
+      var h=hop1(jt/0.55)*0.5;rb.i.position.y=h+(RM?0:Math.abs(Math.sin(time*3))*0.04);
+      rb.i.rotation.y=jt<0.55?jt/0.55*Math.PI*2:0;}};
+}
+function sceneResult(over){
+  var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(34,1.6,0.1,50);lights(sc);
+  var g=new THREE.Group();sc.add(g);platform(g);
+  var rb=voxRobot();rb.o.scale.setScalar(0.12);g.add(rb.o);
+  cam.position.set(0,0.85,4.3);cam.lookAt(0,0.45,0);
+  var bits=[],cols=['#FFC928','#4FA3F7','#E5484D','#4FBF45','#FFFFFF'];
+  if(!over&&!RM)for(var k=0;k<36;k++){var b=bx(sc,0.09,0.09,0.03,cols[k%5],(Math.random()-.5)*5,Math.random()*4,(Math.random()-.5)*2);b.userData={v:0.6+Math.random()*0.8,s:(Math.random()-.5)*8};bits.push(b);}
+  var time=0,jt=9;
+  return {scene:sc,camera:cam,
+    poke:function(){if(jt>0.6){jt=0;SFX.jumps(1,0);}},
+    update:function(dt){time+=dt;jt+=dt;
+      if(over){rb.i.rotation.z=0.32+(RM?0:Math.sin(time*1.4)*0.05);rb.i.rotation.y=RM?0:Math.sin(time*0.6)*0.3;rb.i.position.y=hop1(jt/0.55)*0.3;}
+      else if(!RM){var p=(time%1.1)/1.1,up=p<0.55;rb.i.position.y=up?Math.sin(p/0.55*Math.PI)*0.55:0;rb.i.rotation.y=up?p/0.55*Math.PI*2:0;
+        var land=up?1:1-Math.sin((p-0.55)/0.45*Math.PI)*0.12;rb.i.scale.set(1/Math.sqrt(land),land,1/Math.sqrt(land));}
+      bits.forEach(function(b){b.position.y-=b.userData.v*dt;b.rotation.x+=b.userData.s*dt;b.rotation.y+=b.userData.s*dt*0.7;if(b.position.y<-1.2){b.position.y=3.5;b.position.x=(Math.random()-.5)*5;}});
+      g.rotation.y=RM?0.3:Math.sin(time*0.5)*0.3;}};
+}
+function sceneGraph(q){
+  var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(38,1,0.1,100);lights(sc);
+  var a=q.an/q.ad,X=q.x,Y=q.y;
+  var mm=Math.max(Math.abs(X),Math.abs(Y),4)+1,Rs=[6,8,10,12,15,20,25,30,40],R=40;for(var i=0;i<Rs.length;i++){if(Rs[i]>=mm){R=Rs[i];break;}}
+  var g=R<=8?1:R<=12?2:R===15?3:R<=30?5:10,S=5/R;
+  var panel=cv('--panel','#FFF6DC'),grid=cv('--grid','#D9CFAE'),axis=cv('--axis','#1E1B3A'),lp=cv('--lineplot','#2F6FD6'),line=cv('--line','#1E1B3A');
+  bx(sc,11.5,11.5,0.5,line,0,0,-0.8);bx(sc,11,11,0.5,panel,0,0,-0.6);
+  for(var v=-R;v<=R;v+=g){if(!v)continue;var p=v*S;bx(sc,0.035,10.6,0.02,grid,p,0,-0.34);bx(sc,10.6,0.035,0.02,grid,0,p,-0.34);}
+  bx(sc,10.8,0.1,0.06,axis,0,0,-0.31);bx(sc,0.1,10.8,0.06,axis,0,0,-0.31);
+  var cg=new THREE.ConeGeometry(0.2,0.45,4),ca=new THREE.Mesh(cg,lam(axis)),cb=new THREE.Mesh(cg,lam(axis));
+  ca.position.set(5.4,0,-0.31);ca.rotation.z=-Math.PI/2;cb.position.set(0,5.4,-0.31);sc.add(ca);sc.add(cb);
+  function lab(t,x,y,h){var s=label3(t,h||0.8);s.position.set(x,y,-0.1);sc.add(s);}
+  lab('x',5.3,0.5);lab('y',0.5,5.45);lab('O',-0.42,-0.45);lab(String(R),4.85,-0.55,0.62);lab(String(R),0.75,4.8,0.62);
+  /* bridge = the graph line */
+  var th=Math.atan(a),xm=Math.min(5,5/Math.abs(a)),L=2*xm/Math.cos(th),n=Math.max(8,Math.round(L/0.55)),sl=L/n;
+  var lite=new THREE.Color(lp).lerp(new THREE.Color('#ffffff'),0.32).getStyle();
+  for(var k=0;k<n;k++){var t=-L/2+(k+.5)*sl,sg=bx(sc,sl*0.97,0.18,0.9,k%2?lp:lite,t*Math.cos(th),t*Math.sin(th),0.1);sg.rotation.z=th;}
+  var tx=X*S,ty=Y*S,off=0.09/Math.cos(th);
+  var tile=bx(sc,0.5,0.22,0.96,'#FFC928',tx,ty,0.1,'#3a2a00');tile.rotation.z=th;
+  var pl=label3('('+M(X)+', '+M(Y)+')',0.78);var lx=tx+Math.sin(th)*1.15,ly=ty-Math.cos(th)*1.15;pl.position.set(Math.max(-4.3,Math.min(4.3,lx)),Math.max(-4.9,Math.min(4.9,ly)),0.6);sc.add(pl);
+  /* coin */
+  var coin=new THREE.Group(),cm=new THREE.Mesh(new THREE.CylinderGeometry(0.34,0.34,0.1,20),lam('#FFC928','#5a4200'));cm.rotation.x=Math.PI/2;coin.add(cm);
+  var cin=bx(coin,0.08,0.34,0.13,'#E39A00',0,0,0);cin.userData.k=1;
+  coin.position.set(tx,ty+off+2.4,0.1);sc.add(coin);
+  /* robot */
+  var rb=voxRobot();rb.o.scale.setScalar(0.17);rb.o.position.set(0,off,0.1);sc.add(rb.o);
+  var face=X>0?0.6:-0.6;rb.i.rotation.y=face;
+  var parts=[],cols=['#FFC928','#FFFFFF','#E5484D','#4FBF45',lp];
+  function burst(x,y){for(var k=0;k<18;k++){var p=bx(sc,0.15,0.15,0.15,cols[k%5],x,y,0.3),an=Math.random()*Math.PI*2,sp=2+Math.random()*3;parts.push({m:p,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp+2,vz:(Math.random()-.5)*3,life:1});}}
+  var yaw0=0.34,yaw=yaw0,pitch=0.12,dist=20,tgt=new THREE.Vector3(),dragT=9;
+  var phase=RM?'idle':'walk',t=0,jt=0,grab=RM,time=0,hopT=9,rx=RM?tx:0;
+  if(RM){coin.visible=false;rb.o.position.set(tx,ty+off,0.1);}else SFX.jumps(5,0.28);
+  function setCam(){cam.position.set(tgt.x+dist*Math.sin(yaw)*Math.cos(pitch),tgt.y+dist*Math.sin(pitch),dist*Math.cos(yaw)*Math.cos(pitch));cam.lookAt(tgt);}
+  return {scene:sc,camera:cam,
+    drag:function(dx,dy){yaw=Math.max(-1.15,Math.min(1.15,yaw-dx*0.008));pitch=Math.max(-0.35,Math.min(0.7,pitch+dy*0.006));dragT=0;},
+    poke:function(){if(phase==='idle'&&hopT>0.5){hopT=0;SFX.jumps(1,0);}},
+    update:function(dt){time+=dt;dragT+=dt;hopT+=dt;
+      var base=a*rx+off,y=base;
+      if(phase==='walk'){t=Math.min(1,t+dt/1.5);var e=t<.5?2*t*t:1-2*(1-t)*(1-t);rx=tx*e;base=a*rx+off;y=base+Math.abs(Math.sin(e*Math.PI*5))*0.32;if(t>=1){phase='jump';jt=0;}}
+      else if(phase==='jump'){jt+=dt;var pj=Math.min(1,jt/0.55);y=base+Math.sin(pj*Math.PI)*1.1;rb.i.rotation.y=face+pj*Math.PI*2;
+        if(jt>=0.27&&!grab){grab=true;burst(tx,ty+off+2.3);SFX.coin();}
+        if(pj>=1){phase='idle';rb.i.rotation.y=face;}}
+      else{y=base+hop1(hopT/0.5)*0.6;rb.i.rotation.y=face+(RM?0:Math.sin(time*2)*0.15);}
+      rb.o.position.set(rx,y,0.1);
+      if(!RM)coin.rotation.y+=dt*3;
+      if(grab&&coin.visible){coin.position.y+=dt*3.5;var sc2=Math.max(0,coin.scale.x-dt*2.2);coin.scale.setScalar(sc2);if(sc2<=0)coin.visible=false;}
+      for(var k=parts.length-1;k>=0;k--){var p=parts[k];p.vy-=9*dt;p.m.position.x+=p.vx*dt;p.m.position.y+=p.vy*dt;p.m.position.z+=p.vz*dt;p.m.rotation.x+=dt*6;p.life-=dt*0.9;p.m.scale.setScalar(Math.max(0.001,p.life)*0.15);if(p.life<=0){sc.remove(p.m);p.m.material.dispose();parts.splice(k,1);}}
+      if(!RM&&dragT>2.5){var want=yaw0+Math.sin(time*0.45)*0.08;yaw+=(want-yaw)*Math.min(1,dt*1.5);}
+      tgt.x+=(rx*0.22-tgt.x)*Math.min(1,dt*3);tgt.y+=((a*rx)*0.22-tgt.y)*Math.min(1,dt*3);
+      setCam();}};
+}
+function dispose3(o){if(!o)return;o.scene.traverse(function(n){if(n.geometry&&n.geometry!==BOX)n.geometry.dispose();if(n.material){var ms=Array.isArray(n.material)?n.material:[n.material];ms.forEach(function(m){if(m.map)m.map.dispose();m.dispose();});}});}
+function size3(){var host=document.getElementById('stage3d');if(!host||!R3||!cur3)return;var w=host.clientWidth||100,h=host.clientHeight||w;R3.setSize(w,h,false);cur3.camera.aspect=w/h;cur3.camera.updateProjectionMatrix();}
+function bindDrag(host){
+  var down=false,lx=0,ly=0;
+  host.addEventListener('pointerdown',function(e){down=true;lx=e.clientX;ly=e.clientY;if(cur3&&cur3.poke)cur3.poke();});
+  host.addEventListener('pointermove',function(e){if(!down||!cur3||!cur3.drag)return;cur3.drag(e.clientX-lx,e.clientY-ly);lx=e.clientX;ly=e.clientY;});
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){host.addEventListener(ev,function(){down=false;});});
+}
+function loop3(ts){
+  raf3=0;var host=document.getElementById('stage3d');
+  if(!cur3||!host||!R3||!host.contains(R3.domElement))return;
+  var dt=Math.min(0.05,(ts-last3)/1000);last3=ts;
+  cur3.update(dt);R3.render(cur3.scene,cur3.camera);raf3=requestAnimationFrame(loop3);
+}
+function mount3d(){
+  if(cur3){dispose3(cur3);cur3=null;}
+  var host=document.getElementById('stage3d');if(!host)return;
+  if(!HAS3D||!getR3()){HAS3D=false;render();return;}
+  var k=host.dataset.kind;
+  try{cur3=k==='graph'?sceneGraph(G.qs[G.i]):k==='result'?sceneResult(G&&G.over):sceneTitle();}
+  catch(e){cur3=null;HAS3D=false;render();return;}
+  host.appendChild(R3.domElement);size3();bindDrag(host);
+  if(!raf3){last3=performance.now();raf3=requestAnimationFrame(loop3);}
+}
+window.addEventListener('resize',size3);
+
+/* ---------- 2D effects ---------- */
+var fxNext=null;
+function applyFx(){
+  var f=fxNext;fxNext=null;if(!f||RM)return;
+  if(f.t==='shake'){var p=document.querySelector('.qpanel');if(p)p.classList.add('shake');}
+  else if(f.t==='pop'){var ls=document.querySelectorAll('.note .nl');var l=ls[ls.length-1];if(l)l.classList.add('pop');}
+  else if(f.t==='coin'){var el=document.querySelector('.top .coins');if(el){var r=el.getBoundingClientRect(),d=document.createElement('div');d.className='plus';d.textContent='+'+f.n;d.style.left=(r.left+r.width/2)+'px';d.style.top=r.top+'px';document.body.appendChild(d);setTimeout(function(){d.remove();},1000);}}
+}
+function confetti(){
+  if(RM)return;var c=document.createElement('canvas');c.className='fxc';c.setAttribute('aria-hidden','true');document.body.appendChild(c);
+  var W=c.width=innerWidth,H=c.height=innerHeight,x=c.getContext('2d'),cols=['#FFC928','#4FA3F7','#E5484D','#4FBF45','#FFFFFF'],P=[];
+  for(var i=0;i<90;i++)P.push({x:W/2+(Math.random()-.5)*80,y:H*0.35,vx:(Math.random()-.5)*14,vy:-6-Math.random()*10,s:6+Math.random()*6,c:cols[i%5],r:Math.random()*6});
+  var t0=performance.now();
+  (function f(ts){var e=(ts-t0)/1000;x.clearRect(0,0,W,H);P.forEach(function(p){p.vy+=0.45;p.vx*=0.99;p.x+=p.vx;p.y+=p.vy;p.r+=0.2;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.strokeStyle='#1E1B3A';x.lineWidth=1.5;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.7);x.strokeRect(-p.s/2,-p.s/2,p.s,p.s*0.7);x.restore();});
+    if(e<2.6)requestAnimationFrame(f);else c.remove();})(t0);
+}
+
+/* ---------- views ---------- */
+function starStr(n){var s='';for(var i=0;i<3;i++)s+=i<n?'★':'<span class="off">★</span>';return s;}
+function viewTitle(){
+  var h='<section class="panel"><div class="hero">'+(HAS3D?'<div id="stage3d" class="hero3d" data-kind="title" aria-hidden="true"></div>':'<svg class="bob" width="70" height="78" viewBox="0 0 70 78" aria-hidden="true">'+robo(7.5,1.25,2)+'</svg>')+'<div><h1>比例ラボ</h1><p>第1週 比例の式をつくろう</p></div></div>'+(LOG_URL?'<p class="cap" style="text-align:left">クリアの記録は お父さんにも届くよ</p>':'')
+   +'<div class="titlebar"><p class="coins" style="margin:0">'+coinSVG()+'<span>コイン '+save.coins+'</span></p>'+soundBtn()+'</div></section>';
+  h+='<section class="panel"><h2>ステージをえらぶ</h2>';
+  STAGES.forEach(function(s){
+    h+='<button class="btn stagebtn" data-act="start" data-id="'+s.id+'"><span><span class="nm">'+s.name+'</span><span class="ds">'+s.desc+'</span></span><span class="stars" aria-label="星'+(save.stars[s.id]||0)+'つ">'+starStr(save.stars[s.id]||0)+'</span></button>';
+  });
+  h+='</section>';
+  h+='<section class="panel"><h2>書き方の3つのルール</h2><ol class="rules">'
+    +'<li><b>1</b><span>まず「y = ax」を書く</span></li>'
+    +'<li><b>2</b><span>マイナスの数は ( ) に入れる</span></li>'
+    +'<li><b>3</b><span>最後に たしかめ算</span></li></ol>'
+    +'<p class="cap" style="margin-top:10px">ワークに書くときも、アプリと同じ順番で</p></section>';
+  h+='<section class="panel"><h2>ミスのきろく</h2><div class="record">'
+    +'<div><b>'+save.miss.swap+'</b><span>式の形・<br>入れかわり</span></div>'
+    +'<div><b>'+save.miss.sign+'</b><span>符号<br>(+と−)</span></div>'
+    +'<div><b>'+save.miss.calc+'</b><span>計算</span></div>'
+    +'<div><b>'+save.miss.word+'</b><span>ことば<br>(変域・関係)</span></div></div>'
+    +'<p class="cap" style="margin-top:10px">ミスは数えるだけ。へらすのが目標!</p></section>';
+  return h;
+}
+function topBar(){
+  var h='<div class="top"><button class="btn plain" data-act="back">もどる</button><span class="prog">'+G.st.name+' '+(G.i+1)+'/'+G.st.n+'</span>';
+  if(G.hearts!==null){h+='<span class="hearts" aria-label="ハート'+G.hearts+'つ">';for(var i=0;i<3;i++)h+=heartSVG(i<G.hearts);h+='</span>';}
+  else h+='<span class="coins">'+coinSVG()+save.coins+'</span>';
+  return h+soundBtn(true)+'</div>';
+}
+function viewTable(q){
+  var h='<div class="eq">'+eqn(q.a,1)+'</div><p class="ask">x = '+M(q.ask)+' のとき y は?</p><div class="line2" style="font-size:20px">y = '+P(q.a)+' × '+P(q.ask)+'</div><div class="tblbox"><table class="tbl"><tr><th>x</th>';
+  q.xs.forEach(function(x){h+='<td>'+M(x)+'</td>';});
+  h+='</tr><tr><th>y</th>';
+  q.xs.forEach(function(x){
+    if(x===q.ask){var c=G.done?M(q.y):(G.input?(G.neg?'−':'')+G.input:(G.neg?'−':'')+'?');h+='<td class="q">'+c+'</td>';}
+    else if(q.hidden.indexOf(x)>=0)h+='<td></td>';
+    else h+='<td>'+M(q.a*x)+'</td>';
+  });
+  return h+'</tr></table></div>';
+}
+var ORDER=['form','place','paren','sign','num','check','done'];
+var STEPNAME={form:'形',place:'代入',paren:'かっこ',sign:'符号',num:'計算',check:'たしかめ'};
+function stepsBar(q){
+  var list=q.type==='place'?['form','place','paren']:['form','place','paren','sign','num','check'];
+  if(q.x>0)list=list.filter(function(v){return v!=='paren';});
+  var at=ORDER.indexOf(G.phase),h='<div class="steps" aria-label="手順">';
+  list.forEach(function(k){var i=ORDER.indexOf(k);var c=i<at?'okd':(i===at?'cur':'');h+='<span class="'+c+'">'+STEPNAME[k]+'</span>';});
+  return h+'</div>';
+}
+function aP(q){var f=frac(q.an,q.ad);return (q.ad!==1||q.an<0)?'('+f+')':f;}
+function boxVal(k,q){if(!k)return '';return M(k==='x'?q.x:q.y);}
+function viewPlace(q){
+  var at=ORDER.indexOf(G.phase),find=q.type==='find';
+  var h=stepsBar(q)+'<p class="ask">x = '+M(q.x)+' のとき y = '+M(q.y)+'</p><div class="note">';
+  h+=at===0?'<div class="nl muted">まず 式の形 を書こう</div>':'<div class="nl">y = ax</div>';
+  if(at===1){
+    h+='<div class="nl"><div class="tpl"><button class="box'+(G.boxes[0]?' fill':'')+'" data-act="box" data-i="0" aria-label="左の□">'+boxVal(G.boxes[0],q)+'</button><span>= a ×</span>'
+      +'<button class="box'+(G.boxes[1]?' fill':'')+'" data-act="box" data-i="1" aria-label="右の□">'+boxVal(G.boxes[1],q)+'</button></div></div>';
+  }else if(at>=2){
+    var xs=G.phase==='paren'?'<mark>'+M(q.x)+'</mark>':P(q.x);
+    h+='<div class="nl">'+M(q.y)+' = a × '+xs+'</div>';
+  }
+  if(find&&at>=3)h+='<div class="nl">a = '+M(q.y)+' ÷ '+P(q.x)+'</div>';
+  if(find&&at===4)h+='<div class="nl">a = <span class="ans">'+(G.sign<0?'−':'')+(G.input||'&nbsp;')+'</span></div>';
+  if(find&&at>=5){
+    h+='<div class="nl">a = '+frac(q.an,q.ad)+'</div>';
+    var rhs=G.phase==='check'?'<span class="ans">'+(G.neg?'−':'')+(G.input||'&nbsp;')+'</span>':M(q.y)+' <span class="tag">OK</span>';
+    h+='<div class="nl"><span style="font-size:15px">たしかめ</span> '+aP(q)+' × '+P(q.x)+' = '+rhs+'</div>';
+  }
+  if(G.done)h+='<div class="nl fin">'+eqn(q.an,q.ad)+'</div>';
+  return h+'</div>';
+}
+function keypad(q){
+  var neg=q.type==='table'||G.phase==='check';
+  var keys=['7','8','9','4','5','6','1','2','3',neg?'−':'/','0','⌫'],h='<div class="keypad">';
+  keys.forEach(function(k){var on=(k==='−'&&G.neg)?' on':'';var lab=k==='⌫'?' aria-label="1文字けす"':(k==='−'?' aria-label="マイナス切りかえ" aria-pressed="'+G.neg+'"':'');h+='<button class="btn'+on+'" data-act="key" data-v="'+k+'"'+lab+'>'+k+'</button>';});
+  return h+'<button class="btn ok" data-act="ok">OK</button></div>';
+}
+function controls(q){
+  if(G.done)return '<button class="btn blue wide" data-act="next">'+(G.i+1>=G.st.n?'結果を見る':'次へ')+'</button>';
+  if(q.type==='words')return wordControls(q);
+  if(G.phase==='form'){
+    var lab={ax:'y = ax',adx:'y = '+'<span class="fr"><span>a</span><span>x</span></span>',ay:'x = ay'},h='<p class="ask" style="font-size:18px">比例の式の形はどれ?</p><div class="forms">';
+    G.forms.forEach(function(f){h+='<button class="btn" data-act="form" data-v="'+f+'">'+lab[f]+'</button>';});
+    return h+'</div>';
+  }
+  if(G.phase==='place'){
+    var ks=q.flip?['x','y']:['y','x'],h2='<div class="chips">';
+    ks.forEach(function(k){var used=G.boxes.indexOf(k)>=0;h2+='<button class="btn" data-act="chip" data-k="'+k+'"'+(used?' disabled':'')+'>'+M(k==='x'?q.x:q.y)+'</button>';});
+    return h2+'</div><p class="cap">数字をタップすると□に入るよ。□をタップすると取り消し</p>';
+  }
+  if(G.phase==='paren')return '<p class="ask" style="font-size:18px">マイナスの数が入ったね。どう書く?</p><div class="signs"><button class="btn" data-act="paren" data-v="wrap">( ) をつける</button><button class="btn plain" data-act="paren" data-v="skip">このままでOK</button></div>';
+  if(G.phase==='sign')return '<p class="ask" style="font-size:18px">a はプラス? マイナス?</p><div class="signs"><button class="btn" data-act="sign" data-v="1">+ プラス</button><button class="btn" data-act="sign" data-v="-1">− マイナス</button></div>';
+  if(G.phase==='check')return '<p class="ask" style="font-size:18px">たしかめ算: 計算して y になるかな?</p>'+keypad(q);
+  return keypad(q);
+}
+function viewWords(q){
+  if(q.sub==='mach')return viewMach(q);
+  if(q.sub==='tab')return viewTab(q);
+  var h=q.quiz?'<p class="cap" style="margin-top:0">まとめ問題</p>':'';
+  if(q.sub==='dom'){
+    if(q.mode==='text')h+='<p class="ask">変域を不等号で表すと?</p><p class="wtext">x は <span class="hl">'+q.d[4]+'</span></p>';
+    else h+='<p class="ask">この変域を不等号で表すと?</p>'+numberLine(q.d);
+    if(G.done){h+='<div class="note"><div class="nl">'+ineq(q.d,q.d[0],q.d[1],q.d[2],q.d[3])+'</div></div>';if(q.mode==='text')h+=numberLine(q.d);else h+='<p class="wtext">x は '+q.d[4]+'</p>';}
+    return h;
+  }
+  if(q.sub==='func'){
+    h+='<p class="ask">y は x の関数といえる?</p><p class="wtext">'+q.f[0]+'</p>';
+    if(G.done)h+='<div class="note"><div class="nl">'+(q.f[1]?'関数である':'関数ではない')+'</div><div class="nl" style="font-size:16px;font-family:\'Zen Kaku Gothic New\',sans-serif">'+q.f[2]+'</div></div>';
+    return h;
+  }
+  var r=q.r,list=r.k==='none'?['関係']:['関係','式','定数の意味'];
+  var cur={kind:0,eq:1,mean:2,done:3}[G.phase];
+  h+='<div class="steps">';list.forEach(function(n,i){h+='<span class="'+(i<cur?'okd':(i===cur?'cur':''))+'">'+n+'</span>';});h+='</div>';
+  h+='<p class="wtext">'+r.t+'</p><div class="note">';
+  var kname={prop:'比例',inv:'反比例',none:'どちらでもない'};
+  h+=cur>0?'<div class="nl">'+kname[r.k]+'</div>':'<div class="nl muted">比例? 反比例? どちらでもない?</div>';
+  if(r.k==='none'){if(G.done)h+='<div class="nl">'+r.e+'</div>';}
+  else{
+    if(cur>1)h+='<div class="nl">'+q.eqs.filter(function(e){return e.k===r.k;})[0].s+'</div>';
+    if(cur>2)h+='<div class="nl" style="font-size:18px">'+(r.k==='prop'?'比例':'比例')+'定数 '+r.c+' = '+r.m+'</div>';
+  }
+  return h+'</div>';
+}
+function wordControls(q){
+  if(q.sub==='mach')return machControls(q);
+  if(q.sub==='tab')return tabControls(q);
+  var h='';
+  if(q.sub==='dom'){h='<div class="choices two">';q.opts.forEach(function(o,i){h+='<button class="btn" data-act="wc" data-v="'+i+'">'+o.s+'</button>';});return h+'</div>';}
+  if(q.sub==='func')return '<div class="choices two"><button class="btn small" data-act="wc" data-v="1">関数である</button><button class="btn small" data-act="wc" data-v="0">関数ではない</button></div><p class="cap">x を1つ決めると、y がただ1つに決まる?</p>';
+  if(G.phase==='kind')return '<div class="choices"><button class="btn small" data-act="wc" data-v="prop">比例</button><button class="btn small" data-act="wc" data-v="inv">反比例</button><button class="btn small" data-act="wc" data-v="none">どちらでもない</button></div><p class="cap">ことばの式を考えてみよう(例:代金 = 値段 × 本数)</p>';
+  if(G.phase==='eq'){h='<p class="ask" style="font-size:18px">y を x の式で表すと?</p><div class="choices">';q.eqs.forEach(function(e,i){h+='<button class="btn" data-act="wc" data-v="'+i+'">'+e.s+'</button>';});return h+'</div>';}
+  h='<p class="ask" style="font-size:18px">比例定数 '+q.r.c+' が表しているのは?</p><div class="choices">';q.mo.forEach(function(m,i){h+='<button class="btn small" data-act="wc" data-v="'+i+'">'+m+'</button>';});return h+'</div>';
+}
+function onWord(v){
+  var q=G.qs[G.i];if(G.done)return;
+  if(q.sub==='mach'){onMachJudge(v);return;}
+  if(q.sub==='tab'){onTabChoice(v);return;}
+  if(q.sub==='dom'){
+    var o=q.opts[+v];if(o.ok){finish();return;}
+    var msg=o.dir?'<b>向きをチェック!</b> 「より大きい・以上」は x のほうが大きい(x > ○)、「未満・以下」は x のほうが小さい(x < ○)。'
+      :'<b>ふくむ? ふくまない?</b> 「以上・以下」は その数を<b>ふくむ</b>(≦・●)。「より大きい・未満・より小さい」は <b>ふくまない</b>(<・○)。';
+    if(miss('word',msg))return;render();return;
+  }
+  if(q.sub==='func'){
+    if((v==='1')===q.f[1]){finish();return;}
+    if(miss('word','x を1つ決めたとき、y が<b>ただ1つに決まるか</b>を考えよう。ヒント:'+q.f[2]+'。'))return;render();return;
+  }
+  var r=q.r;
+  if(G.phase==='kind'){
+    if(v===r.k){if(r.k==='none'){finish();return;}G.phase='eq';G.fb={ok:true,msg:'正解! ことばの式は <b>'+r.w+'</b>。次は式にしよう。'};SFX.step();render();return;}
+    if(miss('word','<b>ことばの式</b>をつくってみよう:'+r.w+'。y = (決まった数) × x なら比例、y = (決まった数) ÷ x なら反比例、たし算・ひき算なら どちらでもない。'))return;render();return;
+  }
+  if(G.phase==='eq'){
+    if(q.eqs[+v].k===r.k){G.phase='mean';G.fb={ok:true,msg:'式OK! 最後に、比例定数 '+r.c+' が何を表しているか。'};SFX.step();render();return;}
+    if(miss('word',(r.k==='prop'?'比例は <b>y = ax</b> の形':'反比例は <b>y = a/x</b> の形')+'。ことばの式 '+r.w+' を見直そう。'))return;render();return;
+  }
+  if(G.phase==='mean'){
+    if(q.mo[+v]===r.m){finish();return;}
+    if(miss('word','式の中の <b>'+r.c+'</b> は、問題文のどの数だった? ことばの式 '+r.w+' と見比べよう。'))return;render();return;
+  }
+}
+function viewPlay(){
+  var q=G.qs[G.i],h=topBar();
+  h+='<section class="panel qpanel">'+(q.type==='table'?viewTable(q):q.type==='words'?viewWords(q):viewPlace(q))+'</section>';
+  if(G.fb)h+='<div class="fb hint '+(G.fb.ok?'good':'bad')+'" role="status">'+G.fb.msg+'</div>';
+  if(G.done&&q.type!=='words')h+='<section class="panel">'+graph(q)+'</section>';
+  h+='<section class="panel">'+controls(q)+'</section>';
+  return h;
+}
+function viewResult(){
+  var n=G.st.n,f=G.firstOK,st=calcStars();
+  if(st>(save.stars[G.st.id]||0)){save.stars[G.st.id]=st;persist();}
+  var title=G.over?'ハートがなくなった…':'ステージクリア!';
+  var sub=G.over?'あと一歩。ミスした問題のヒントを思い出してもう一回!':'1回でせいかい '+f+' / '+n+' 問';
+  return '<section class="panel result">'+(HAS3D?'<div id="stage3d" class="stage3d res" data-kind="result" aria-hidden="true"></div>':'<svg class="bob" width="70" height="78" viewBox="0 0 70 78" aria-hidden="true">'+robo(7.5,1.25,2)+'</svg>')
+    +'<p class="big">'+title+'</p><p class="stars" style="font-size:34px;margin:0">'+starStr(st)+'</p><p>'+sub+'</p>'
+    +'<p class="coins" style="justify-content:center;display:flex">'+coinSVG()+'コイン '+save.coins+'</p>'
+    +'<div class="row"><button class="btn" data-act="start" data-id="'+G.st.id+'">もう一回</button><button class="btn plain" data-act="back">ステージへ</button></div></section>';
+}
+function render(){
+  var app=document.getElementById('app');
+  app.innerHTML=screen==='title'?viewTitle():screen==='play'?viewPlay():viewResult();
+  applyFx();mount3d();runBuild();
+}
+
+/* ---------- logic ---------- */
+function onForm(v){
+  if(G.phase!=='form')return;
+  if(v==='ax'){G.phase='place';G.fb={ok:true,msg:'まず <b>y = ax</b>。これを書いてから代入すると、入れかわりが起きにくいよ。'};SFX.step();render();return;}
+  var msg=v==='ay'?'<b>xとyが逆!</b> 比例は y = ax。左に来るのは y だよ。':'それは<b>反比例</b>の式(3週目に出てくるよ)。比例は y = ax。';
+  if(miss('swap',msg))return;render();
+}
+function afterPlace(){
+  var q=G.qs[G.i];
+  if(q.type==='place'){finish();return;}
+  G.phase='sign';G.fb={ok:true,msg:'代入OK! 次は a の<b>符号</b>を決めよう。'};SFX.step();render();
+}
+function onChip(k){
+  var q=G.qs[G.i];if(G.phase!=='place')return;
+  var idx=G.boxes[0]===null?0:1;G.boxes[idx]=k;G.fb=null;SFX.place();
+  if(G.boxes[0]&&G.boxes[1]){
+    if(G.boxes[0]==='y'&&G.boxes[1]==='x'){
+      if(q.x<0){G.phase='paren';G.fb=null;render();return;}
+      afterPlace();return;
+    }else{
+      G.boxes=[null,null];
+      if(miss('swap','<b>xとyが入れかわってるよ!</b> y = a × x だから、左の□には <b>y の値('+M(q.y)+')</b>、右の□には x の値が入るよ。'))return;
+    }
+  }
+  render();
+}
+function onParen(v){
+  if(G.phase!=='paren')return;
+  if(v==='wrap'){G.parenDone=true;afterPlace();if(!G.done){G.fb={ok:true,msg:'<b>( ) でガード!</b> 次は a の<b>符号</b>を決めよう。'};render();}return;}
+  G.fb={ok:false,msg:'このままだと「× −」が並んで、符号を見落としやすい。<b>マイナスの数は ( ) に入れよう。</b>'};SFX.tap();render();
+}
+function onBox(i){if(G.phase!=='place')return;G.boxes[i]=null;if(i===0&&G.boxes[1]){G.boxes[0]=G.boxes[1];G.boxes[1]=null;}render();}
+function onSign(v){
+  var q=G.qs[G.i];if(G.phase!=='sign')return;
+  var right=q.an<0?-1:1;
+  if(v===right){G.sign=v;G.phase='num';G.fb={ok:true,msg:'符号OK! あとは数を入れよう。'};SFX.step();}
+  else{
+    var ys=q.y<0?'−':'+',xs=q.x<0?'−':'+',rs=right<0?'−':'+';
+    if(miss('sign','<b>符号チェック!</b> ('+ys+') ÷ ('+xs+') = ('+rs+')。わり算は <b>同じ符号なら+、ちがう符号なら−</b>。'))return;
+  }
+  render();
+}
+function onKey(k){
+  if(G.done||(G.phase!=='num'&&G.phase!=='check'))return;
+  var q=G.qs[G.i];
+  SFX.tap();
+  if(k==='⌫')G.input=G.input.slice(0,-1);
+  else if(k==='−'){if(q.type==='table'||G.phase==='check')G.neg=!G.neg;}
+  else if(k==='/'){if(G.phase==='num'&&q.type!=='table'&&G.input&&G.input.indexOf('/')<0)G.input+='/';}
+  else if(/^\d$/.test(k)&&G.input.length<6)G.input+=k;
+  render();
+}
+function onOK(){
+  var q=G.qs[G.i];if(G.done||(G.phase!=='num'&&G.phase!=='check'))return;
+  if(G.phase==='check'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてからOKを押そう。'};render();return;}
+    var cv=(G.neg?-1:1)*parseInt(G.input,10);
+    if(cv===q.y){finish();return;}
+    var st2;
+    if(Math.abs(cv)===Math.abs(q.y))st2=miss('sign','<b>数は合ってる! 符号をチェック。</b> かけ算は 同じ符号なら+、ちがう符号なら−。');
+    else st2=miss('calc',q.ad!==1?'分数のかけ算は、<b>x ÷ 分母 × 分子</b> の順でやると楽だよ。':'かけ算しなおしてみよう。');
+    if(st2)return;G.input='';G.neg=false;render();return;
+  }
+  if(q.type==='table'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてからOKを押そう。'};render();return;}
+    var val=(G.neg?-1:1)*parseInt(G.input,10);
+    if(val===q.y){finish();return;}
+    var stop;
+    if(Math.abs(val)===Math.abs(q.y))stop=miss('sign','<b>数は合ってる! 符号をチェック。</b> かけ算は 同じ符号なら+、ちがう符号なら−。');
+    else stop=miss('calc','y = '+M(q.a)+' × '+P(q.ask)+' を計算しよう。表のとなりの数もヒントになるよ。');
+    if(stop)return;
+    G.input='';G.neg=false;render();return;
+  }
+  var mt=G.input.match(/^(\d+)(?:\/(\d+))?$/);
+  if(!mt){G.fb={ok:false,msg:'数を入れてね。分数は 1/3 のように / を使うよ。'};render();return;}
+  var n=+mt[1],d=mt[2]?+mt[2]:1;
+  if(d===0){G.fb={ok:false,msg:'分母に0は使えないよ。'};G.input='';render();return;}
+  var tn=Math.abs(q.an),td=q.ad;
+  if(n*td===tn*d){
+    if(gcd(n,d)!==1){G.fb={ok:false,msg:'<b>おしい!</b> 値は合ってる。<b>約分</b>してみよう。'};G.input='';render();return;}
+    G.phase='check';G.input='';G.neg=false;G.fb={ok:true,msg:'a が出た! 最後に<b>たしかめ算</b>。a × x が y になるかな?'};SFX.step();render();return;
+  }
+  if(miss('calc',Math.abs(q.y)+' ÷ '+Math.abs(q.x)+' を計算しよう。わり切れないときは <b>分数(○/○)</b> で書くよ。'))return;
+  G.input='';render();
+}
+function onNext(){var fin=G.i+1>=G.st.n;if(fin)logResult('クリア');G.i++;if(fin){screen='result';}else resetQ();render();window.scrollTo(0,0);if(fin){SFX.clear();if(!G.over)confetti();}else SFX.tap();}
+
+document.getElementById('app').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b||b.disabled)return;
+  var a=b.dataset.act;
+  if(a==='start')startStage(b.dataset.id);
+  else if(a==='back'){if(screen==='play'&&G&&(G.i>0||G.done))logResult('途中でやめた');screen='title';G=null;render();window.scrollTo(0,0);}
+  else if(a==='chip')onChip(b.dataset.k);
+  else if(a==='form')onForm(b.dataset.v);
+  else if(a==='wc')onWord(b.dataset.v);
+  else if(a==='mx')onMachX(+b.dataset.v);
+  else if(a==='tvplay'){G.animCols=[0,1,2,3,4];render();}
+  else if(a==='trow'){G.rows[b.dataset.v]=!G.rows[b.dataset.v];SFX.tap();render();}
+  else if(a==='wkey')onTabKey(b.dataset.v);
+  else if(a==='wok')onTabOK();
+  else if(a==='paren')onParen(b.dataset.v);
+  else if(a==='box')onBox(+b.dataset.i);
+  else if(a==='sign')onSign(+b.dataset.v);
+  else if(a==='key')onKey(b.dataset.v);
+  else if(a==='ok')onOK();
+  else if(a==='next')onNext();
+  else if(a==='sound'){save.sound=!save.sound;persist();render();if(save.sound)SFX.coin();}
+});
+document.addEventListener('keydown',function(e){
+  if(screen!=='play'||!G)return;
+  if(G.done&&e.key==='Enter'){onNext();return;}
+  if(G.phase!=='num'&&G.phase!=='check')return;
+  if(/^\d$/.test(e.key))onKey(e.key);
+  else if(e.key==='Backspace')onKey('⌫');
+  else if(e.key==='-')onKey('−');
+  else if(e.key==='/')onKey('/');
+  else if(e.key==='Enter')onOK();
+});
+document.addEventListener('keydown',function(e){
+  if(screen!=='play'||!G||G.done)return;var q=G.qs[G.i];
+  if(q.type!=='words'||q.sub!=='tab'||(G.phase!=='fill'&&G.phase!=='cnst'))return;
+  if(/^\d$/.test(e.key))onTabKey(e.key);else if(e.key==='Backspace')onTabKey('⌫');else if(e.key==='Enter')onTabOK();
+});
+render();
+flush();
+})();
+</script>
+</body>
+</html>
