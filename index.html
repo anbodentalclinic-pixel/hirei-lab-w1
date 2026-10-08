@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>比例ラボ 第1週</title>
+<meta name="description" content="中1数学 比例の式(y = ax)を、式の形→代入→かっこ→符号→計算→たしかめ算の順で練習するゲーム">
+<meta name="theme-color" content="#63B7F2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="比例ラボ">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 10'%3E%3Crect x='4' width='1' height='1' fill='%23FFC928'/%3E%3Crect x='4' y='1' width='1' height='1' fill='%231E1B3A'/%3E%3Crect x='1' y='2' width='7' height='6' fill='%231E1B3A'/%3E%3Crect x='2' y='3' width='5' height='4' fill='%234FA3F7'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='5' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='3' y='6' width='3' height='1' fill='%231E1B3A'/%3E%3Crect x='2' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3Crect x='5' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
@@ -61,7 +66,7 @@ button{font-family:inherit;color:inherit}
 .stagebtn .ds{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:14px;color:var(--sub);display:block}
 .stars{font-size:20px;color:var(--coin);white-space:nowrap;-webkit-text-stroke:1px var(--line)}
 .stars .off{color:transparent}
-.record{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.record{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;text-align:center}
 .record div{border:2px solid var(--line);padding:6px 4px;background:var(--chip)}
 .record b{display:block;font-size:24px;font-weight:400}
 .record span{font-size:13px;font-family:'Zen Kaku Gothic New',system-ui,sans-serif;color:var(--sub)}
@@ -140,6 +145,48 @@ mark{background:var(--coin);color:var(--onCoin);padding:0 4px}
 @keyframes plus{to{transform:translate(-50%,-50px);opacity:0}}
 .fxc{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
 @media (prefers-reduced-motion: reduce){.bob,.shake,.pop,.plus{animation:none}}
+.wtext{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:19px;line-height:1.7;font-weight:700;text-align:center;margin:6px 0 12px}
+.wtext .hl{background:var(--coin);color:var(--onCoin);padding:0 4px}
+.nline{display:block;width:100%;max-width:320px;margin:6px auto}
+.nline text{fill:var(--text);font-family:'DotGothic16',sans-serif;font-size:15px}
+.choices{display:grid;gap:10px}
+.choices .btn{background:var(--chip);color:var(--text);font-size:21px;text-align:center}
+.choices .btn.small{font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:17px;font-weight:700}
+.choices.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mach{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 12px}
+.mslot{width:78px;height:64px;border:3px solid var(--line);background:var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.mslot span{font-size:13px;color:var(--sub)}.mslot b{font-weight:400;font-size:24px}
+.mslot.out{background:var(--coin);color:var(--onCoin)}.mslot.out span{color:var(--onCoin)}
+.mbox{width:84px;height:70px}.mbox.pop{animation:pop .35s steps(3)}
+@keyframes pop{30%{transform:translateY(-5px) scale(1.06)}60%{transform:translateY(2px)}}
+.tbl td.clash{background:var(--badbg);color:var(--fbtext)}
+.tbl td.calc{background:var(--goodbg);color:var(--fbtext);font-size:15px}
+.tbl th.sm{font-size:13px}
+.tblbox{padding-bottom:4px}
+.tblbox + .note{margin-top:12px}
+.choices.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.choices.three .btn{font-size:17px;padding:8px 4px}
+.choices .btn.on{background:var(--blue);color:var(--onBlue)}
+.mstat{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.mstat span{font-size:13px;padding:2px 8px;border:2px solid var(--line);background:var(--chip);color:var(--sub)}
+.mstat span.okd{background:var(--goodbg);color:var(--fbtext)}
+pre.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.5;background:#1E1B3A;color:#FFF6DC;border:3px solid var(--line);padding:10px 12px;margin:8px 0;text-align:left;overflow-x:auto;white-space:pre}
+.mcards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px}
+.mcard{border:2px solid var(--line);background:var(--chip);padding:4px}
+.mcard svg{display:block;width:100%;height:auto}
+.mcard.clash{background:var(--badbg);border-color:#E5484D;border-width:3px}
+.mcap{text-align:center;font-size:14px;color:var(--text)}
+.vt{font-family:'Zen Kaku Gothic New',sans-serif;font-size:11px;font-weight:700;fill:var(--text)}
+.mcard svg{aspect-ratio:140/108}
+.tvstrip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin-top:8px}
+.tv{border:2px solid var(--line);background:var(--chip);text-align:center;padding:2px}
+.tv svg{display:block;width:100%;height:auto;aspect-ratio:80/68}
+.tv span{font-size:12px;color:var(--sub)}
+.tv.act{background:var(--coin);border-width:3px}.tv.act span{color:var(--onCoin)}
+.tv .vt{font-size:9px}
+@keyframes buildin{0%{opacity:0;transform:translateY(-8px) scale(.4)}70%{opacity:1;transform:translateY(1px) scale(1.08)}100%{opacity:1;transform:none}}
+svg.build > *{animation:buildin .3s steps(5) both;transform-box:fill-box;transform-origin:center}
+.tvplay{width:100%;margin-top:8px;min-height:44px;font-size:16px}
 </style>
 </head>
 <body>
@@ -160,6 +207,7 @@ function load(){try{var v=localStorage.getItem(KEY);if(v)return JSON.parse(v);}c
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){}}
 var save=load()||{};
 save.stars=save.stars||{}; save.coins=save.coins||0; save.miss=save.miss||{swap:0,sign:0,calc:0};
+if(save.miss.word===undefined)save.miss.word=0;
 if(save.sound===undefined)save.sound=true;
 save.queue=save.queue||[];
 save.device=save.device||Math.random().toString(36).slice(2,8);
@@ -172,7 +220,7 @@ function logResult(result){
   save.queue.push({
     key:LOG_KEY, app:'比例ラボ 第1週', stage:G.st.name, result:result,
     answered:answered, total:G.st.n, firstOK:G.firstOK, stars:result==='途中でやめた'?0:calcStars(),
-    swap:G.ms.swap, sign:G.ms.sign, calc:G.ms.calc,
+    swap:G.ms.swap, sign:G.ms.sign, calc:G.ms.calc, word:G.ms.word||0,
     seconds:Math.round((Date.now()-G.t0)/1000), device:save.device,
     clientTime:new Date().toLocaleString('ja-JP')
   });
@@ -229,8 +277,298 @@ var STAGES=[
   {id:'table',name:'表をうめろ',desc:'y = ax の表の「?」を計算。マイナスに注意',n:6},
   {id:'place',name:'代入パズル',desc:'式の形を書いて、y と x を正しい□へ',n:8},
   {id:'find',name:'a をさがせ',desc:'形→代入→符号→計算→たしかめ',n:8},
+  {id:'words',name:'関係ラボ',desc:'関数マシン・表から比例/反比例を見ぬく・変域',n:7},
   {id:'boss',name:'ボス戦',desc:'全部まぜて10問。ハートは3つ',n:10}
 ];
+
+/* ---------- ことばの問題 データ ---------- */
+var DOM=[[0,true,6,true,'0以上6以下'],[3,true,18,false,'3以上18未満'],[3,false,null,null,'3より大きい'],[null,null,-1,false,'−1未満'],
+ [-5,false,0,false,'−5より大きく0より小さい'],[0,true,100,true,'0以上100以下'],[-2,true,4,false,'−2以上4未満'],[null,null,5,true,'5以下'],
+ [1,false,7,true,'1より大きく7以下'],[-3,true,null,null,'−3以上']];
+var FUNC=[['1辺が x cm の正方形の面積は y cm²',true,'1辺を決めると、面積はただ1つに決まる'],
+ ['身長 x cm の人の体重は y kg',false,'同じ身長でも、体重は人によってちがう'],
+ ['x 歳の人の身長は y cm',false,'同じ年でも、身長は人によってちがう'],
+ ['半径 x cm の円の面積は y cm²',true,'半径を決めると、面積はただ1つに決まる'],
+ ['整数 x の絶対値は y',true,'x を決めると、絶対値はただ1つに決まる'],
+ ['20km はなれた所へ時速 x km で行くと y 時間かかる',true,'速さを決めると、時間はただ1つに決まる'],
+ ['周の長さが x cm の長方形の面積は y cm²',false,'周の長さが同じでも、形によって面積がちがう'],
+ ['自然数 x の倍数は y',false,'3 の倍数は 3, 6, 9…と たくさんあって1つに決まらない'],
+ ['1000円出して x 円の買い物をしたときのおつりは y 円',true,'代金を決めると、おつりはただ1つに決まる']];
+var REL=[
+ {t:'1本 50円のえんぴつを x 本買ったときの代金 y 円',k:'prop',c:'50',m:'えんぴつ1本の値段',mo:['えんぴつ1本の値段','えんぴつの本数','代金'],w:'代金 = 1本の値段 × 本数'},
+ {t:'時速 4km で x 時間歩いたときの道のり y km',k:'prop',c:'4',m:'歩く速さ(時速)',mo:['歩く速さ(時速)','歩いた時間','道のり'],w:'道のり = 速さ × 時間'},
+ {t:'縦 4cm、横 x cm の長方形の面積 y cm²',k:'prop',c:'4',m:'長方形の縦の長さ',mo:['長方形の縦の長さ','長方形の横の長さ','長方形の面積'],w:'面積 = 縦 × 横'},
+ {t:'底辺 12cm、高さ x cm の平行四辺形の面積 y cm²',k:'prop',c:'12',m:'平行四辺形の底辺',mo:['平行四辺形の底辺','平行四辺形の高さ','平行四辺形の面積'],w:'面積 = 底辺 × 高さ'},
+ {t:'1人に x 本ずつ、5人にえんぴつを配るときの本数の合計 y 本',k:'prop',c:'5',m:'配る人数',mo:['配る人数','1人に配る本数','配る本数の合計'],w:'合計 = 1人分 × 人数'},
+ {t:'毎分 3L ずつ水そうに水を入れるとき、x 分後の水の量 y L',k:'prop',c:'3',m:'1分間に入れる水の量',mo:['1分間に入れる水の量','水を入れる時間','水そうの大きさ'],w:'水の量 = 1分間の量 × 時間'},
+ {t:'面積が 18cm² の長方形の横 x cm と縦 y cm',k:'inv',c:'18',m:'長方形の面積',mo:['長方形の面積','長方形の縦の長さ','長方形の周の長さ'],w:'縦 = 面積 ÷ 横'},
+ {t:'1200m の道のりを分速 x m で歩くときにかかる時間 y 分',k:'inv',c:'1200',m:'道のりの長さ',mo:['道のりの長さ','歩く速さ','かかる時間'],w:'時間 = 道のり ÷ 速さ'},
+ {t:'120cm のひもを x 等分したときの1本の長さ y cm',k:'inv',c:'120',m:'ひも全体の長さ',mo:['ひも全体の長さ','分ける数','1本の長さ'],w:'1本の長さ = 全体の長さ ÷ 分ける数'},
+ {t:'24個のあめを x 人で同じ数ずつ分けるときの1人分 y 個',k:'inv',c:'24',m:'あめ全体の個数',mo:['あめ全体の個数','分ける人数','1人分の個数'],w:'1人分 = 全体 ÷ 人数'},
+ {t:'1000円出して x 円の買い物をしたときのおつり y 円',k:'none',e:'y = 1000 − x',w:'おつり = 出したお金 − 代金'},
+ {t:'周の長さが 30cm の長方形の縦 x cm と横 y cm',k:'none',e:'y = 15 − x',w:'横 = 15 − 縦'}];
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=rnd(0,i),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function ineq(d,lo,li,hi,hiI){
+  if(lo!==null&&hi!==null)return M(lo)+' '+(li?'≦':'<')+' x '+(hiI?'≦':'<')+' '+M(hi);
+  if(lo!==null)return 'x '+(li?'≧':'>')+' '+M(lo);
+  return 'x '+(hiI?'≦':'<')+' '+M(hi);
+}
+function domOptions(d){
+  var lo=d[0],li=d[1],hi=d[2],hiI=d[3],o=[];
+  if(lo!==null&&hi!==null){[[true,true],[true,false],[false,true],[false,false]].forEach(function(c){o.push({s:ineq(d,lo,c[0],hi,c[1]),ok:c[0]===li&&c[1]===hiI,dir:false});});}
+  else if(lo!==null){[[lo,true],[lo,false]].forEach(function(c){o.push({s:ineq(d,lo,c[1],null,null),ok:c[1]===li,dir:false});});[true,false].forEach(function(c){o.push({s:ineq(d,null,null,lo,c),ok:false,dir:true});});}
+  else{[true,false].forEach(function(c){o.push({s:ineq(d,null,null,hi,c),ok:c===hiI,dir:false});});[true,false].forEach(function(c){o.push({s:ineq(d,hi,c,null,null),ok:false,dir:true});});}
+  return shuffle(o);
+}
+function numberLine(d){
+  var lo=d[0],li=d[1],hi=d[2],hiI=d[3];
+  var a=lo!==null?lo:hi-6,b=hi!==null?hi:lo+6;var span=Math.max(b-a,1);
+  var L=40,Rr=260;function X(v){return L+(v-a)*(Rr-L)/span;}
+  var s='<line x1="10" y1="40" x2="290" y2="40" stroke="var(--axis)" stroke-width="2"/>';
+  var sx=lo!==null?X(lo):12,ex=hi!==null?X(hi):288;
+  s+='<line x1="'+sx+'" y1="40" x2="'+ex+'" y2="40" stroke="var(--blue)" stroke-width="7"/>';
+  if(lo===null)s+='<polygon points="8,40 18,33 18,47" fill="var(--blue)"/>';
+  if(hi===null)s+='<polygon points="292,40 282,33 282,47" fill="var(--blue)"/>';
+  [[lo,li],[hi,hiI]].forEach(function(e){if(e[0]===null)return;var x=X(e[0]);s+='<circle cx="'+x+'" cy="40" r="7" fill="'+(e[1]?'var(--text)':'var(--panel)')+'" stroke="var(--text)" stroke-width="2.5"/><text x="'+x+'" y="70" text-anchor="middle">'+M(e[0])+'</text>';});
+  return '<svg class="nline" viewBox="0 0 300 80" role="img" aria-label="数直線">'+s+'</svg>';
+}
+/* ---------- 関係ラボ:関数マシン ---------- */
+var MACH=[
+ {t:'1辺が x cm の正方形 → 面積 y cm²',fn:true,xs:[2,3,4],v:'square',f:function(x){return x*x;},code:'int y(int x) {\n  return x * x;\n}'},
+ {t:'1000円出して x 円の買い物 → おつり y 円',fn:true,xs:[100,300,500],v:'change',f:function(x){return 1000-x;},code:'int y(int x) {\n  return 1000 - x;\n}'},
+ {t:'20km を時速 x km で進む → かかる時間 y 時間',fn:true,xs:[2,4,5],v:'road',f:function(x){return 20/x;},code:'int y(int x) {\n  return 20 / x;\n}'},
+ {t:'整数 x → x の絶対値 y',fn:true,xs:[-3,2,-5],v:'abs',f:function(x){return Math.abs(x);},code:'int y(int x) {\n  return Math.abs(x);\n}'},
+ {t:'身長 x cm の人 → 体重 y kg',fn:false,xs:[150,160,170],v:'weight',g:function(x){return x-110+rnd(-8,8);},why:'同じ身長でも、体重は人によってちがう'},
+ {t:'x 歳の人 → 身長 y cm',fn:false,xs:[10,12,14],v:'age',g:function(x){return 130+(x-10)*6+rnd(-8,8);},why:'同じ年でも、身長は人によってちがう'},
+ {t:'周の長さ x cm の長方形 → 面積 y cm²',fn:false,xs:[12,16,20],v:'rect',g:function(x){var h=x/2,a=rnd(1,h-1);return a*(h-a);},why:'周の長さが同じでも、細長い形と正方形に近い形で面積がちがう'},
+ {t:'自然数 x → x の倍数 y',ex:'たとえば 3 の倍数は 3, 6, 9, 12 … とたくさんある。マシンはその中の1つを出す',fn:false,xs:[2,3,5],v:'mult',g:function(x){return x*rnd(1,6);},why:'倍数はたくさんあって、1つに決まらない'}];
+/* ---------- 関係ラボ:表から見ぬく ---------- */
+var TAB=[
+ {v:'pencil',t:'1本 50円のえんぴつを x 本買ったときの代金 y 円',k:'prop',c:50,xs:[1,2,3,4,5],w:'代金 = 1本の値段 × 本数',m:'えんぴつ1本の値段',mo:['えんぴつ1本の値段','えんぴつの本数','代金']},
+ {v:'walk',t:'時速 4km で x 時間歩いたときの道のり y km',k:'prop',c:4,xs:[1,2,3,4,5],w:'道のり = 速さ × 時間',m:'歩く速さ(時速)',mo:['歩く速さ(時速)','歩いた時間','道のり']},
+ {v:'rect6',t:'縦 6cm、横 x cm の長方形の面積 y cm²',k:'prop',c:6,xs:[1,2,3,4,5],w:'面積 = 縦 × 横',m:'長方形の縦の長さ',mo:['長方形の縦の長さ','長方形の横の長さ','長方形の面積']},
+ {v:'water',t:'毎分 3L ずつ水そうに水を入れるとき、x 分後の水の量 y L',k:'prop',c:3,xs:[1,2,3,4,5],w:'水の量 = 1分間の量 × 時間',m:'1分間に入れる水の量',mo:['1分間に入れる水の量','水を入れる時間','水そうの大きさ']},
+ {v:'candy',t:'24個のあめを x 人で同じ数ずつ分けるときの1人分 y 個',k:'inv',c:24,xs:[1,2,3,4,6],w:'1人分 = 全体の個数 ÷ 人数',m:'あめ全体の個数',mo:['あめ全体の個数','分ける人数','1人分の個数']},
+ {v:'rect18',t:'面積が 18cm² の長方形の横 x cm と縦 y cm',k:'inv',c:18,xs:[1,2,3,6,9],w:'縦 = 面積 ÷ 横',m:'長方形の面積',mo:['長方形の面積','長方形の縦の長さ','長方形の周の長さ']},
+ {v:'string',t:'120cm のひもを x 等分したときの1本の長さ y cm',k:'inv',c:120,xs:[2,3,4,5,6],w:'1本の長さ = 全体の長さ ÷ 分ける数',m:'ひも全体の長さ',mo:['ひも全体の長さ','分ける数','1本の長さ']},
+ {v:'walk1200',t:'1200m の道のりを分速 x m で歩くときにかかる時間 y 分',k:'inv',c:1200,xs:[100,200,300,400,600],w:'時間 = 道のり ÷ 速さ',m:'道のりの長さ',mo:['道のりの長さ','歩く速さ','かかる時間']},
+ {v:'change',t:'1000円出して x 円の買い物をしたときのおつり y 円',k:'none',op:'sub',c:1000,xs:[100,200,300,400,500],w:'おつり = 出したお金 − 代金',e:'y = 1000 − x'},
+ {v:'rect30',t:'周の長さが 30cm の長方形の縦 x cm と横 y cm',k:'none',op:'sub',c:15,xs:[1,2,3,4,5],w:'横 = 15(周の半分) − 縦',e:'y = 15 − x'},
+ {v:'bro',t:'弟が x 歳のとき、3歳上の兄は y 歳',k:'none',op:'add',c:3,xs:[1,2,3,4,5],w:'兄の年 = 弟の年 + 3',e:'y = x + 3'}];
+function tabY(r,x){return r.k==='prop'?r.c*x:r.k==='inv'?r.c/x:(r.op==='sub'?r.c-x:x+r.c);}
+function genMach(fn){var pool=MACH.filter(function(m){return m.fn===fn;});return {type:'words',sub:'mach',m:pool[rnd(0,pool.length-1)]};}
+function genTab(k){var pool=TAB.filter(function(r){return r.k===k;});var r=pool[rnd(0,pool.length-1)];return {type:'words',sub:'tab',r:r,mo:r.mo?shuffle(r.mo):null};}
+function rfrac(n,d){var g=gcd(n,d);n/=g;d/=g;return frac(n,d);}
+
+/* ---------- 関数マシンの絵 ---------- */
+function vt(x,y,t,anc,cls){return '<text x="'+x+'" y="'+y+'" text-anchor="'+(anc||'middle')+'" class="'+(cls||'vt')+'">'+t+'</text>';}
+function tiles(ox,oy,w,h,u){var s='';for(var r=0;r<h;r++)for(var c=0;c<w;c++)s+='<rect x="'+(ox+c*u)+'" y="'+(oy+r*u)+'" width="'+u+'" height="'+u+'" fill="#FFC928" stroke="#1E1B3A" stroke-width="1"/>';return s;}
+function person(cx,base,hgt,wid,col){
+  var head=Math.max(7,hgt*0.13),bodyH=hgt*0.45,legH=hgt-head*2-bodyH,top=base-hgt,s='';
+  s+='<circle cx="'+cx+'" cy="'+(top+head)+'" r="'+head+'" fill="#FFDDBD" stroke="#1E1B3A" stroke-width="1.5"/>';
+  s+='<rect x="'+(cx-wid/2)+'" y="'+(top+head*2)+'" width="'+wid+'" height="'+bodyH+'" rx="'+Math.min(8,wid/3)+'" fill="'+col+'" stroke="#1E1B3A" stroke-width="1.5"/>';
+  s+='<rect x="'+(cx-wid/2+2)+'" y="'+(top+head*2+bodyH)+'" width="'+(wid/2-3)+'" height="'+legH+'" fill="#3B302A"/><rect x="'+(cx+1)+'" y="'+(top+head*2+bodyH)+'" width="'+(wid/2-3)+'" height="'+legH+'" fill="#3B302A"/>';
+  return s;
+}
+var VIZ={
+  square:function(x,y){var u=Math.min(18,72/x),w=x*u,ox=70-w/2,oy=12;return tiles(ox,oy,x,x,u)+vt(70,oy+w+16,'1辺 '+x+'cm → '+y+'マス');},
+  change:function(x,y){var W=120,px=W*x/1000,s='<rect x="10" y="22" width="'+px+'" height="26" fill="#E5484D" stroke="#1E1B3A" stroke-width="1.5"/><rect x="'+(10+px)+'" y="22" width="'+(W-px)+'" height="26" fill="#4FBF45" stroke="#1E1B3A" stroke-width="1.5"/>';
+    return vt(70,14,'1000円')+s+vt(10,66,'代金 '+x,'start')+vt(130,84,'おつり '+y,'end');},
+  road:function(x,y){var W=124,seg=W/y,s='';for(var i=0;i<y;i++)s+='<rect x="'+(8+i*seg)+'" y="30" width="'+seg+'" height="18" fill="'+(i%2?'#9FC3EE':'#2F6FD6')+'" stroke="#1E1B3A" stroke-width="1"/>';
+    return vt(70,20,'20km の道')+s+vt(70,68,'1時間に '+x+'km → '+y+'時間');},
+  abs:function(x,y){var u=12,c=70,s='<line x1="6" y1="40" x2="134" y2="40" stroke="var(--axis)" stroke-width="2"/>';
+    for(var v=-5;v<=5;v++)s+='<line x1="'+(c+v*u)+'" y1="36" x2="'+(c+v*u)+'" y2="44" stroke="var(--axis)" stroke-width="1.5"/>';
+    s+='<rect x="'+Math.min(c,c+x*u)+'" y="30" width="'+Math.abs(x*u)+'" height="7" fill="#4FBF45"/>';
+    s+='<circle cx="'+(c+x*u)+'" cy="40" r="5" fill="#FFC928" stroke="#1E1B3A" stroke-width="1.5"/>'+vt(c,60,'0')+vt(c+x*u,60,M(x));
+    return s+vt(70,84,'0からの距離 '+y);},
+  weight:function(x,y){var hgt=50+(x-150)*1.5,wid=8+(y-30)*1.3;return person(70,86,hgt,wid,'#4FA3F7')+vt(70,102,x+'cm → '+y+'kg');},
+  age:function(x,y){var hgt=30+(y-115)*1.1;return '<line x1="20" y1="86" x2="120" y2="86" stroke="var(--grid)" stroke-width="2"/>'+person(70,86,hgt,22,'#E9822E')+vt(70,102,x+'歳 → '+y+'cm');},
+  rect:function(x,y){var h=x/2,a=Math.round((h-Math.sqrt(h*h-4*y))/2),b=h-a,u=Math.min(11,120/b,64/a);var w=b*u,hh=a*u,ox=70-w/2,oy=12+(64-hh)/2;
+    return tiles(ox,oy,b,a,u)+vt(70,94,b+'×'+a+' → '+y+'マス');},
+  mult:function(x,y){var s=vt(70,14,x+' の倍数'),w=20,gap=2,ox=70-(6*w+5*gap)/2;
+    for(var k=1;k<=6;k++){var v=x*k,on=v===y,bx0=ox+(k-1)*(w+gap);
+      s+='<rect x="'+bx0+'" y="26" width="'+w+'" height="22" fill="'+(on?'#FFC928':'var(--panel)')+'" stroke="#1E1B3A" stroke-width="'+(on?2.5:1)+'"/>'+vt(bx0+w/2,41,String(v));}
+    s+='<polygon points="'+(ox+(y/x-1)*(w+gap)+w/2-5)+',56 '+(ox+(y/x-1)*(w+gap)+w/2+5)+',56 '+(ox+(y/x-1)*(w+gap)+w/2)+',50" fill="#E5484D"/>';
+    return s+vt(70,72,'この中から1つ → '+y)+vt(70,90,'('+x+' × '+(y/x)+')');}
+};
+function vizCard(m,e,clash,anim){
+  return '<div class="mcard'+(clash?' clash':'')+'"><svg viewBox="0 0 140 108" aria-hidden="true"'+(anim?' data-anim="0"':'')+'>'+VIZ[m.v](e.x,e.y)+'</svg><div class="mcap">x = '+M(e.x)+' → y = '+M(e.y)+'</div></div>';
+}
+function viewMach(q){
+  var m=q.m,h='<p class="ask">関数マシンを調べよう</p><p class="wtext">'+m.t+'</p>'+(m.ex?'<p class="cap" style="margin-top:-6px">'+m.ex+'</p>':'');
+  var last=G.hist.length?G.hist[G.hist.length-1]:null;
+  h+='<div class="mach" aria-hidden="true"><div class="mslot"><span>x</span><b>'+(last?M(last.x):'?')+'</b></div>'
+    +'<svg class="mbox'+(G.pop?' pop':'')+'" viewBox="0 0 84 70"><rect x="2" y="8" width="80" height="58" fill="var(--blue)" stroke="var(--line)" stroke-width="3"/><rect x="12" y="18" width="60" height="22" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/><text x="42" y="34" text-anchor="middle" style="font-size:12px;fill:var(--text)">関数?</text><rect x="16" y="48" width="10" height="10" fill="#FFC928"/><rect x="32" y="48" width="10" height="10" fill="#E5484D"/><rect x="58" y="0" width="8" height="10" fill="var(--line)"/></svg>'
+    +'<div class="mslot out"><span>y</span><b>'+(last?M(last.y):'?')+'</b></div></div>';
+  if(G.hist.length){
+    var seen={},cl={};G.hist.forEach(function(e){if(seen[e.x]!==undefined&&seen[e.x]!==e.y)cl[e.x]=1;seen[e.x]=e.y;});
+    var shown=G.hist.slice(-4);cl={};var sv={};shown.forEach(function(e){if(sv[e.x]!==undefined&&sv[e.x]!==e.y)cl[e.x]=1;sv[e.x]=e.y;});h+='<div class="mcards">';shown.forEach(function(e,k){h+=vizCard(m,e,cl[e.x],G.animNew&&k===shown.length-1);});h+='</div>';
+    if(Object.keys(cl).length)h+='<p class="cap" style="color:var(--text)">赤いカードは、<b>同じ x なのに y がちがう</b>ところ</p>';
+  }
+  if(G.done){
+    h+='<div class="note">';
+    if(m.fn)h+='<div class="nl">同じ x からは、いつも同じ y</div><div class="nl fin" style="font-size:24px">関数である</div><div class="nl muted">Javaで書くと、こんなメソッドになる</div><pre class="code">'+m.code+'</pre>';
+    else h+='<div class="nl">同じ x なのに、y がちがう!</div><div class="nl fin" style="font-size:24px">関数ではない</div><div class="nl muted">'+m.why+'。y を1つ返すメソッドは書けない</div>';
+    h+='</div>';
+  }
+  return h;
+}
+function machState(){var xs={},rep=false;G.hist.forEach(function(e){if(xs[e.x])rep=true;xs[e.x]=1;});return {n:G.hist.length,rep:rep};}
+function machControls(q){
+  var st=machState(),h='<div class="choices three">';
+  q.m.xs.forEach(function(x){h+='<button class="btn" data-act="mx" data-v="'+x+'">x = '+M(x)+'</button>';});
+  h+='</div><div class="mstat"><span class="'+(st.n>=3?'okd':'')+'">入れた回数 '+Math.min(st.n,3)+'/3</span><span class="'+(st.rep?'okd':'')+'">同じ x をもう一度 '+(st.rep?'OK':'まだ')+'</span></div>';
+  if(st.n>=3&&st.rep)h+='<p class="ask" style="font-size:18px">y は x の関数といえる?</p><div class="choices two"><button class="btn small" data-act="wc" data-v="1">関数である<br><span style="font-weight:500;font-size:14px">いつも同じ y</span></button><button class="btn small" data-act="wc" data-v="0">関数ではない<br><span style="font-weight:500;font-size:14px">y が1つに決まらない</span></button></div>';
+  else h+='<p class="cap">x を入れて y を見よう。<b>同じ x を2回</b>入れると、何かわかるかも?</p>';
+  return h;
+}
+function onMachX(x){
+  var q=G.qs[G.i],m=q.m;if(G.done||G.phase!=='try')return;
+  var y;
+  if(m.fn)y=m.f(x);
+  else{var prev=G.hist.filter(function(e){return e.x===x;}).map(function(e){return e.y;}),t=0;var gap=(m.v==='weight'||m.v==='age')?5:1;do{y=m.g(x);t++;}while(prev.some(function(p){return Math.abs(p-y)<gap;})&&t<40);}
+  G.hist.push({x:x,y:y});G.pop=true;G.animNew=true;G.fb=null;SFX.place();setTimeout(function(){SFX.step();},120);render();
+  setTimeout(function(){G&&(G.pop=false);},400);
+}
+function onMachJudge(v){
+  var q=G.qs[G.i];
+  if((v==='1')===q.m.fn){finish();return;}
+  if(miss('word','<b>同じ x を入れたときの y</b>を見比べよう。いつも同じなら関数、ちがう y が出たら関数ではない。'))return;render();
+}
+
+/* ---------- 表の問題の絵 ---------- */
+function tvTiles(cols,rows,maxW,maxH,oy){var u=Math.min(maxW/cols,maxH/rows,9),w=cols*u,ox=40-w/2;return tiles(ox,(oy||4)+(maxH-rows*u)/2,cols,rows,u);}
+function tvBar(parts,cols){var W=72,tot=parts.reduce(function(a,b){return a+b;},0),x=4,s='';parts.forEach(function(p,i){var w=W*p/tot;s+='<rect x="'+x+'" y="22" width="'+w+'" height="16" fill="'+cols[i%cols.length]+'" stroke="#1E1B3A" stroke-width="1"/>';x+=w;});return s;}
+var TV={
+  pencil:function(x){var s='',gap=72/5;for(var i=0;i<x;i++){var cx=4+gap*i+gap/2;s+='<rect x="'+(cx-3)+'" y="12" width="6" height="28" fill="#FFC928" stroke="#1E1B3A" stroke-width="1"/><polygon points="'+(cx-3)+',40 '+(cx+3)+',40 '+cx+',47" fill="#FFDDBD" stroke="#1E1B3A" stroke-width="1"/>';}return s+vt(40,60,'50円が'+x+'本');},
+  walk:function(x){var p=[];for(var i=0;i<x;i++)p.push(1);return tvBar(p,['#2F6FD6','#9FC3EE'])+vt(40,14,'4km × '+x)+vt(40,56,x+'時間');},
+  rect6:function(x){return tvTiles(x,6,64,46)+vt(40,62,'縦6 × 横'+x);},
+  water:function(x){var s='<rect x="24" y="4" width="32" height="46" fill="none" stroke="#1E1B3A" stroke-width="2"/>',h=46/6;for(var i=0;i<x;i++)s+='<rect x="25" y="'+(50-(i+1)*h)+'" width="30" height="'+h+'" fill="'+(i%2?'#9FC3EE':'#4FA3F7')+'" stroke="#1E1B3A" stroke-width="0.5"/>';return s+vt(40,62,'3L × '+x+'分');},
+  candy:function(x){var y=24/x,s='',gw=72/x;for(var g=0;g<x;g++){var cols=y>6?2:1,rows=Math.ceil(y/cols),u=Math.min(6,44/rows);for(var k=0;k<y;k++){var c=k%cols,r=Math.floor(k/cols);s+='<circle cx="'+(4+gw*g+gw/2+(c-(cols-1)/2)*u)+'" cy="'+(6+r*u+u/2)+'" r="'+(u*0.38)+'" fill="#E5484D"/>';}if(g>0)s+='<line x1="'+(4+gw*g)+'" y1="4" x2="'+(4+gw*g)+'" y2="52" stroke="var(--grid)" stroke-width="1.5"/>';}return s+vt(40,64,'24個を'+x+'人で');},
+  rect18:function(x){return tvTiles(x,18/x,64,46)+vt(40,62,'横'+x+'の長方形');},
+  string:function(x){var p=[];for(var i=0;i<x;i++)p.push(1);return tvBar(p,['#E9822E','#FFD9A8'])+vt(40,14,'120cm')+vt(40,56,x+'等分');},
+  walk1200:function(x){var n=1200/x,p=[];for(var i=0;i<n;i++)p.push(1);return tvBar(p,['#2F6FD6','#9FC3EE'])+vt(40,14,'1200m')+vt(40,56,'1分に'+x+'m');},
+  change:function(x){return tvBar([x,1000-x],['#E5484D','#4FBF45'])+vt(40,14,'1000円')+vt(40,56,'代金 '+x);},
+  rect30:function(x){return tvTiles(15-x,x,64,46)+vt(40,62,'縦'+x+'の長方形');},
+  bro:function(x){var u=4,s='<line x1="10" y1="50" x2="70" y2="50" stroke="var(--grid)" stroke-width="1.5"/>';s+='<rect x="18" y="'+(50-x*u)+'" width="16" height="'+(x*u)+'" fill="#4FA3F7" stroke="#1E1B3A" stroke-width="1"/><rect x="46" y="'+(50-(x+3)*u)+'" width="16" height="'+((x+3)*u)+'" fill="#E9822E" stroke="#1E1B3A" stroke-width="1"/>';return s+vt(26,62,'弟')+vt(54,62,'兄');}
+};
+function tvStrip(r){
+  var h='<div class="tvstrip">',ac=G.animCols||[];
+  r.xs.forEach(function(x,i){
+    var act=G.phase==='fill'&&i===G.fillAt,vis=G.phase!=='fill'||G.ty[i]!==null||act,ord=ac.indexOf(i);
+    var inner=vis?TV[r.v](x):'<text x="40" y="40" text-anchor="middle" style="font-size:22px;fill:var(--grid)">?</text>';
+    h+='<div class="tv'+(act?' act':'')+'"><svg viewBox="0 0 80 68" aria-hidden="true"'+(vis&&ord>=0?' data-anim="'+ord+'"':'')+'>'+inner+'</svg><span>x='+x+'</span></div>';
+  });
+  h+='</div>';
+  if(G.phase!=='fill')h+='<button class="btn plain tvplay" data-act="tvplay">▶ x を1つずつ増やして見る</button>';
+  return h;
+}
+function runBuild(){
+  if(G){G.animCols=null;G.animNew=false;}
+  if(RM)return;
+  var list=document.querySelectorAll('svg[data-anim]');
+  list.forEach(function(svg){
+    var base=(+svg.getAttribute('data-anim'))*550,kids=svg.children,n=kids.length,step=Math.min(40,600/Math.max(n,1));
+    svg.classList.remove('build');void svg.getBoundingClientRect();
+    for(var i=0;i<n;i++)kids[i].style.animationDelay=(base+i*step)+'ms';
+    svg.classList.add('build');
+    if(base>0)setTimeout(function(){SFX.tap();},base);
+  });
+}
+function viewTab(q){
+  var r=q.r,list=r.k==='none'?['表','変わらない数','関係']:['表','変わらない数','関係','比例定数','意味'];
+  var cur={fill:0,find:1,kind:2,cnst:3,mean:4,done:9}[G.phase];
+  var h='<div class="steps">';list.forEach(function(n,i){h+='<span class="'+(i<cur?'okd':(i===cur?'cur':''))+'">'+n+'</span>';});h+='</div>';
+  h+='<p class="wtext">'+r.t+'</p>';
+  h+='<div class="tblbox"><table class="tbl"><tr><th>x</th>';r.xs.forEach(function(x){h+='<td>'+x+'</td>';});
+  h+='</tr><tr><th>y</th>';
+  r.xs.forEach(function(x,i){var v=G.ty[i];if(v!==null)h+='<td>'+v+'</td>';else if(G.phase==='fill'&&i===G.fillAt)h+='<td class="q">'+(G.input||'?')+'</td>';else h+='<td>…</td>';});
+  h+='</tr>';
+  if(G.rows.div){h+='<tr><th class="sm">y÷x</th>';r.xs.forEach(function(x){h+='<td class="calc">'+rfrac(tabY(r,x),x)+'</td>';});h+='</tr>';}
+  if(G.rows.mul){h+='<tr><th class="sm">x×y</th>';r.xs.forEach(function(x){h+='<td class="calc">'+(x*tabY(r,x))+'</td>';});h+='</tr>';}
+  h+='</table></div>'+tvStrip(r);
+  if(cur>=2){
+    var kn={prop:'比例',inv:'反比例',none:'どちらでもない'};
+    h+='<div class="note">';
+    h+='<div class="nl">'+(r.k==='prop'?'y ÷ x がいつも '+r.c:r.k==='inv'?'x × y がいつも '+r.c:'y ÷ x も x × y も 変わる')+'</div>';
+    if(cur>=3)h+='<div class="nl">'+kn[r.k]+(r.k==='none'?'':'')+'</div>';
+    if(r.k==='none'&&G.done)h+='<div class="nl">'+r.e+'</div>';
+    if(r.k!=='none'&&cur>=4)h+='<div class="nl">'+(r.k==='prop'?'y = '+r.c+'x':'y = <span class="fr"><span>'+r.c+'</span><span>x</span></span>')+'</div>';
+    if(r.k!=='none'&&G.done)h+='<div class="nl" style="font-size:18px">比例定数 '+r.c+' = '+r.m+'</div>';
+    if(G.done&&r.k!=='none')h+='<div class="nl muted">x が2倍、3倍…になると、y は '+(r.k==='prop'?'2倍、3倍…':'<span class="fr"><span>1</span><span>2</span></span>、<span class="fr"><span>1</span><span>3</span></span>…')+'</div>';
+    h+='</div>';
+  }
+  return h;
+}
+function wKeypad(lab){
+  var keys=['7','8','9','4','5','6','1','2','3','','0','⌫'],h='<div class="keypad">';
+  keys.forEach(function(k){if(!k){h+='<span></span>';return;}h+='<button class="btn" data-act="wkey" data-v="'+k+'"'+(k==='⌫'?' aria-label="1文字けす"':'')+'>'+k+'</button>';});
+  return h+'<button class="btn ok" data-act="wok">'+(lab||'OK')+'</button></div>';
+}
+function tabControls(q){
+  var r=q.r;
+  if(G.phase==='fill')return '<p class="ask" style="font-size:18px">x = '+r.xs[G.fillAt]+' のとき、y はいくつ?</p>'+wKeypad();
+  if(G.phase==='find'){
+    var any=G.rows.div||G.rows.mul;
+    return '<p class="ask" style="font-size:18px">表の中で、<b>いつも同じ</b>になるものは?</p><div class="choices two"><button class="btn small'+(G.rows.div?' on':'')+'" data-act="trow" data-v="div">y ÷ x を<br>計算してみる</button><button class="btn small'+(G.rows.mul?' on':'')+'" data-act="trow" data-v="mul">x × y を<br>計算してみる</button></div>'
+     +'<div class="choices" style="margin-top:12px"><button class="btn small" data-act="wc" data-v="div"'+(any?'':' disabled')+'>y ÷ x がいつも同じ</button><button class="btn small" data-act="wc" data-v="mul"'+(any?'':' disabled')+'>x × y がいつも同じ</button><button class="btn small" data-act="wc" data-v="none"'+(any?'':' disabled')+'>どちらも変わる</button></div>'
+     +(any?'':'<p class="cap">まず上のボタンで計算してみよう</p>');
+  }
+  if(G.phase==='kind')return '<p class="ask" style="font-size:18px">ということは、x と y の関係は?</p><div class="choices"><button class="btn small" data-act="wc" data-v="prop">比例</button><button class="btn small" data-act="wc" data-v="inv">反比例</button><button class="btn small" data-act="wc" data-v="none">どちらでもない</button></div>';
+  if(G.phase==='cnst')return '<p class="ask" style="font-size:18px">比例定数はいくつ?</p><p class="line2">a = <span class="ans">'+(G.input||'&nbsp;')+'</span></p>'+wKeypad();
+  var h='<p class="ask" style="font-size:18px">比例定数 '+r.c+' は、問題文の何を表している?</p><div class="choices">';q.mo.forEach(function(m,i){h+='<button class="btn small" data-act="wc" data-v="'+i+'">'+m+'</button>';});return h+'</div>';
+}
+function onTabKey(k){
+  if(G.done||(G.phase!=='fill'&&G.phase!=='cnst'))return;SFX.tap();
+  if(k==='⌫')G.input=G.input.slice(0,-1);else if(/^\d$/.test(k)&&G.input.length<6)G.input+=k;
+  render();
+}
+function onTabOK(){
+  var q=G.qs[G.i],r=q.r;
+  if(G.phase==='fill'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてね。'};render();return;}
+    var x=r.xs[G.fillAt],v=parseInt(G.input,10);
+    if(v===tabY(r,x)){
+      G.ty[G.fillAt]=v;G.input='';
+      if(G.fillAt<2){G.fillAt++;G.animCols=[G.fillAt];G.fb={ok:true,msg:'OK! 次の y も計算しよう。'};SFX.step();}
+      else{for(var i=0;i<r.xs.length;i++)G.ty[i]=tabY(r,r.xs[i]);G.phase='find';G.animCols=[3,4];G.fb={ok:true,msg:'表ができた! 次は、表の中で<b>いつも同じになるもの</b>をさがそう。'};SFX.step();}
+      render();return;
+    }
+    if(miss('calc','ことばの式は <b>'+r.w+'</b>。x = '+x+' を入れて計算しよう。'))return;G.input='';render();return;
+  }
+  if(G.phase==='cnst'){
+    if(!G.input){G.fb={ok:false,msg:'数を入れてね。'};render();return;}
+    if(parseInt(G.input,10)===r.c){G.phase='mean';G.input='';G.fb={ok:true,msg:'比例定数は、表で<b>いつも同じだった数</b>。最後に、その数の意味を考えよう。'};SFX.step();render();return;}
+    if(miss('word','比例定数は、表で <b>'+(r.k==='prop'?'y ÷ x':'x × y')+'</b> を計算したときに、いつも同じになった数だよ。'))return;G.input='';render();
+  }
+}
+function onTabChoice(v){
+  var q=G.qs[G.i],r=q.r;
+  if(G.phase==='find'){
+    var right=r.k==='prop'?'div':r.k==='inv'?'mul':'none';
+    if(v===right){G.phase='kind';G.rows.div=true;G.rows.mul=true;
+      G.fb={ok:true,msg:r.k==='prop'?'そう! <b>y ÷ x がいつも '+r.c+'</b>。x が2倍、3倍…になると y も2倍、3倍…':r.k==='inv'?'そう! <b>x × y がいつも '+r.c+'</b>。x が2倍、3倍…になると y は1/2、1/3…':'そう! どちらも<b>一定じゃない</b>。'};SFX.step();render();return;}
+    if(miss('word','計算した行を、左から右へ見比べよう。<b>全部同じ数</b>になっているのはどっち?'))return;
+    G.rows.div=true;G.rows.mul=true;render();return;
+  }
+  if(G.phase==='kind'){
+    if(v===r.k){if(r.k==='none'){finish();return;}G.phase='cnst';G.fb={ok:true,msg:'正解! '+(r.k==='prop'?'y ÷ x が一定 → 比例':'x × y が一定 → 反比例')+'。'};SFX.step();render();return;}
+    if(miss('word','<b>y ÷ x が一定なら比例</b>、<b>x × y が一定なら反比例</b>、どちらも変わるなら どちらでもない。'))return;render();return;
+  }
+  if(G.phase==='mean'){
+    if(q.mo[+v]===r.m){finish();return;}
+    if(miss('word','ことばの式 <b>'+r.w+'</b> の中で、x や y が変わっても <b>'+r.c+' のまま</b>のものは何?'))return;render();
+  }
+}
+
+function genWords(sub){
+  if(sub==='dom'){var d=DOM[rnd(0,DOM.length-1)];return {type:'words',sub:'dom',d:d,mode:Math.random()<.5?'text':'line',opts:domOptions(d)};}
+  if(sub==='func'){var f=FUNC[rnd(0,FUNC.length-1)];return {type:'words',sub:'func',f:f};}
+  var r=REL[rnd(0,REL.length-1)];
+  var eqs=r.k==='none'?null:shuffle([{s:'y = '+r.c+'x',k:'prop'},{s:'y = <span class="fr"><span>'+r.c+'</span><span>x</span></span>',k:'inv'},{s:'y = x + '+r.c,k:'none'}]);
+  return {type:'words',sub:'rel',r:r,eqs:eqs,mo:r.mo?shuffle(r.mo):null};
+}
+
 
 function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
 function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
@@ -261,13 +599,16 @@ var PRAISE=['ナイス！','クリア！','いいね！','その調子！','完�
 
 function startStage(id){
   var st=STAGES.filter(function(s){return s.id===id;})[0],qs=[];
-  for(var i=0;i<st.n;i++){var t=id;if(id==='boss')t=['table','place','find','find'][rnd(0,3)];qs.push(genQ(t));}
-  G={st:st,qs:qs,i:0,firstOK:0,hearts:id==='boss'?3:null,over:false,ms:{swap:0,sign:0,calc:0},t0:Date.now()};
+  if(id==='words'){qs=shuffle([genMach(true),genMach(false)]).concat(shuffle([genTab('prop'),genTab('inv'),genTab('none')]));qs.push(genWords('dom'));var qz=genWords('rel');qz.quiz=true;qs.push(qz);}
+  else for(var i=0;i<st.n;i++){var t=id;if(id==='boss')t=['table','place','find','find'][rnd(0,3)];qs.push(genQ(t));}
+  G={st:st,qs:qs,i:0,firstOK:0,hearts:id==='boss'?3:null,over:false,ms:{swap:0,sign:0,calc:0,word:0},t0:Date.now()};
   resetQ(); screen='play'; render(); SFX.start();
 }
 function resetQ(){
   var q=G.qs[G.i];
-  G.phase=q.type==='table'?'num':'form'; G.boxes=[null,null]; G.sign=null; G.input=''; G.neg=false;
+  G.phase=q.type==='table'?'num':(q.type==='words'?({mach:'try',tab:'fill',rel:'kind'}[q.sub]||'choice'):'form');
+  G.hist=[];G.pop=false;G.ty=[];G.fillAt=1;G.rows={div:false,mul:false};
+  if(q.type==='words'&&q.sub==='tab'){var rr=q.r;G.ty=rr.xs.map(function(x,i){return i===0?tabY(rr,x):null;});G.animCols=[0,1];} G.boxes=[null,null]; G.sign=null; G.input=''; G.neg=false;
   G.parenDone=false; G.missed=false; G.done=false; G.fb=null;
   var f=['ax','adx','ay'];for(var i=f.length-1;i>0;i--){var j=rnd(0,i),t=f[i];f[i]=f[j];f[j]=t;}G.forms=f;
 }
@@ -283,7 +624,7 @@ function finish(){
   persist();
   var q=G.qs[G.i];
   var msg=PRAISE[rnd(0,PRAISE.length-1)];
-  if(q.type!=='table')msg+=' ロボが '+eqn(q.an,q.ad)+' の上を走るよ。';
+  if(q.type!=='table'&&q.type!=='words')msg+=' ロボが '+eqn(q.an,q.ad)+' の上を走るよ。';
   G.fb={ok:true,msg:msg};
   render(); SFX.coin(); runRobot();
 }
@@ -509,7 +850,8 @@ function viewTitle(){
   h+='<section class="panel"><h2>ミスのきろく</h2><div class="record">'
     +'<div><b>'+save.miss.swap+'</b><span>式の形・<br>入れかわり</span></div>'
     +'<div><b>'+save.miss.sign+'</b><span>符号<br>(+と−)</span></div>'
-    +'<div><b>'+save.miss.calc+'</b><span>計算</span></div></div>'
+    +'<div><b>'+save.miss.calc+'</b><span>計算</span></div>'
+    +'<div><b>'+save.miss.word+'</b><span>ことば<br>(変域・関係)</span></div></div>'
     +'<p class="cap" style="margin-top:10px">ミスは数えるだけ。へらすのが目標!</p></section>';
   return h;
 }
@@ -570,6 +912,7 @@ function keypad(q){
 }
 function controls(q){
   if(G.done)return '<button class="btn blue wide" data-act="next">'+(G.i+1>=G.st.n?'結果を見る':'次へ')+'</button>';
+  if(q.type==='words')return wordControls(q);
   if(G.phase==='form'){
     var lab={ax:'y = ax',adx:'y = '+'<span class="fr"><span>a</span><span>x</span></span>',ay:'x = ay'},h='<p class="ask" style="font-size:18px">比例の式の形はどれ?</p><div class="forms">';
     G.forms.forEach(function(f){h+='<button class="btn" data-act="form" data-v="'+f+'">'+lab[f]+'</button>';});
@@ -585,11 +928,77 @@ function controls(q){
   if(G.phase==='check')return '<p class="ask" style="font-size:18px">たしかめ算: 計算して y になるかな?</p>'+keypad(q);
   return keypad(q);
 }
+function viewWords(q){
+  if(q.sub==='mach')return viewMach(q);
+  if(q.sub==='tab')return viewTab(q);
+  var h=q.quiz?'<p class="cap" style="margin-top:0">まとめ問題</p>':'';
+  if(q.sub==='dom'){
+    if(q.mode==='text')h+='<p class="ask">変域を不等号で表すと?</p><p class="wtext">x は <span class="hl">'+q.d[4]+'</span></p>';
+    else h+='<p class="ask">この変域を不等号で表すと?</p>'+numberLine(q.d);
+    if(G.done){h+='<div class="note"><div class="nl">'+ineq(q.d,q.d[0],q.d[1],q.d[2],q.d[3])+'</div></div>';if(q.mode==='text')h+=numberLine(q.d);else h+='<p class="wtext">x は '+q.d[4]+'</p>';}
+    return h;
+  }
+  if(q.sub==='func'){
+    h+='<p class="ask">y は x の関数といえる?</p><p class="wtext">'+q.f[0]+'</p>';
+    if(G.done)h+='<div class="note"><div class="nl">'+(q.f[1]?'関数である':'関数ではない')+'</div><div class="nl" style="font-size:16px;font-family:\'Zen Kaku Gothic New\',sans-serif">'+q.f[2]+'</div></div>';
+    return h;
+  }
+  var r=q.r,list=r.k==='none'?['関係']:['関係','式','定数の意味'];
+  var cur={kind:0,eq:1,mean:2,done:3}[G.phase];
+  h+='<div class="steps">';list.forEach(function(n,i){h+='<span class="'+(i<cur?'okd':(i===cur?'cur':''))+'">'+n+'</span>';});h+='</div>';
+  h+='<p class="wtext">'+r.t+'</p><div class="note">';
+  var kname={prop:'比例',inv:'反比例',none:'どちらでもない'};
+  h+=cur>0?'<div class="nl">'+kname[r.k]+'</div>':'<div class="nl muted">比例? 反比例? どちらでもない?</div>';
+  if(r.k==='none'){if(G.done)h+='<div class="nl">'+r.e+'</div>';}
+  else{
+    if(cur>1)h+='<div class="nl">'+q.eqs.filter(function(e){return e.k===r.k;})[0].s+'</div>';
+    if(cur>2)h+='<div class="nl" style="font-size:18px">'+(r.k==='prop'?'比例':'比例')+'定数 '+r.c+' = '+r.m+'</div>';
+  }
+  return h+'</div>';
+}
+function wordControls(q){
+  if(q.sub==='mach')return machControls(q);
+  if(q.sub==='tab')return tabControls(q);
+  var h='';
+  if(q.sub==='dom'){h='<div class="choices two">';q.opts.forEach(function(o,i){h+='<button class="btn" data-act="wc" data-v="'+i+'">'+o.s+'</button>';});return h+'</div>';}
+  if(q.sub==='func')return '<div class="choices two"><button class="btn small" data-act="wc" data-v="1">関数である</button><button class="btn small" data-act="wc" data-v="0">関数ではない</button></div><p class="cap">x を1つ決めると、y がただ1つに決まる?</p>';
+  if(G.phase==='kind')return '<div class="choices"><button class="btn small" data-act="wc" data-v="prop">比例</button><button class="btn small" data-act="wc" data-v="inv">反比例</button><button class="btn small" data-act="wc" data-v="none">どちらでもない</button></div><p class="cap">ことばの式を考えてみよう(例:代金 = 値段 × 本数)</p>';
+  if(G.phase==='eq'){h='<p class="ask" style="font-size:18px">y を x の式で表すと?</p><div class="choices">';q.eqs.forEach(function(e,i){h+='<button class="btn" data-act="wc" data-v="'+i+'">'+e.s+'</button>';});return h+'</div>';}
+  h='<p class="ask" style="font-size:18px">比例定数 '+q.r.c+' が表しているのは?</p><div class="choices">';q.mo.forEach(function(m,i){h+='<button class="btn small" data-act="wc" data-v="'+i+'">'+m+'</button>';});return h+'</div>';
+}
+function onWord(v){
+  var q=G.qs[G.i];if(G.done)return;
+  if(q.sub==='mach'){onMachJudge(v);return;}
+  if(q.sub==='tab'){onTabChoice(v);return;}
+  if(q.sub==='dom'){
+    var o=q.opts[+v];if(o.ok){finish();return;}
+    var msg=o.dir?'<b>向きをチェック!</b> 「より大きい・以上」は x のほうが大きい(x > ○)、「未満・以下」は x のほうが小さい(x < ○)。'
+      :'<b>ふくむ? ふくまない?</b> 「以上・以下」は その数を<b>ふくむ</b>(≦・●)。「より大きい・未満・より小さい」は <b>ふくまない</b>(<・○)。';
+    if(miss('word',msg))return;render();return;
+  }
+  if(q.sub==='func'){
+    if((v==='1')===q.f[1]){finish();return;}
+    if(miss('word','x を1つ決めたとき、y が<b>ただ1つに決まるか</b>を考えよう。ヒント:'+q.f[2]+'。'))return;render();return;
+  }
+  var r=q.r;
+  if(G.phase==='kind'){
+    if(v===r.k){if(r.k==='none'){finish();return;}G.phase='eq';G.fb={ok:true,msg:'正解! ことばの式は <b>'+r.w+'</b>。次は式にしよう。'};SFX.step();render();return;}
+    if(miss('word','<b>ことばの式</b>をつくってみよう:'+r.w+'。y = (決まった数) × x なら比例、y = (決まった数) ÷ x なら反比例、たし算・ひき算なら どちらでもない。'))return;render();return;
+  }
+  if(G.phase==='eq'){
+    if(q.eqs[+v].k===r.k){G.phase='mean';G.fb={ok:true,msg:'式OK! 最後に、比例定数 '+r.c+' が何を表しているか。'};SFX.step();render();return;}
+    if(miss('word',(r.k==='prop'?'比例は <b>y = ax</b> の形':'反比例は <b>y = a/x</b> の形')+'。ことばの式 '+r.w+' を見直そう。'))return;render();return;
+  }
+  if(G.phase==='mean'){
+    if(q.mo[+v]===r.m){finish();return;}
+    if(miss('word','式の中の <b>'+r.c+'</b> は、問題文のどの数だった? ことばの式 '+r.w+' と見比べよう。'))return;render();return;
+  }
+}
 function viewPlay(){
   var q=G.qs[G.i],h=topBar();
-  h+='<section class="panel qpanel">'+(q.type==='table'?viewTable(q):viewPlace(q))+'</section>';
+  h+='<section class="panel qpanel">'+(q.type==='table'?viewTable(q):q.type==='words'?viewWords(q):viewPlace(q))+'</section>';
   if(G.fb)h+='<div class="fb hint '+(G.fb.ok?'good':'bad')+'" role="status">'+G.fb.msg+'</div>';
-  if(G.done)h+='<section class="panel">'+graph(q)+'</section>';
+  if(G.done&&q.type!=='words')h+='<section class="panel">'+graph(q)+'</section>';
   h+='<section class="panel">'+controls(q)+'</section>';
   return h;
 }
@@ -606,7 +1015,7 @@ function viewResult(){
 function render(){
   var app=document.getElementById('app');
   app.innerHTML=screen==='title'?viewTitle():screen==='play'?viewPlay():viewResult();
-  applyFx();mount3d();
+  applyFx();mount3d();runBuild();
 }
 
 /* ---------- logic ---------- */
@@ -703,6 +1112,12 @@ document.getElementById('app').addEventListener('click',function(e){
   else if(a==='back'){if(screen==='play'&&G&&(G.i>0||G.done))logResult('途中でやめた');screen='title';G=null;render();window.scrollTo(0,0);}
   else if(a==='chip')onChip(b.dataset.k);
   else if(a==='form')onForm(b.dataset.v);
+  else if(a==='wc')onWord(b.dataset.v);
+  else if(a==='mx')onMachX(+b.dataset.v);
+  else if(a==='tvplay'){G.animCols=[0,1,2,3,4];render();}
+  else if(a==='trow'){G.rows[b.dataset.v]=!G.rows[b.dataset.v];SFX.tap();render();}
+  else if(a==='wkey')onTabKey(b.dataset.v);
+  else if(a==='wok')onTabOK();
   else if(a==='paren')onParen(b.dataset.v);
   else if(a==='box')onBox(+b.dataset.i);
   else if(a==='sign')onSign(+b.dataset.v);
@@ -720,6 +1135,11 @@ document.addEventListener('keydown',function(e){
   else if(e.key==='-')onKey('−');
   else if(e.key==='/')onKey('/');
   else if(e.key==='Enter')onOK();
+});
+document.addEventListener('keydown',function(e){
+  if(screen!=='play'||!G||G.done)return;var q=G.qs[G.i];
+  if(q.type!=='words'||q.sub!=='tab'||(G.phase!=='fill'&&G.phase!=='cnst'))return;
+  if(/^\d$/.test(e.key))onTabKey(e.key);else if(e.key==='Backspace')onTabKey('⌫');else if(e.key==='Enter')onTabOK();
 });
 render();
 flush();
