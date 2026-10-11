@@ -8,7 +8,8 @@
 <meta name="theme-color" content="#63B7F2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="比例ラボ">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 10'%3E%3Crect x='4' width='1' height='1' fill='%23FFC928'/%3E%3Crect x='4' y='1' width='1' height='1' fill='%231E1B3A'/%3E%3Crect x='1' y='2' width='7' height='6' fill='%231E1B3A'/%3E%3Crect x='2' y='3' width='5' height='4' fill='%234FA3F7'/%3E%3Crect x='3' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='5' y='4' width='1' height='1' fill='%23fff'/%3E%3Crect x='3' y='6' width='3' height='1' fill='%231E1B3A'/%3E%3Crect x='2' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3Crect x='5' y='8' width='2' height='2' fill='%231E1B3A'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
@@ -200,6 +201,14 @@ svg.build > *{animation:buildin .3s steps(5) both;transform-box:fill-box;transfo
 .hopnew{animation:hop .35s ease-out}
 @keyframes hop{40%{transform:translateY(-14px)}}
 @media (prefers-reduced-motion: reduce){.arcnew{animation:none;stroke-dashoffset:0}.hopnew{animation:none}}
+.kwbar{display:grid;gap:8px;margin-bottom:12px}
+.kw{display:flex;align-items:center;gap:8px;border:3px solid var(--line);padding:6px 10px;background:var(--chip)}
+.kw i{font-style:normal;display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;color:#FFFFFF;font-size:15px}
+.kw.k1 i{background:#2F6FD6}.kw.k2 i{background:#B4541A}
+.kw b{font-weight:400;font-size:19px}.kw span{display:block;font-family:'Zen Kaku Gothic New',system-ui,sans-serif;font-size:12.5px;color:var(--sub)}
+.kwt{display:inline-block;font-family:'DotGothic16',sans-serif;font-size:13px;color:#FFFFFF;background:#2F6FD6;padding:1px 8px;margin-bottom:4px}
+.kwt.k2{background:#B4541A}
+.kw.k3 i{background:#2E7D3E}.kwt.k3{background:#2E7D3E}
 </style>
 </head>
 <body>
@@ -290,7 +299,7 @@ var STAGES=[
   {id:'table',name:'表をうめろ',desc:'y = ax の表の「?」を計算。マイナスに注意',n:6},
   {id:'place',name:'代入パズル',desc:'式の形を書いて、y と x を正しい□へ',n:8},
   {id:'find',name:'a をさがせ',desc:'形→代入→符号→計算→たしかめ',n:8},
-  {id:'words',name:'関係ラボ',desc:'関数マシン・表から比例/反比例を見ぬく・変域',n:8},
+  {id:'words',name:'関係ラボ',desc:'関数マシン・表から比例/反比例を見ぬく・変域',n:9},
   {id:'boss',name:'ボス戦',desc:'全部まぜて10問。ハートは3つ',n:10}
 ];
 
@@ -654,7 +663,7 @@ var PRAISE=['ナイス！','クリア！','いいね！','その調子！','完�
 
 function startStage(id){
   var st=STAGES.filter(function(s){return s.id===id;})[0],qs=[];
-  if(id==='words'){qs=[machBy('double'),machBy('mult'),genMach(Math.random()<0.5)].concat(shuffle([genTab('prop'),genTab('inv'),genTab('none')]));qs.push(genWords('dom'));var qz=genWords('rel');qz.quiz=true;qs.push(qz);}
+  if(id==='words'){qs=[machBy('double'),machBy('mult'),genMach(Math.random()<0.5)].concat(shuffle([genTab('prop'),genTab('inv'),genTab('none')]));qs.push(genWords('dom'));var d2;do{d2=genWords('dom');}while(d2.d===qs[qs.length-1].d);qs.push(d2);var qz=genWords('rel');qz.quiz=true;qs.push(qz);}
   else for(var i=0;i<st.n;i++){var t=id;if(id==='boss')t=['table','place','find','find'][rnd(0,3)];qs.push(genQ(t));}
   G={st:st,qs:qs,i:0,firstOK:0,hearts:id==='boss'?3:null,over:false,ms:{swap:0,sign:0,calc:0,word:0},t0:Date.now()};
   resetQ(); screen='play'; render(); SFX.start();
@@ -669,6 +678,7 @@ function resetQ(){
   var f=['ax','adx','ay'];for(var i=f.length-1;i>0;i--){var j=rnd(0,i),t=f[i];f[i]=f[j];f[j]=t;}G.forms=f;
 }
 function miss(kind,msg){
+  if(kind!=='word')msg=(G&&G.phase==='check'?'<span class="kwt k3">合言葉③ もとに戻して たしかめる</span>':'<span class="kwt">合言葉① 1行に1ステップ</span>')+'<br>'+msg;
   fxNext={t:'shake'};save.miss[kind]=(save.miss[kind]||0)+1; G.ms[kind]++; G.missed=true; G.fb={ok:false,msg:msg};
   if(G.hearts!==null){G.hearts--; if(G.hearts<=0){G.over=true; persist(); logResult('ゲームオーバー'); screen='result'; render(); SFX.over(); return true;} SFX.wrong(); SFX.heart();}
   else SFX.wrong();
@@ -898,7 +908,7 @@ function viewTitle(){
     h+='<button class="btn stagebtn" data-act="start" data-id="'+s.id+'"><span><span class="nm">'+s.name+'</span><span class="ds">'+s.desc+'</span></span><span class="stars" aria-label="星'+(save.stars[s.id]||0)+'つ">'+starStr(save.stars[s.id]||0)+'</span></button>';
   });
   h+='</section>';
-  h+='<section class="panel"><h2>書き方の3つのルール</h2><ol class="rules">'
+  h+='<section class="panel"><h2>合言葉と 書き方のルール</h2>'+'<div class="kwbar"><div class="kw k1"><i>①</i><div><b>1行に1ステップ</b><span>途中式は1行に1つ。= は1行に1つ。マイナスは ( )</span></div></div>'+'<div class="kw k2"><i>②</i><div><b>答えの文まで</b><span>文章題は「答え ○○は△△」まで書いてクリア</span></div></div><div class="kw k3"><i>③</i><div><b>もとに戻して たしかめる</b><span>答えを問題に戻して、合うか見る</span></div></div></div>'+'<ol class="rules">'
     +'<li><b>1</b><span>まず「y = ax」を書く</span></li>'
     +'<li><b>2</b><span>マイナスの数は ( ) に入れる</span></li>'
     +'<li><b>3</b><span>最後に たしかめ算</span></li></ol>'
@@ -1029,7 +1039,7 @@ function onWord(v){
   if(q.sub==='dom'){
     var o=q.opts[+v];if(o.ok){finish();return;}
     var msg=o.dir?'<b>向きをチェック!</b> 「より大きい・以上」は x のほうが大きい(x > ○)、「未満・以下」は x のほうが小さい(x < ○)。'
-      :'<b>ふくむ? ふくまない?</b> 「以上・以下」は その数を<b>ふくむ</b>(≦・●)。「より大きい・未満・より小さい」は <b>ふくまない</b>(<・○)。';
+      :'<b>ふくむ? ふくまない?</b> 「以上・以下」は その数を<b>ふくむ</b>(≦・●)。「より大きい・未満・より小さい」は <b>ふくまない</b>(<・○)。数直線と同じく、<b>小さい数を左</b>に書くよ。';
     if(miss('word',msg))return;render();return;
   }
   if(q.sub==='func'){
@@ -1065,7 +1075,7 @@ function viewResult(){
   var sub=G.over?'あと一歩。ミスした問題のヒントを思い出してもう一回!':'1回でせいかい '+f+' / '+n+' 問';
   return '<section class="panel result">'+(HAS3D?'<div id="stage3d" class="stage3d res" data-kind="result" aria-hidden="true"></div>':'<svg class="bob" width="70" height="78" viewBox="0 0 70 78" aria-hidden="true">'+robo(7.5,1.25,2)+'</svg>')
     +'<p class="big">'+title+'</p><p class="stars" style="font-size:34px;margin:0">'+starStr(st)+'</p><p>'+sub+'</p>'
-    +'<p class="coins" style="justify-content:center;display:flex">'+coinSVG()+'コイン '+save.coins+'</p>'
+    +'<p class="cap" style="color:var(--text);margin:6px 0">ワークでも <b>①1行に1ステップ</b> ・ <b>②答えの文まで</b> ・ <b>③もとに戻してたしかめる</b></p>'+'<p class="coins" style="justify-content:center;display:flex">'+coinSVG()+'コイン '+save.coins+'</p>'
     +'<div class="row"><button class="btn" data-act="start" data-id="'+G.st.id+'">もう一回</button><button class="btn plain" data-act="back">ステージへ</button></div></section>';
 }
 function render(){
